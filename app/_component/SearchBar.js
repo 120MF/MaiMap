@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { getPOI } from "@/app/_lib/AMapPOI";
+import { getPOI } from "@/app/_lib/QMapPOI";
 
 export default function SearchBar() {
   const [inputValue, setInputValue] = useState("");
@@ -28,7 +28,7 @@ export default function SearchBar() {
   }, [inputValue]);
 
   function handleSearch(input) {
-    const [lat, lng] = input.split(",");
+    const { lat, lng } = input;
     const params = new URLSearchParams(searchParams);
     if (input) {
       params.set("lat", lat);
@@ -58,20 +58,24 @@ export default function SearchBar() {
           }
         }}
         onFocus={() => handleFocus(true)}
-        onBlur={() => handleFocus(false)}
+        onBlur={() =>
+          setTimeout(() => {
+            handleFocus(false);
+          }, 100)
+        }
       />
-      {suggestions.length > 0 && isFocus && (
+      {suggestions && suggestions.length > 0 && isFocus && (
         <ul className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-md shadow-lg">
           {suggestions.map((suggestion, index) => (
             <li
               key={index}
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
               onClick={() => {
-                setInputValue(suggestion.name);
+                setInputValue(suggestion.title);
                 handleSearch(suggestion.location);
               }}
             >
-              <div>{suggestion.name}</div>
+              <div>{suggestion.title}</div>
               <div>{suggestion.address}</div>
             </li>
           ))}

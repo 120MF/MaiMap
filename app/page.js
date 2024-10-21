@@ -1,8 +1,14 @@
 import SearchBar from "@/app/_component/SearchBar";
 import dynamic from "next/dynamic";
+
 // import Map from "@/app/_component/Map";
 
-export default function Home() {
+export default function Home(Params) {
+  console.log(Params);
+  const lat = Params?.searchParams.lat;
+  const lng = Params?.searchParams.lng;
+  console.log(lat, lng);
+
   const MapContainer = dynamic(() => import("@/app/_component/Map"), {
     loading: () => <p>Loading...</p>,
     ssr: false,
@@ -11,7 +17,7 @@ export default function Home() {
     <>
       <SearchBar></SearchBar>
       <div className={"w-screen h-screen"}>
-        <MapContainer></MapContainer>
+        <MapContainer lat={lat} lng={lng}></MapContainer>
       </div>
     </>
   );
