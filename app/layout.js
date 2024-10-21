@@ -1,5 +1,6 @@
-import Footer from "@/app/_component/Footer";
+import "./globals.css";
 
+import Footer from "@/app/_component/Footer";
 export const metadata = {
   title: "Maimap",
   description: "A map enabling you find the nearest Maimai.",
