@@ -49,7 +49,9 @@ except FileNotFoundError:
 existing_stores_dict = {store['store_address']: store for store in existing_stores}
 
 # 全局变量 QMAP_KEY
-QMAP_KEY = ''  # 替换为你的 QMAP_KEY
+QMAP_KEY = '4BQBZ-6DJWA-MJDKJ-CEHME-I4AL7-IDBK7'  # 替换为你的 QMAP_KEY
+
+id = 1
 
 # 提取每个 li 元素中的 store_name 和 store_address
 for li in store_list.find_all('li'):
@@ -82,7 +84,10 @@ for li in store_list.find_all('li'):
         'store_name': store_name,
         'store_address': store_address,
         'pos': pos,
+        'id': id,
     })
+
+    id += 1
 
 sorted_stores = sorted(stores, key=lambda x: lazy_pinyin(x['store_address'])[0][0])
 
