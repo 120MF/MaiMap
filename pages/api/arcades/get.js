@@ -1,14 +1,16 @@
 import fs from "fs";
 import path from "path";
 
+import { LL2Distance } from "@/app/_lib/LL2Distance";
+
 export default async function handler(req, res) {
   const { query } = req;
-  const { lat, lng } = query;
+  const { lat, lng, range } = query;
 
-  if (!lat || !lng) {
+  if (!lat || !lng || !range) {
     return res
       .status(400)
-      .json({ error: "Latitude and longitude are required" });
+      .json({ error: "Latitude and longitude and range are required" });
   }
 
   const filePath = path.join(
@@ -27,11 +29,8 @@ export default async function handler(req, res) {
       const arcades = JSON.parse(fileContents);
       const filteredArcades = arcades.filter((arcade) => {
         const [arcadeLat, arcadeLng] = arcade.pos;
-        return (
-          Math.abs(arcadeLat - lat) <= 0.5 && Math.abs(arcadeLng - lng) <= 0.5
-        );
+        return Math.abs(LL2Distance(arcadeLng, arcadeLat, lng, lat)) <= range;
       });
-      console.log(filteredArcades);
 
       res.status(200).json(filteredArcades);
     } catch (err) {

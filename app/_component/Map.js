@@ -7,9 +7,8 @@ import {
   APILoader,
   ScaleControl,
   ToolBarControl,
-  ControlBarControl,
-  Geolocation,
   Marker,
+  Circle,
 } from "@uiw/react-amap";
 
 function reducer(state, action) {
@@ -19,9 +18,10 @@ function reducer(state, action) {
     case "url/update":
       return {
         ...state,
-        urlPos: action.payload,
-        centerPos: action.payload,
+        urlPos: [action.payload[0], action.payload[1]],
+        centerPos: [action.payload[0], action.payload[1]],
         hasParams: action.payload[0] && action.payload[1],
+        radius: action.payload[2],
       };
     case "geo/update":
       return { ...state, geoPos: action.payload, centerPos: action.payload };
@@ -30,26 +30,36 @@ function reducer(state, action) {
   }
 }
 
-export default function MapContainer({ lng = 116.397183, lat = 39.909333 }) {
+export default function MapContainer({
+  lng = 116.397183,
+  lat = 39.909333,
+  range = 40,
+}) {
   const akey = process.env.NEXT_PUBLIC_AMAP_AKEY;
   const initialState = {
-    centerPos: [116.38, 39.9],
+    centerPos: [116.397183, 39.909333],
     geoPos: [null, null],
     urlPos: [Number(lng), Number(lat)],
     hasParams: lat && lng,
     nearbyArcades: [],
+    range: range,
   };
 
   useEffect(() => {
-    dispatch({ type: "url/update", payload: [Number(lng), Number(lat)] });
+    dispatch({
+      type: "url/update",
+      payload: [Number(lng), Number(lat), Number(range)],
+    });
 
     async function fetchArcades() {
-      const res = await fetch(`/api/arcades/get?lat=${lat}&lng=${lng}`);
+      const res = await fetch(
+        `/api/arcades/get?lat=${lat}&lng=${lng}&range=${range}`,
+      );
       const result = await res.json();
       dispatch({ type: "nearby/update", payload: result });
     }
     fetchArcades();
-  }, [lat, lng]);
+  }, [lat, lng, range]);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -86,6 +96,17 @@ function MaiMap({ state, dispatch }) {
   console.log(state.nearbyArcades);
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
+      <ScaleControl visible={true} offset={[20, 10]} position="LB" />
+      <ToolBarControl visible={true} offset={[10, 10]} position="LT" />
+
+      <Circle
+        visible={true}
+        radius={state.radius * 1000}
+        strokeColor="#fff"
+        strokeWeight={2}
+        center={state.centerPos}
+      />
+
       {state.geoPos[0] && (
         <Marker visible={true} position={state.geoPos} title={"定位位置"}>
           <div className={"flex w-12 text-xs text-blue-200 bg-red-300"}>
