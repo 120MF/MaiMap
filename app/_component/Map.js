@@ -11,7 +11,6 @@ import {
   Geolocation,
   Marker,
 } from "@uiw/react-amap";
-import { useRouter } from "next/navigation";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -26,22 +25,31 @@ function reducer(state, action) {
       };
     case "geo/update":
       return { ...state, geoPos: action.payload, centerPos: action.payload };
+    case "nearby/update":
+      return { ...state, nearbyArcades: action.payload };
   }
 }
 
-export default function MapContainer({ lng = null, lat = null }) {
-  const router = useRouter();
+export default function MapContainer({ lng = 116.397183, lat = 39.909333 }) {
   const akey = process.env.NEXT_PUBLIC_AMAP_AKEY;
   const initialState = {
-    centerPos: [121.31, 31.2],
+    centerPos: [116.38, 39.9],
     geoPos: [null, null],
     urlPos: [Number(lng), Number(lat)],
     hasParams: lat && lng,
+    nearbyArcades: [],
   };
 
   useEffect(() => {
     dispatch({ type: "url/update", payload: [Number(lng), Number(lat)] });
-  }, [lat, lng, router.isReady]);
+
+    async function fetchArcades() {
+      const res = await fetch(`/api/arcades/get?lat=${lat}&lng=${lng}`);
+      const result = await res.json();
+      dispatch({ type: "nearby/update", payload: result });
+    }
+    fetchArcades();
+  }, [lat, lng]);
 
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -75,6 +83,7 @@ export default function MapContainer({ lng = null, lat = null }) {
 }
 
 function MaiMap({ state, dispatch }) {
+  console.log(state.nearbyArcades);
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
       {state.geoPos[0] && (
@@ -91,6 +100,18 @@ function MaiMap({ state, dispatch }) {
           </div>
         </Marker>
       )}
+      {state.nearbyArcades.map((arcade, index) => (
+        <Marker
+          key={index}
+          visible={true}
+          position={[Number(arcade.pos[1]), Number(arcade.pos[0])]}
+          title={"舞萌位置"}
+        >
+          <div className={"flex w-12 text-xs text-red-400 bg-green-400"}>
+            舞萌位置
+          </div>
+        </Marker>
+      ))}
     </Map>
   );
 }
