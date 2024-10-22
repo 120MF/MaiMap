@@ -6,7 +6,6 @@ import dynamic from "next/dynamic";
 export default function Home(Params) {
   const lat = Params?.searchParams.lat;
   const lng = Params?.searchParams.lng;
-  console.log(lat);
 
   const MapContainer = dynamic(() => import("@/app/_component/Map"), {
     loading: () => <p>Loading...</p>,
