@@ -7,24 +7,28 @@ import { getPOI } from "@/app/_lib/QMapPOI";
 export default function SearchBar() {
   const [inputValue, setInputValue] = useState("");
   const [suggestions, setSuggestions] = useState([]);
-  const searchParams = useSearchParams();
   const [isFocus, setIsFocus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   useEffect(() => {
-    const handler = setTimeout(async () => {
-      if (inputValue) {
+    if (inputValue) {
+      setIsLoading(true);
+      const handler = setTimeout(async () => {
         const data = await getPOI(inputValue);
         setSuggestions(data);
-      } else {
-        setSuggestions([]);
-      }
-    }, 1000);
-
-    return () => {
-      clearTimeout(handler);
-    };
+        setIsLoading(false);
+      }, 1000);
+      return () => {
+        clearTimeout(handler);
+      };
+    } else {
+      setSuggestions([]);
+      setIsLoading(false);
+    }
   }, [inputValue]);
 
   function handleSearch(input) {
@@ -64,7 +68,7 @@ export default function SearchBar() {
           }, 100)
         }
       />
-      {suggestions && suggestions.length > 0 && isFocus && (
+      {suggestions && suggestions.length > 0 && isFocus && !isLoading && (
         <ul className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-md shadow-lg">
           {suggestions.map((suggestion, index) => (
             <li
@@ -79,6 +83,11 @@ export default function SearchBar() {
               <div>{suggestion.address}</div>
             </li>
           ))}
+        </ul>
+      )}
+      {isLoading && isFocus && (
+        <ul className="absolute top-full left-0 w-full bg-white border border-gray-200 mt-1 rounded-md shadow-lg">
+          <li className="px-4 py-2 bg-gray-50 cursor-not-allowed">加载中……</li>
         </ul>
       )}
     </div>
