@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
+from pypinyin import lazy_pinyin
 
 # 配置 WebDriver
 options = webdriver.ChromeOptions()
@@ -39,7 +40,7 @@ stores = []
 
 # 读取现有的 JSON 文件
 try:
-    with open('stores.json', 'r', encoding='utf-8') as f:
+    with open('arcades.json', 'r', encoding='utf-8') as f:
         existing_stores = json.load(f)
 except FileNotFoundError:
     existing_stores = []
@@ -83,8 +84,10 @@ for li in store_list.find_all('li'):
         'pos': pos,
     })
 
+sorted_stores = sorted(stores, key=lambda x: lazy_pinyin(x['store_address'])[0][0])
+
 # 导出为 JSON 文件
 with open('arcades.json', 'w', encoding='utf-8') as f:
-    json.dump(stores, f, ensure_ascii=False, indent=4)
+    json.dump(sorted_stores, f, ensure_ascii=False, indent=4)
 
 print('Data has been exported to stores.json')
