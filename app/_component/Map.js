@@ -94,11 +94,10 @@ function MaiMap({ state }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  console.log(state.range);
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
       <ScaleControl visible={true} offset={[20, 10]} position="LB" />
-      <ToolBarControl visible={true} offset={[10, 10]} position="LT" />
+      <ToolBarControl visible={true} offset={[10, 50]} position="RT" />
       <Circle
         key={state.range}
         visible={true}
@@ -123,7 +122,7 @@ function MaiMap({ state }) {
           title={"舞萌位置"}
           onClick={() => {
             const params = new URLSearchParams(searchParams);
-            params.set("focusId", arcade.id);
+            params.set("detailId", arcade.id);
             replace(`${pathname}?${params.toString()}`);
           }}
         >

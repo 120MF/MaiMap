@@ -8,10 +8,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        {children}
-        <Footer></Footer>
+    <html lang="en" style={{ height: "100%" }}>
+      <body className="flex flex-col h-full">
+        <div className="flex-grow">{children}</div>
+        <Footer className="h-1/6"></Footer>
       </body>
     </html>
   );
