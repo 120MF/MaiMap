@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useState } from "react";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 
 import {
   Map,
@@ -44,6 +45,7 @@ export default function MapContainer({
     nearbyArcades: [],
     range: range,
   };
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     dispatch({
@@ -61,7 +63,9 @@ export default function MapContainer({
     fetchArcades();
   }, [lat, lng, range]);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
 
   function handleGeoLocation() {
     console.log("click");
@@ -69,7 +73,11 @@ export default function MapContainer({
       const instance = new AMap.Geolocation({});
       instance.getCityInfo((status, result) => {
         if (status === "complete") {
-          dispatch({ type: "geo/update", payload: result.position });
+          const [lng, lat] = result.position;
+          const params = new URLSearchParams(searchParams);
+          params.set("lat", lat);
+          params.set("lng", lng);
+          replace(`${pathname}?${params.toString()}`);
         } else {
           throw new Error("GeoLocation Error");
         }
@@ -93,7 +101,6 @@ export default function MapContainer({
 }
 
 function MaiMap({ state, dispatch }) {
-  console.log(state.nearbyArcades);
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
       <ScaleControl visible={true} offset={[20, 10]} position="LB" />
@@ -106,14 +113,6 @@ function MaiMap({ state, dispatch }) {
         strokeWeight={2}
         center={state.centerPos}
       />
-
-      {state.geoPos[0] && (
-        <Marker visible={true} position={state.geoPos} title={"定位位置"}>
-          <div className={"flex w-12 text-xs text-blue-200 bg-red-300"}>
-            定位位置
-          </div>
-        </Marker>
-      )}
       {state.hasParams && (
         <Marker visible={true} position={state.urlPos} title={"标定位置"}>
           <div className={"flex w-12 text-xs text-blue-200 bg-red-300"}>
