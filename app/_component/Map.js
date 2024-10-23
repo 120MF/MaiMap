@@ -9,6 +9,7 @@ import {
   ScaleControl,
   ToolBarControl,
   Marker,
+  Circle,
 } from "@uiw/react-amap";
 import GeolocationButton from "@/app/_component/GeolocationButton";
 import RangeSlider from "@/app/_component/RangeSlider";
@@ -93,10 +94,20 @@ function MaiMap({ state }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  console.log(state.range);
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
       <ScaleControl visible={true} offset={[20, 10]} position="LB" />
       <ToolBarControl visible={true} offset={[10, 10]} position="LT" />
+      <Circle
+        key={state.range}
+        visible={true}
+        radius={state.range * 1000}
+        strokeColor="#fff"
+        strokeWeight={2}
+        center={state.centerPos}
+        fillOpacity={0.1}
+      />
       {state.hasParams && (
         <Marker visible={true} position={state.urlPos} title={"标定位置"}>
           <div className={"flex w-12 text-xs text-blue-200 bg-red-300"}>
