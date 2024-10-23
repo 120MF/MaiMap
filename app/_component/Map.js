@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { useSearchParams } from "next/navigation";
 
 import {
@@ -17,13 +17,17 @@ function reducer(state, action) {
   switch (action.type) {
     case "center/update":
       return { ...state, centerPos: action.payload };
-    case "url/update":
+    case "url/pos_update":
       return {
         ...state,
         urlPos: [action.payload[0], action.payload[1]],
         centerPos: [action.payload[0], action.payload[1]],
         hasParams: action.payload[0] && action.payload[1],
-        range: action.payload[2],
+      };
+    case "url/range_update":
+      return {
+        ...state,
+        range: action.payload,
       };
     case "nearby/update":
       return { ...state, nearbyArcades: action.payload };
@@ -41,7 +45,7 @@ export default function MapContainer({}) {
   const initialState = {
     centerPos: [116.397183, 39.909333],
     geoPos: [null, null],
-    urlPos: [Number(lng), Number(lat)],
+    urlPos: [null, null],
     hasParams: lat && lng,
     nearbyArcades: [],
     range: range,
@@ -49,10 +53,20 @@ export default function MapContainer({}) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
-    dispatch({
-      type: "url/update",
-      payload: [lng, lat, range],
-    });
+    const state_lng = state.urlPos[0];
+    const state_lat = state.urlPos[1];
+    if (lng !== state_lng || lat !== state_lat) {
+      dispatch({
+        type: "url/pos_update",
+        payload: [lng, lat],
+      });
+    }
+    if (range !== state.range) {
+      dispatch({
+        type: "url/range_update",
+        payload: range,
+      });
+    }
 
     async function fetchArcades() {
       const res = await fetch(
@@ -62,7 +76,7 @@ export default function MapContainer({}) {
       dispatch({ type: "nearby/update", payload: result });
     }
     fetchArcades();
-  }, [lat, lng, range]);
+  }, [lat, lng, range, state.urlPos, state.range]);
 
   return (
     <APILoader version="2.0.5" akey={akey}>
