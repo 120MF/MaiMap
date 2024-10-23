@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer, useState } from "react";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import {
   Map,
@@ -9,8 +9,9 @@ import {
   ScaleControl,
   ToolBarControl,
   Marker,
-  Circle,
 } from "@uiw/react-amap";
+import GeolocationButton from "@/app/_component/GeolocationButton";
+import RangeSlider from "@/app/_component/RangeSlider";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -22,20 +23,20 @@ function reducer(state, action) {
         urlPos: [action.payload[0], action.payload[1]],
         centerPos: [action.payload[0], action.payload[1]],
         hasParams: action.payload[0] && action.payload[1],
-        radius: action.payload[2],
+        range: action.payload[2],
       };
-    case "geo/update":
-      return { ...state, geoPos: action.payload, centerPos: action.payload };
     case "nearby/update":
       return { ...state, nearbyArcades: action.payload };
   }
 }
 
-export default function MapContainer({
-  lng = 116.397183,
-  lat = 39.909333,
-  range = 40,
-}) {
+export default function MapContainer({}) {
+  const searchParams = useSearchParams();
+
+  const range = Number(searchParams.get("range")) || 40;
+  const lat = Number(searchParams.get("lat")) || 39.909333;
+  const lng = Number(searchParams.get("lng")) || 116.397183;
+
   const akey = process.env.NEXT_PUBLIC_AMAP_AKEY;
   const initialState = {
     centerPos: [116.397183, 39.909333],
@@ -50,7 +51,7 @@ export default function MapContainer({
   useEffect(() => {
     dispatch({
       type: "url/update",
-      payload: [Number(lng), Number(lat), Number(range)],
+      payload: [lng, lat, range],
     });
 
     async function fetchArcades() {
@@ -63,56 +64,22 @@ export default function MapContainer({
     fetchArcades();
   }, [lat, lng, range]);
 
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-
-  function handleGeoLocation() {
-    console.log("click");
-    AMap.plugin(["AMap.Geolocation"], () => {
-      const instance = new AMap.Geolocation({});
-      instance.getCityInfo((status, result) => {
-        if (status === "complete") {
-          const [lng, lat] = result.position;
-          const params = new URLSearchParams(searchParams);
-          params.set("lat", lat);
-          params.set("lng", lng);
-          replace(`${pathname}?${params.toString()}`);
-        } else {
-          throw new Error("GeoLocation Error");
-        }
-      });
-    });
-  }
-
   return (
     <APILoader version="2.0.5" akey={akey}>
       <div className="relative">
         <MaiMap state={state} dispatch={dispatch} />
-        <button
-          className="absolute bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg w-12"
-          onClick={handleGeoLocation}
-        >
-          +
-        </button>
+        <GeolocationButton />
+        <RangeSlider />
       </div>
     </APILoader>
   );
 }
 
-function MaiMap({ state, dispatch }) {
+function MaiMap({ state }) {
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
       <ScaleControl visible={true} offset={[20, 10]} position="LB" />
       <ToolBarControl visible={true} offset={[10, 10]} position="LT" />
-
-      <Circle
-        visible={true}
-        radius={state.radius * 1000}
-        strokeColor="#fff"
-        strokeWeight={2}
-        center={state.centerPos}
-      />
       {state.hasParams && (
         <Marker visible={true} position={state.urlPos} title={"标定位置"}>
           <div className={"flex w-12 text-xs text-blue-200 bg-red-300"}>

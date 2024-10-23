@@ -1,0 +1,105 @@
+$base-color: #71c8f1;
+$background-color: #181818;
+$border-color: #242424;
+
+input[type='range'] {
+  display: block;
+  margin: 0; padding: 0;
+  font-size: inherit;
+  width: 9.9em; height: 1em;
+  border-radius: .25em;
+  border: .2em solid $border-color;
+  background-color: $border-color;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow .2s linear;
+  box-shadow: 0 0 0 0 transparent;
+  &:focus { box-shadow: 0 0 0 .1em  #AAAAAA; }
+  &:hover { box-shadow: 0 0 0 .15em #6FC5F0; }
+}
+
+/* ## Orientation tweak, with [orient] attribute in degrees */
+/* > I know it's not standard, but that's the cleaner way I was thinking of. */
+input[type='range'][orient='90deg'] {  transform: rotate( 90deg );  }
+input[type='range'][orient='180deg'] { transform: rotate( 180deg ); }
+input[type='range'][orient='270deg'] { transform: rotate( 270deg ); }
+
+/* ### all vertical ranges : */
+input[type='range'] {
+  &[orient='90deg'], &[orient='270deg'] {
+    &::-webkit-slider-thumb { cursor: ns-resize; }
+    &::-moz-range-thumb { cursor: ns-resize; }
+    &::-ms-thumb { cursor: ns-resize; }
+    margin: 4.5em -4.5em;
+    display: inline-block;
+  }
+}
+
+
+
+/* ## Slider components */
+/* ### Slider::-track */
+input[type='range'] {
+  @mixin track() {
+    border: none;
+    background: none;
+    height: 100%;
+    width: 100%;
+  }
+  &::-webkit-slider-runnable-track { @include track(); }
+  &::-moz-range-track { @include track(); }
+  &::-ms-track { @include track(); }
+}
+
+/* ### Slider::-thumb */
+input[type='range'] {
+  @mixin thumb() {
+    margin: .05em; padding: 0;
+    height: .9em; width: .9em;
+    border-radius: .1em;
+    box-sizing: border-box;
+    border: none;
+    background-color: #6FC5F0;
+    box-shadow:
+            -10em 0 0 0 #313131, -9em 0 0 0 #313131,
+            -8em 0 0 0 #2F343F, -7em 0 0 0 #283F6B,
+            -6em 0 0 0 #214893, -5em 0 0 0 #1A52BC,
+            -4em 0 0 0 #2769D3, -3em 0 0 0 #3E87DC,
+            -2em 0 0 0 #55A5E6, -1em 0 0 0 #6FC5F0,
+
+            1em 0 0 0 $background-color, 2em 0 0 0 $background-color,
+            3em 0 0 0 $background-color, 4em 0 0 0 $background-color,
+            5em 0 0 0 $background-color, 6em 0 0 0 $background-color,
+            7em 0 0 0 $background-color, 8em 0 0 0 $background-color,
+            9em 0 0 0 $background-color;
+    cursor: ew-resize;
+  }
+  &::-webkit-slider-thumb { @include thumb(); }
+  &::-moz-range-thumb { @include thumb(); }
+  &::-ms-thumb { @include thumb(); }
+}
+
+
+/* ## Browser tweaks */
+/* ### webkit */
+input[type='range'] {
+  &,
+  &::-webkit-slider-runnable-track,
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+  }
+}
+
+/* ### IE */
+input[type='range'] {
+  &::-ms-track {
+    color: transparent;
+  }
+  &::-ms-fill-lower,
+  &::-ms-fill-upper,
+  &::-ms-tooltip {
+    display: none;
+  }
+}
