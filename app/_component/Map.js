@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer } from "react";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
   Map,
@@ -90,6 +90,9 @@ export default function MapContainer({}) {
 }
 
 function MaiMap({ state }) {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
   return (
     <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
       <ScaleControl visible={true} offset={[20, 10]} position="LB" />
@@ -107,6 +110,11 @@ function MaiMap({ state }) {
           visible={true}
           position={[Number(arcade.pos[1]), Number(arcade.pos[0])]}
           title={"舞萌位置"}
+          onClick={() => {
+            const params = new URLSearchParams(searchParams);
+            params.set("focusId", arcade.id);
+            replace(`${pathname}?${params.toString()}`);
+          }}
         >
           <div className={"flex w-12 text-xs text-red-400 bg-green-400"}>
             舞萌位置
