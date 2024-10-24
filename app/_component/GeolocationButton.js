@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function GeolocationButton() {
@@ -24,12 +24,14 @@ function GeolocationButton() {
   }
 
   return (
-    <button
-      className="absolute bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg w-24"
-      onClick={handleGeoLocation}
-    >
-      点击定位
-    </button>
+    <Suspense>
+      <button
+        className="absolute bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg w-24"
+        onClick={handleGeoLocation}
+      >
+        点击定位
+      </button>
+    </Suspense>
   );
 }
 
