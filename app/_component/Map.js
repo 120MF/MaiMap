@@ -111,7 +111,7 @@ function MaiMap({ state }) {
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
-    <Map style={{ height: "90vh", width: "100vw" }} center={state.centerPos}>
+    <Map style={{ height: "95vh", width: "100vw" }} center={state.centerPos}>
       <ScaleControl visible={true} offset={[20, 10]} position="LB" />
       <ToolBarControl visible={true} offset={[10, 50]} position="RT" />
       <Circle
