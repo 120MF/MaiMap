@@ -46,14 +46,14 @@ function SideBox() {
   return (
     <div
       className={`relative top-1/2 -translate-y-1/2 z-10 transition-width duration-200 ${
-        isBoxOpen ? "w-[30rem]" : "w-[2rem]"
+        isBoxOpen ? "w-[26rem]" : "w-[2rem]"
       }`}
     >
       <div className="relative flex items-center">
         <div
-          className={`relative w-[28rem] h-[30rem] bg-blue-300 transition-transform duration-200 ${
+          className={`relative w-[24rem] h-[30rem] bg-blue-300 transition-transform duration-200 ${
             isBoxOpen ? "translate-x-0" : "-translate-x-full"
-          } overflow-y-auto`}
+          } overflow-y-auto opacity-70`}
         >
           {detailId && (
             <button
@@ -93,7 +93,7 @@ function SideBox() {
         <button
           onClick={() => setIsBoxOpen((state) => !state)}
           className={`absolute h-10 w-[2rem] bg-blue-500 text-white transition-transform duration-200 ${
-            isBoxOpen ? "translate-x-[28rem]" : "left-0"
+            isBoxOpen ? "translate-x-[24rem]" : "left-0"
           }`}
         >
           {isBoxOpen ? "←" : "→"}

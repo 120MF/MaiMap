@@ -41,6 +41,7 @@ export default function MapContainer({}) {
   const range = Number(searchParams.get("range")) || 40;
   const lat = Number(searchParams.get("lat")) || 39.909333;
   const lng = Number(searchParams.get("lng")) || 116.397183;
+  const detailId = Number(searchParams.get("detailId")) || null;
 
   const akey = process.env.NEXT_PUBLIC_AMAP_AKEY;
   const initialState = {
@@ -79,6 +80,21 @@ export default function MapContainer({}) {
     fetchArcades();
   }, [lat, lng, range, state.urlPos, state.range]);
 
+  useEffect(() => {
+    if (detailId) {
+      const detailArcade = state.nearbyArcades.find(
+        (element) => Number(element.id) === Number(detailId),
+      );
+      dispatch({
+        type: "center/update",
+        payload: [Number(detailArcade.pos[1]), Number(detailArcade.pos[0])],
+      });
+    } else {
+      if (state.hasParams)
+        dispatch({ type: "center/update", payload: state.urlPos });
+    }
+  }, [detailId, state.hasParams, state.nearbyArcades, state.urlPos]);
+
   return (
     <APILoader version="2.0.5" akey={akey}>
       <div className="relative">
@@ -104,7 +120,7 @@ function MaiMap({ state }) {
         radius={state.range * 1000}
         strokeColor="#fff"
         strokeWeight={2}
-        center={state.centerPos}
+        center={state.urlPos}
         fillOpacity={0.1}
       />
       {state.hasParams && (
