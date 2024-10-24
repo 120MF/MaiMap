@@ -13,6 +13,7 @@ import {
 } from "@uiw/react-amap";
 import GeolocationButton from "@/app/_component/GeolocationButton";
 import RangeSlider from "@/app/_component/RangeSlider";
+import Image from "next/image";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -124,14 +125,18 @@ function MaiMap({ state }) {
         fillOpacity={0.1}
       />
       {state.hasParams && (
-        <Marker visible={true} position={state.urlPos} title={"标定位置"}>
-          <div className={"flex w-12 text-xs text-blue-200 bg-red-300"}>
-            标定位置
-          </div>
+        <Marker
+          visible={true}
+          position={state.urlPos}
+          title={"标定位置"}
+          offset={new AMap.Pixel(-13, -30)}
+        >
+          <Image src="/nail-target.png" alt="target" width={30} height={50} />
         </Marker>
       )}
       {state.nearbyArcades.map((arcade, index) => (
         <Marker
+          offset={new AMap.Pixel(-13, -30)}
           key={index}
           visible={true}
           position={[Number(arcade.pos[1]), Number(arcade.pos[0])]}
@@ -142,8 +147,8 @@ function MaiMap({ state }) {
             replace(`${pathname}?${params.toString()}`);
           }}
         >
-          <div className={"flex w-12 text-xs text-red-400 bg-green-400"}>
-            舞萌位置
+          <div className={"flex w-12 text-xs"}>
+            <Image src="/nail-arcade.png" alt="arcade" width={30} height={50} />
           </div>
         </Marker>
       ))}
