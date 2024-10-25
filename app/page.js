@@ -17,9 +17,7 @@ export default function Home() {
         <SideBox className="z-10" />
       </Suspense>
       <div className="absolute top-0 left-0 w-full h-full">
-        <Suspense>
-          <MapContainer></MapContainer>
-        </Suspense>
+        <MapContainer></MapContainer>
       </div>
     </>
   );
