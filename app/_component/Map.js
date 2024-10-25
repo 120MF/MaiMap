@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
@@ -72,11 +72,18 @@ export default function MapContainer({}) {
     }
 
     async function fetchArcades() {
-      const res = await fetch(
-        `/api/arcades/get?lat=${lat}&lng=${lng}&range=${range}`,
-      );
-      const result = await res.json();
-      dispatch({ type: "nearby/update", payload: result });
+      try {
+        const res = await fetch(
+          `/api/arcades/get?lat=${lat}&lng=${lng}&range=${range}`,
+        );
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        const result = await res.json();
+        dispatch({ type: "nearby/update", payload: result });
+      } catch (error) {
+        console.error("Failed to fetch arcades:", error);
+      }
     }
     fetchArcades();
   }, [lat, lng, range, state.urlPos, state.range]);
@@ -97,15 +104,13 @@ export default function MapContainer({}) {
   }, [detailId, state.hasParams, state.nearbyArcades, state.urlPos]);
 
   return (
-    <Suspense>
-      <APILoader version="2.0.5" akey={akey}>
-        <div className="relative">
-          <MaiMap state={state} dispatch={dispatch} />
-          <GeolocationButton />
-          <RangeSlider />
-        </div>
-      </APILoader>
-    </Suspense>
+    <APILoader version="2.0.5" akey={akey}>
+      <div className="relative">
+        <MaiMap state={state} dispatch={dispatch} />
+        <GeolocationButton />
+        <RangeSlider />
+      </div>
+    </APILoader>
   );
 }
 

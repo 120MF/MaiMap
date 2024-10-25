@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 function SideBox() {
@@ -44,64 +44,62 @@ function SideBox() {
   const [isBoxOpen, setIsBoxOpen] = useState(false);
 
   return (
-    <Suspense>
-      <div
-        className={`relative top-1/2 -translate-y-1/2 z-10 transition-width duration-200 ${
-          isBoxOpen ? "w-[26rem]" : "w-[2rem]"
-        }`}
-      >
-        <div className="relative flex items-center">
-          <div
-            className={`relative w-[24rem] h-[30rem] bg-blue-300 transition-transform duration-200 ${
-              isBoxOpen ? "translate-x-0" : "-translate-x-full"
-            } overflow-y-auto opacity-70`}
-          >
-            {detailId && (
-              <button
-                onClick={() => {
-                  params.delete("detailId");
-                  replace(`${pathname}?${params.toString()}`);
-                }}
-                className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
-              >
-                X
-              </button>
-            )}
-            {detailId ? (
-              <ul className="left-4">
-                <li className="text-2xl text-stone-950 py-1 px-1">
-                  {arcadeDetail.store_name}
-                </li>
-                <li className="text-xl text-stone-800 py-1 px-1">
-                  地址：{arcadeDetail.store_address}
-                </li>
-              </ul>
-            ) : (
-              <ul>
-                {arcadeList.map((arcade) => (
-                  <li key={arcade.id} className="m-2">
-                    <li className="text-xl text-stone-950 py-1 px-1">
-                      {arcade.store_name}
-                    </li>
-                    <li className="text-xs text-stone-800 py-1 px-1">
-                      {arcade.store_address}
-                    </li>
+    <div
+      className={`relative top-1/2 -translate-y-1/2 z-10 transition-width duration-200 ${
+        isBoxOpen ? "w-[26rem]" : "w-[2rem]"
+      }`}
+    >
+      <div className="relative flex items-center">
+        <div
+          className={`relative w-[24rem] h-[30rem] bg-blue-300 transition-transform duration-200 ${
+            isBoxOpen ? "translate-x-0" : "-translate-x-full"
+          } overflow-y-auto opacity-70`}
+        >
+          {detailId && (
+            <button
+              onClick={() => {
+                params.delete("detailId");
+                replace(`${pathname}?${params.toString()}`);
+              }}
+              className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
+            >
+              X
+            </button>
+          )}
+          {detailId ? (
+            <ul className="left-4">
+              <li className="text-2xl text-stone-950 py-1 px-1">
+                {arcadeDetail.store_name}
+              </li>
+              <li className="text-xl text-stone-800 py-1 px-1">
+                地址：{arcadeDetail.store_address}
+              </li>
+            </ul>
+          ) : (
+            <ul>
+              {arcadeList.map((arcade) => (
+                <li key={arcade.id} className="m-2">
+                  <li className="text-xl text-stone-950 py-1 px-1">
+                    {arcade.store_name}
                   </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          <button
-            onClick={() => setIsBoxOpen((state) => !state)}
-            className={`absolute h-10 w-[2rem] bg-blue-500 text-white transition-transform duration-200 ${
-              isBoxOpen ? "translate-x-[24rem]" : "left-0"
-            }`}
-          >
-            {isBoxOpen ? "←" : "→"}
-          </button>
+                  <li className="text-xs text-stone-800 py-1 px-1">
+                    {arcade.store_address}
+                  </li>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
+        <button
+          onClick={() => setIsBoxOpen((state) => !state)}
+          className={`absolute h-10 w-[2rem] bg-blue-500 text-white transition-transform duration-200 ${
+            isBoxOpen ? "translate-x-[24rem]" : "left-0"
+          }`}
+        >
+          {isBoxOpen ? "←" : "→"}
+        </button>
       </div>
-    </Suspense>
+    </div>
   );
 }
 
