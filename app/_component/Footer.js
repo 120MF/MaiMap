@@ -4,7 +4,7 @@ function Footer() {
   return (
     <div className="relative h-full border-t border-gray-300 flex items-center justify-between px-4 py-2">
       <div className="flex items-center">
-        <Image src="/logo.png" alt="Logo" width={100} height={40} />
+        <Image src="/Logo.png" alt="Logo" width={160} height={60} />
       </div>
       <div className="flex items-center space-x-4">
         <a

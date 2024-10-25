@@ -46,12 +46,12 @@ function SideBox() {
   return (
     <div
       className={`relative top-1/2 -translate-y-1/2 z-10 transition-width duration-200 ${
-        isBoxOpen ? "w-[26rem]" : "w-[2rem]"
+        isBoxOpen ? "w-[22rem]" : "w-[2rem]"
       }`}
     >
       <div className="relative flex items-center">
         <div
-          className={`relative w-[24rem] h-[30rem] bg-blue-300 transition-transform duration-200 ${
+          className={`custom-scrollbar relative w-[20rem] h-[40rem] bg-blue-300 transition-transform duration-200 ${
             isBoxOpen ? "translate-x-0" : "-translate-x-full"
           } overflow-y-auto opacity-70`}
         >
@@ -78,7 +78,10 @@ function SideBox() {
           ) : (
             <ul>
               {arcadeList.map((arcade) => (
-                <li key={arcade.id} className="m-2">
+                <li
+                  key={arcade.id}
+                  className="m-2 border-t border-gray-500 pl-4"
+                >
                   <li className="text-xl text-stone-950 py-1 px-1">
                     {arcade.store_name}
                   </li>
@@ -92,9 +95,9 @@ function SideBox() {
         </div>
         <button
           onClick={() => setIsBoxOpen((state) => !state)}
-          className={`absolute h-10 w-[2rem] bg-blue-500 text-white transition-transform duration-200 ${
-            isBoxOpen ? "translate-x-[24rem]" : "left-0"
-          }`}
+          className={`absolute h-10 w-[1rem] bg-blue-400 text-gray-200 transition-transform duration-200 ${
+            isBoxOpen ? "translate-x-[20rem]" : "left-0"
+          } text-xs`}
         >
           {isBoxOpen ? "←" : "→"}
         </button>
