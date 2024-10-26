@@ -3,6 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { Button } from "@nextui-org/button";
+import { FaArrowRightArrowLeft } from "react-icons/fa6";
+import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+
 function SideBox() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -49,7 +53,7 @@ function SideBox() {
         isBoxOpen ? "w-[22rem]" : "w-[2rem]"
       }`}
     >
-      <div className="relative flex items-center">
+      <div className="flex items-center">
         <div
           className={`custom-scrollbar relative w-[20rem] h-[40rem] bg-blue-300 transition-transform duration-200 ${
             isBoxOpen ? "translate-x-0" : "-translate-x-full"
@@ -93,14 +97,20 @@ function SideBox() {
             </ul>
           )}
         </div>
-        <button
+        <Button
           onClick={() => setIsBoxOpen((state) => !state)}
-          className={`absolute h-10 w-[1rem] bg-blue-400 text-gray-200 transition-transform duration-200 ${
-            isBoxOpen ? "translate-x-[20rem]" : "left-0"
-          } text-xs`}
+          className={`flex rounded-right h-10`}
+          isIconOnly
+          color={"primary"}
+          size={"md"}
+          // radius={"none"}
         >
-          {isBoxOpen ? "←" : "→"}
-        </button>
+          {isBoxOpen ? (
+            <IoIosArrowBack size={30} />
+          ) : (
+            <IoIosArrowForward size={30} />
+          )}
+        </Button>
       </div>
     </div>
   );

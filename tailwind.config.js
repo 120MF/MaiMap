@@ -8,7 +8,11 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/components/(button|slider|ripple|spinner|popover).js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      borderRadius: {
+        "right-only": "0 0.5rem 0.5rem 0",
+      },
+    },
   },
   plugins: [nextui()],
 };
