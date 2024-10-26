@@ -6,7 +6,7 @@ import RangeSlider from "@/app/_component/RangeSlider";
 
 function Footer() {
   return (
-    <div className="relative h-full border-t border-gray-300 flex items-center justify-between px-4 py-2">
+    <div className="relative h-full border-t border-gray-300 flex items-center justify-between px-4 py-2 bg-gray-50">
       <div className="flex items-center">
         <Image src="/Logo.png" alt="Logo" width={140} height={70} />
       </div>

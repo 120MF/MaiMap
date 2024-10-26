@@ -45,7 +45,7 @@ function SideBox() {
 
   return (
     <div
-      className={`relative top-1/2 -translate-y-1/2 z-10 transition-width duration-200 ${
+      className={`absolute top-1/2 -translate-y-1/2 z-10 transition-width duration-200 ${
         isBoxOpen ? "w-[22rem]" : "w-[2rem]"
       }`}
     >

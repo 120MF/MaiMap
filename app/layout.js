@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="flex flex-col h-full">
-        <div className="flex-grow" style={{ height: "95vh" }}>
+        <div className="" style={{ height: "95vh" }}>
           {children}
         </div>
         <div style={{ height: "5vh" }}>
