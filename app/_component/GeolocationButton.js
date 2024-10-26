@@ -1,13 +1,18 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@nextui-org/button";
+
+import { FaMapLocationDot } from "react-icons/fa6";
 
 function GeolocationButton() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleGeoLocation() {
     AMap.plugin(["AMap.Geolocation"], () => {
+      setIsLoading(true);
       const instance = new AMap.Geolocation({});
       instance.getCityInfo((status, result) => {
         if (status === "complete") {
@@ -19,18 +24,22 @@ function GeolocationButton() {
         } else {
           throw new Error("GeoLocation Error");
         }
+        setIsLoading(false);
       });
     });
   }
 
   return (
     <Suspense>
-      <button
-        className="absolute bottom-4 right-4 bg-blue-500 text-white p-3 rounded-full shadow-lg w-24"
+      <Button
+        isIconOnly
+        isLoading={isLoading}
+        color={"primary"}
+        className="absolute bottom-4 right-4"
         onClick={handleGeoLocation}
       >
-        点击定位
-      </button>
+        <FaMapLocationDot />
+      </Button>
     </Suspense>
   );
 }

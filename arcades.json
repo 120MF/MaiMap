@@ -1,6 +1,0 @@
-[
-  {
-    "name": "{{item.arcadeName}}",
-    "address": "{{item.address}}"
-  }
-]
