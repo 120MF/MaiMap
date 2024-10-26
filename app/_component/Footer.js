@@ -1,11 +1,16 @@
+"use client";
+
 import Image from "next/image";
+
+import RangeSlider from "@/app/_component/RangeSlider";
 
 function Footer() {
   return (
     <div className="relative h-full border-t border-gray-300 flex items-center justify-between px-4 py-2">
       <div className="flex items-center">
-        <Image src="/Logo.png" alt="Logo" width={160} height={60} />
+        <Image src="/Logo.png" alt="Logo" width={140} height={70} />
       </div>
+      <RangeSlider />
       <div className="flex items-center space-x-4">
         <a
           href="https://github.com/MoonBite666/Maimap/issues"

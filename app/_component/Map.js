@@ -12,7 +12,6 @@ import {
   Circle,
 } from "@uiw/react-amap";
 import GeolocationButton from "@/app/_component/GeolocationButton";
-import RangeSlider from "@/app/_component/RangeSlider";
 import Image from "next/image";
 
 function reducer(state, action) {
@@ -108,7 +107,6 @@ export default function MapContainer({}) {
       <div className="relative">
         <MaiMap state={state} dispatch={dispatch} />
         <GeolocationButton />
-        <RangeSlider />
       </div>
     </APILoader>
   );
