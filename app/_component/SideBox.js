@@ -7,8 +7,12 @@ import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { IoReturnUpBack } from "react-icons/io5";
 
 import { Button } from "@nextui-org/button";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import { Divider } from "@nextui-org/react";
+import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
+import { Divider, SelectItem } from "@nextui-org/react";
+import { Select } from "@nextui-org/select";
+
+import { LL2Distance } from "@/app/_lib/LL2Distance";
+import pinyin from "pinyin";
 
 function SideBox() {
   const searchParams = useSearchParams();
@@ -23,6 +27,8 @@ function SideBox() {
 
   const [arcadeList, setArcadeList] = useState([]);
   const [arcadeDetail, setArcadeDetail] = useState({});
+  const [sortMethod, setSortMethod] = useState("");
+  const [isBoxOpen, setIsBoxOpen] = useState(false);
 
   useEffect(() => {
     async function fetchArcades() {
@@ -30,25 +36,51 @@ function SideBox() {
         `/api/arcades/get?lat=${lat}&lng=${lng}&range=${range}`,
       );
       const result = await res.json();
-      if (detailId) {
-        const detail = result.find((element) => {
-          return Number(element.id) === Number(detailId);
-        });
-        if (detail) {
-          setArcadeDetail(detail);
-          setIsBoxOpen(true);
-        } else {
-          params.delete("detailId");
-          replace(`${pathname}?${params.toString()}`);
-        }
-      } else {
-        setArcadeList(result);
-      }
+
+      setArcadeList(result);
     }
     fetchArcades();
-  }, [lat, lng, range, detailId]);
+  }, [lat, lng, range]);
 
-  const [isBoxOpen, setIsBoxOpen] = useState(false);
+  useEffect(() => {
+    if (detailId) {
+      const detail = arcadeList.find((element) => {
+        return Number(element.id) === Number(detailId);
+      });
+      if (detail) {
+        setArcadeDetail(detail);
+        setIsBoxOpen(true);
+      } else {
+        params.delete("detailId");
+        replace(`${pathname}?${params.toString()}`);
+      }
+    }
+  }, [detailId]);
+
+  useEffect(() => {
+    if (sortMethod === "按距离") {
+      let tempList = [...arcadeList];
+      tempList.sort(
+        (a, b) =>
+          LL2Distance(a.pos[1], a.pos[0], lng, lat) -
+          LL2Distance(b.pos[1], b.pos[0], lng, lat),
+      );
+      setArcadeList(tempList);
+    } else if (sortMethod === "按首字母") {
+      let tempList = [...arcadeList];
+      tempList.sort((a, b) => {
+        const pinyinA = pinyin(a.store_name, {
+          style: pinyin.STYLE_FIRST_LETTER,
+        }).join("");
+
+        const pinyinB = pinyin(b.store_name, {
+          style: pinyin.STYLE_FIRST_LETTER,
+        }).join("");
+        return pinyinA.localeCompare(pinyinB);
+      });
+      setArcadeList(tempList);
+    }
+  }, [lat, lng, sortMethod]);
 
   return (
     <div
@@ -67,7 +99,23 @@ function SideBox() {
             {detailId ? (
               <p className="text-xl">机厅详情</p>
             ) : (
-              <p className="text-xl">机厅列表</p>
+              <>
+                <p className="text-xl">机厅列表</p>
+                <Select
+                  className="max-w-40"
+                  variant="underlined"
+                  label="排序方式"
+                  defaultSelectedKeys=""
+                  selectedKeys={[sortMethod]}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setSortMethod(e.target.value);
+                  }}
+                >
+                  <SelectItem key="按距离">按距离</SelectItem>
+                  <SelectItem key="按首字母">按首字母</SelectItem>
+                </Select>
+              </>
             )}
             {detailId && (
               <Button
@@ -119,6 +167,13 @@ function SideBox() {
                         </li>
                       </ul>
                     </CardBody>
+                    <CardFooter className="flex justify-end">
+                      <p className="text-sm text-stone-700">
+                        直线距离:
+                        {LL2Distance(lng, lat, arcade.pos[1], arcade.pos[0])}
+                        km
+                      </p>
+                    </CardFooter>
                   </Card>
                 ))}
               </ul>
