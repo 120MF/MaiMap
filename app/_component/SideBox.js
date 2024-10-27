@@ -110,14 +110,14 @@ function SideBox() {
                     }}
                   >
                     <CardBody>
-                      <li className="px-2">
+                      <ul className="px-2">
                         <li className="text-xl text-stone-950 py-1 px-1">
                           {arcade.store_name}
                         </li>
                         <li className="text-xs text-stone-800 py-1 px-1">
                           {arcade.store_address}
                         </li>
-                      </li>
+                      </ul>
                     </CardBody>
                   </Card>
                 ))}
