@@ -10,13 +10,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className="flex flex-col h-full">
-        <div className="" style={{ height: "95vh" }}>
-          <Suspense>{children}</Suspense>
-        </div>
-        <div style={{ height: "5vh" }}>
-          <Footer></Footer>
+    <html lang="en" className="m-0 p-0 h-full overflow-hidden">
+      <body className="m-0 p-0 h-full overflow-hidden">
+        <div className="flex-1 flex flex-col">
+          <div className="m-0 p-0" style={{ height: "95vh" }}>
+            <Suspense>{children}</Suspense>
+          </div>
+          <div style={{ height: "5vh" }}>
+            <Footer></Footer>
+          </div>
         </div>
       </body>
     </html>
