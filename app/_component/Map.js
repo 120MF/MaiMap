@@ -138,17 +138,18 @@ function MaiMap({ state }) {
           visible={true}
           position={state.urlPos}
           title={"标定位置"}
-          offset={new AMap.Pixel(-13, -30)}
+          offset={new AMap.Pixel(-15, -42)}
         >
           <Image src="/nail-target.png" alt="target" width={30} height={50} />
         </Marker>
       )}
       {state.nearbyArcades.map((arcade, index) => (
         <Marker
-          offset={new AMap.Pixel(-13, -30)}
+          offset={new AMap.Pixel(-15, -42)}
           key={index}
           visible={true}
           position={[Number(arcade.pos[1]), Number(arcade.pos[0])]}
+          zIndex={state.detailId === arcade.id ? 200 : 100}
           title={arcade.store_name}
           onClick={() => {
             const params = new URLSearchParams(searchParams);
