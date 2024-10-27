@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { IoReturnUpBack } from "react-icons/io5";
 
-import { Button } from "@nextui-org/button";
+import { Button, Link } from "@nextui-org/react";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider, SelectItem } from "@nextui-org/react";
 import { Select } from "@nextui-org/select";
@@ -29,6 +29,7 @@ function SideBox() {
   const [arcadeDetail, setArcadeDetail] = useState({});
   const [sortMethod, setSortMethod] = useState("");
   const [isBoxOpen, setIsBoxOpen] = useState(false);
+  const [pathUrl, setPathUrl] = useState("");
 
   useEffect(() => {
     async function fetchArcades() {
@@ -43,17 +44,35 @@ function SideBox() {
   }, [lat, lng, range]);
 
   useEffect(() => {
+    async function fetchPathUrl(detailArcade) {
+      const base_Url =
+        "https://map.baidu.com/dir/@12957990.28211534,4826154.198241538,16.83z?querytype=bt&c=167&sn=2";
+      const detail_address = await (
+        await fetch(
+          `/api/QMap/poi?lat=${detailArcade.pos[0]}&lng=${detailArcade.pos[1]}`,
+        )
+      ).json();
+      const url_address = await (
+        await fetch(`/api/QMap/poi?lat=${lat}&lng=${lng}`)
+      ).json();
+      console.log(detail_address, url_address);
+      setPathUrl(
+        `${base_Url}\$\$\$\$\$\$${url_address}\$\$0\$\$\$\$&en=2\$\$\$\$\$\$${detail_address}\$\$&sc=167&ec=167&pn=0&rn=5&version=5&da_src=shareurl`,
+      );
+    }
     if (detailId) {
       const detail = arcadeList.find((element) => {
         return Number(element.id) === Number(detailId);
       });
       if (detail) {
         setArcadeDetail(detail);
+        fetchPathUrl(detail);
         setIsBoxOpen(true);
-      } else {
-        params.delete("detailId");
-        replace(`${pathname}?${params.toString()}`);
       }
+      // else {
+      //   params.delete("detailId");
+      //   replace(`${pathname}?${params.toString()}`);
+      // }
     }
   }, [detailId]);
 
@@ -124,6 +143,8 @@ function SideBox() {
                   replace(`${pathname}?${params.toString()}`);
                 }}
                 isIconOnly
+                showAnchorIcon
+                variant="solid"
                 className="ml-auto"
               >
                 <IoReturnUpBack />
@@ -133,14 +154,26 @@ function SideBox() {
           <Divider />
           <CardBody className="custom-scrollbar px-0 py-0">
             {detailId ? (
-              <ul className="left-4 pt-2">
-                <li className="text-2xl text-stone-950 py-1 px-1">
-                  {arcadeDetail.store_name}
-                </li>
-                <li className="text-xl text-stone-800 py-1 px-1">
-                  地址：{arcadeDetail.store_address}
-                </li>
-              </ul>
+              <>
+                <ul className="left-4 pt-2">
+                  <li className="text-2xl text-stone-950 py-1 px-1">
+                    {arcadeDetail.store_name}
+                  </li>
+                  <li className="text-xl text-stone-800 py-1 px-1">
+                    地址：{arcadeDetail.store_address}
+                  </li>
+                </ul>
+                <Button
+                  href={pathUrl}
+                  as={Link}
+                  className="ml-auto"
+                  variant="solid"
+                  showAnchorIcon
+                  isExternal
+                >
+                  查看路线
+                </Button>
+              </>
             ) : (
               <ul>
                 {arcadeList.map((arcade) => (

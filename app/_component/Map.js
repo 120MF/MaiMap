@@ -139,6 +139,7 @@ function MaiMap({ state }) {
           position={state.urlPos}
           title={"标定位置"}
           offset={new AMap.Pixel(-15, -42)}
+          zIndex={300}
         >
           <Image src="/nail-target.png" alt="target" width={30} height={50} />
         </Marker>
