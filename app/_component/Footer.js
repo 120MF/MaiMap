@@ -4,6 +4,7 @@ import Image from "next/image";
 
 import RangeSlider from "@/app/_component/RangeSlider";
 import { Suspense } from "react";
+import { Link } from "@nextui-org/link";
 
 function Footer() {
   return (
@@ -20,19 +21,20 @@ function Footer() {
         </div>
         <RangeSlider />
         <div className="flex items-center space-x-4">
-          <a
-            href="https://github.com/MoonBite666/Maimap/issues"
+          <Link
+            underline={"hover"}
+            href="https://gitee.com/moonfeather/MaiMap/issues"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-l border-gray-300 pl-4"
+            className="border-l border-gray-300 pl-4 m-0 text-sm"
           >
             反馈
-          </a>
+          </Link>
           <a
             href="https://github.com/MoonBite666/Maimap"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-l border-gray-300 pl-4"
+            className="border-l border-gray-300 pl-4 m-0"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
