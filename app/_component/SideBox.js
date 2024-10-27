@@ -3,9 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { Button } from "@nextui-org/button";
-import { FaArrowRightArrowLeft } from "react-icons/fa6";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
+import { IoReturnUpBack } from "react-icons/io5";
+
+import { Button } from "@nextui-org/button";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import { Divider } from "@nextui-org/react";
 
 function SideBox() {
   const searchParams = useSearchParams();
@@ -54,49 +57,74 @@ function SideBox() {
       }`}
     >
       <div className="flex items-center">
-        <div
-          className={`custom-scrollbar relative w-[20rem] h-[40rem] bg-blue-300 transition-transform duration-200 ${
+        <Card
+          isBlurred={true}
+          className={`flex max-w-[20rem] h-[40rem] transition-transform duration-200 ${
             isBoxOpen ? "translate-x-0" : "-translate-x-full"
-          } overflow-y-auto opacity-70`}
+          } overflow-y-auto opacity-80`}
         >
-          {detailId && (
-            <button
-              onClick={() => {
-                params.delete("detailId");
-                replace(`${pathname}?${params.toString()}`);
-              }}
-              className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded"
-            >
-              X
-            </button>
-          )}
-          {detailId ? (
-            <ul className="left-4">
-              <li className="text-2xl text-stone-950 py-1 px-1">
-                {arcadeDetail.store_name}
-              </li>
-              <li className="text-xl text-stone-800 py-1 px-1">
-                地址：{arcadeDetail.store_address}
-              </li>
-            </ul>
-          ) : (
-            <ul>
-              {arcadeList.map((arcade) => (
-                <li
-                  key={arcade.id}
-                  className="m-2 border-t border-gray-500 pl-4"
-                >
-                  <li className="text-xl text-stone-950 py-1 px-1">
-                    {arcade.store_name}
-                  </li>
-                  <li className="text-xs text-stone-800 py-1 px-1">
-                    {arcade.store_address}
-                  </li>
+          <CardHeader className="flex justify-between items-center h-14">
+            {detailId ? (
+              <p className="text-xl">机厅详情</p>
+            ) : (
+              <p className="text-xl">机厅列表</p>
+            )}
+            {detailId && (
+              <Button
+                onClick={() => {
+                  params.delete("detailId");
+                  replace(`${pathname}?${params.toString()}`);
+                }}
+                isIconOnly
+                className="ml-auto"
+              >
+                <IoReturnUpBack />
+              </Button>
+            )}
+          </CardHeader>
+          <Divider />
+          <CardBody className="custom-scrollbar px-0 py-0">
+            {detailId ? (
+              <ul className="left-4 pt-2">
+                <li className="text-2xl text-stone-950 py-1 px-1">
+                  {arcadeDetail.store_name}
                 </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                <li className="text-xl text-stone-800 py-1 px-1">
+                  地址：{arcadeDetail.store_address}
+                </li>
+              </ul>
+            ) : (
+              <ul>
+                {arcadeList.map((arcade) => (
+                  <Card
+                    fullWidth
+                    key={arcade.id}
+                    isBlurred={true}
+                    radius={"none"}
+                    isPressable
+                    isHoverable
+                    onPress={() => {
+                      const params = new URLSearchParams(searchParams);
+                      params.set("detailId", arcade.id);
+                      replace(`${pathname}?${params.toString()}`);
+                    }}
+                  >
+                    <CardBody>
+                      <li className="px-2">
+                        <li className="text-xl text-stone-950 py-1 px-1">
+                          {arcade.store_name}
+                        </li>
+                        <li className="text-xs text-stone-800 py-1 px-1">
+                          {arcade.store_address}
+                        </li>
+                      </li>
+                    </CardBody>
+                  </Card>
+                ))}
+              </ul>
+            )}
+          </CardBody>
+        </Card>
         <Button
           onClick={() => setIsBoxOpen((state) => !state)}
           className={`flex rounded-right h-10`}

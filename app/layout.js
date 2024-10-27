@@ -2,7 +2,7 @@ import "./globals.css";
 
 import Footer from "@/app/_component/Footer";
 export const metadata = {
-  title: "Maimap",
+  title: "MaiMap",
   description: "A map enabling you find the nearest Maimai.",
   icons: "/favicon.png",
 };
