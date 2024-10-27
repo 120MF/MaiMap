@@ -32,6 +32,8 @@ function reducer(state, action) {
       };
     case "nearby/update":
       return { ...state, nearbyArcades: action.payload };
+    case "detailId/update":
+      return { ...state, detailId: action.payload };
   }
 }
 
@@ -51,6 +53,7 @@ export default function MapContainer({}) {
     hasParams: lat && lng,
     nearbyArcades: [],
     range: range,
+    detailId: null,
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -88,6 +91,7 @@ export default function MapContainer({}) {
   }, [lat, lng, range, state.urlPos, state.range]);
 
   useEffect(() => {
+    dispatch({ type: "detailId/update", payload: detailId });
     if (detailId) {
       const detailArcade = state.nearbyArcades.find(
         (element) => Number(element.id) === Number(detailId),
@@ -145,16 +149,23 @@ function MaiMap({ state }) {
           key={index}
           visible={true}
           position={[Number(arcade.pos[1]), Number(arcade.pos[0])]}
-          title={"舞萌位置"}
+          title={arcade.store_name}
           onClick={() => {
             const params = new URLSearchParams(searchParams);
             params.set("detailId", arcade.id);
             replace(`${pathname}?${params.toString()}`);
           }}
         >
-          <div className={"flex w-12 text-xs"}>
+          {state.detailId === arcade.id ? (
+            <Image
+              src="/nail-arcade-selected.png"
+              alt="arcade"
+              width={30}
+              height={50}
+            />
+          ) : (
             <Image src="/nail-arcade.png" alt="arcade" width={30} height={50} />
-          </div>
+          )}
         </Marker>
       ))}
     </Map>
