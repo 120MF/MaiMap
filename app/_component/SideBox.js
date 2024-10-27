@@ -174,7 +174,7 @@ function SideBox() {
                   查看路线
                 </Button>
               </>
-            ) : (
+            ) : arcadeList.length > 0 ? (
               <ul>
                 {arcadeList.map((arcade) => (
                   <Card
@@ -210,6 +210,10 @@ function SideBox() {
                   </Card>
                 ))}
               </ul>
+            ) : (
+              <p className="w-full text-xl p-5 text-stone-600">
+                在指定范围内没有找到机厅。别气馁啦！
+              </p>
             )}
           </CardBody>
         </Card>
