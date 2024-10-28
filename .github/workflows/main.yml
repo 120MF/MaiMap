@@ -24,4 +24,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimai-docker:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimap-docker:latest
