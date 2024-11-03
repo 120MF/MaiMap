@@ -34,7 +34,7 @@ function SideBox() {
   useEffect(() => {
     async function fetchArcades() {
       const res = await fetch(
-        `/api/arcades/get?lat=${lat}&lng=${lng}&range=${range}`,
+        `/api/arcades/nearby?lat=${lat}&lng=${lng}&distance=${range}`,
       );
       const result = await res.json();
 
@@ -49,7 +49,7 @@ function SideBox() {
         "https://map.baidu.com/dir/@12957990.28211534,4826154.198241538,16.83z?querytype=bt&c=167&sn=2";
       const detail_address = await (
         await fetch(
-          `/api/QMap/poi?lat=${detailArcade.pos[0]}&lng=${detailArcade.pos[1]}`,
+          `/api/QMap/poi?lat=${detailArcade.store_lat}&lng=${detailArcade.store_lng}`,
         )
       ).json();
       const url_address = await (
@@ -81,8 +81,8 @@ function SideBox() {
       let tempList = [...arcadeList];
       tempList.sort(
         (a, b) =>
-          LL2Distance(a.pos[1], a.pos[0], lng, lat) -
-          LL2Distance(b.pos[1], b.pos[0], lng, lat),
+          LL2Distance(a.store_lng, a.store_lat, lng, lat) -
+          LL2Distance(b.store_lng, b.store_lat, lng, lat),
       );
       setArcadeList(tempList);
     } else if (sortMethod === "按首字母") {
@@ -203,7 +203,7 @@ function SideBox() {
                     <CardFooter className="flex justify-end">
                       <p className="text-sm text-stone-700">
                         直线距离:
-                        {LL2Distance(lng, lat, arcade.pos[1], arcade.pos[0])}
+                        {(arcade.distance / 1000).toFixed(4)}
                         km
                       </p>
                     </CardFooter>

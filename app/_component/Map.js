@@ -76,7 +76,7 @@ export default function MapContainer({}) {
     async function fetchArcades() {
       try {
         const res = await fetch(
-          `/api/arcades/get?lat=${lat}&lng=${lng}&range=${range}`,
+          `/api/arcades/nearby?lat=${lat}&lng=${lng}&distance=${range}`,
         );
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -87,7 +87,9 @@ export default function MapContainer({}) {
         console.error("Failed to fetch arcades:", error);
       }
     }
-    fetchArcades();
+    if (lng !== state_lng || lat !== state_lat || range !== state.range) {
+      fetchArcades();
+    }
   }, [lat, lng, range, state.urlPos, state.range]);
 
   useEffect(() => {
@@ -98,7 +100,10 @@ export default function MapContainer({}) {
       );
       dispatch({
         type: "center/update",
-        payload: [Number(detailArcade.pos[1]), Number(detailArcade.pos[0])],
+        payload: [
+          Number(detailArcade.store_lng),
+          Number(detailArcade.store_lat),
+        ],
       });
     } else {
       if (state.hasParams)
@@ -109,7 +114,7 @@ export default function MapContainer({}) {
   return (
     <APILoader version="2.0.5" akey={akey}>
       <div className="relative">
-        <MaiMap state={state} dispatch={dispatch} />
+        <MaiMap state={state} />
         <GeolocationButton />
       </div>
     </APILoader>
@@ -149,7 +154,7 @@ function MaiMap({ state }) {
           offset={new AMap.Pixel(-15, -42)}
           key={index}
           visible={true}
-          position={[Number(arcade.pos[1]), Number(arcade.pos[0])]}
+          position={[Number(arcade.store_lng), Number(arcade.store_lat)]}
           zIndex={state.detailId === arcade.id ? 200 : 100}
           title={arcade.store_name}
           onClick={() => {

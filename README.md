@@ -42,15 +42,17 @@ docker push my-dockerhub-username/maimap-docker:latest
 ```dotenv
 NEXT_PUBLIC_AMAP_AKEY=高德地图JavascriptAPI密钥
 NEXT_PUBLIC_QMAP_API_KEY=腾讯地图WebAPI密钥
-NEXT_PUBLIC_AMAP_API_KEY=高德地图WebAPI密钥（已弃用）
 ```
 
-- 爬取机厅数据暂用Python完成，若近期有更新需要手动重新爬取；
+- 需要自行建立`mysql`数据库并在[此文件](./app/_lib/db.js)中配置数据库连接；
+- 爬取机厅数据暂用Python完成，若近期有更新需要手动重新爬取。
 
 ## Todo
 
-- [ ] 引入组件库
-- [ ] 为机厅详情页增加各种外部链接
+- [x] 引入组件库
+- [x] 引入数据库
+- [ ] 修改详情界面按钮触发机制
+- [ ] 制作fallback页面
 - [ ] 增加机厅评论功能
 
 ## 致谢
