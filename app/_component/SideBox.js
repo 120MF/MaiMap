@@ -128,7 +128,7 @@ function SideBox() {
           </CardHeader>
           <Divider />
           <CardBody className="custom-scrollbar px-0 py-0">
-            {detailId ? (
+            {detailId && arcadeDetail.store_name ? (
               <>
                 <ul className="left-4 pt-2">
                   <li className="text-2xl text-stone-950 py-1 px-1">

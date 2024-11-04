@@ -99,13 +99,14 @@ export default function MapContainer({}) {
       const detailArcade = state.nearbyArcades.find(
         (element) => Number(element.id) === Number(detailId),
       );
-      dispatch({
-        type: "center/update",
-        payload: [
-          Number(detailArcade.store_lng),
-          Number(detailArcade.store_lat),
-        ],
-      });
+      if (detailArcade)
+        dispatch({
+          type: "center/update",
+          payload: [
+            Number(detailArcade.store_lng),
+            Number(detailArcade.store_lat),
+          ],
+        });
     } else {
       if (state.hasParams)
         dispatch({ type: "center/update", payload: state.urlPos });
