@@ -1,80 +1,61 @@
-name: "🐛 Bug Report"
-description: Create a new ticket for a bug.
-title: "🐛 [BUG] - <title>"
+name: "🐛 Bug反馈"
+description: 创建一条关于程序异常的反馈.
+title: "🐛 [BUG] - 标题"
 labels: [
   "bug"
 ]
 body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢对项目的支持与关注。
+  - type: checkboxes
+    attributes:
+      label: 这个问题是否已经存在？
+      options:
+        - label: 我已经在Issue页面搜索过现有的问题 (https://gitee.com/moonfeather/MaiMap/issues)
+          required: true
   - type: textarea
     id: description
     attributes:
-      label: "Description"
-      description: Please enter an explicit description of your issue
-      placeholder: Short and explicit description of your incident...
+      label: "描述"
+      description: 请简要描述您使用过程中遇到的问题
+      placeholder: 简要描述您使用过程中遇到的问题...
     validations:
       required: true
   - type: input
     id: reprod-url
     attributes:
-      label: "Reproduction URL"
-      description: Please enter your GitHub URL to provide a reproduction of the issue
-      placeholder: ex. https://github.com/USERNAME/REPO-NAME
+      label: "错误重现URL"
+      description: 您可填写网站发生错误时的URL
+      placeholder: 例如. https://maimap.tech/?lat=22.3193039&lng=114.1693611&detailId=9
     validations:
-      required: true
+      required: false
   - type: textarea
     id: reprod
     attributes:
-      label: "Reproduction steps"
-      description: Please enter an explicit description of your issue
+      label: "错误重现步骤"
+      description: 请填写触发Bug的过程
       value: |
-        1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
-        4. See error
-      render: bash
+        1. 访问网站
+        2. 点击 '....'
+        3. 滑动至 '....'
+        4. 触发Bug
     validations:
       required: true
   - type: textarea
     id: screenshot
     attributes:
-      label: "Screenshots"
-      description: If applicable, add screenshots to help explain your problem.
-      value: |
-        ![DESCRIPTION](LINK.png)
-      render: bash
+      label: "屏幕截图"
+      description: 如果可以的话，添加一张屏幕截图来辅助定位问题
+      placeholder: 在上方工具栏中上传图片...
     validations:
       required: false
   - type: textarea
-    id: logs
-    attributes:
-      label: "Logs"
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: bash
-    validations:
-      required: false
-  - type: dropdown
     id: browsers
     attributes:
-      label: "Browsers"
-      description: What browsers are you seeing the problem on ?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
-        - Opera
+      label: "浏览器"
+      description: 填写您触发Bug时使用的浏览器
+      placeholder: 例如. Chrome、Firefox、小米浏览器、夸克浏览器
     validations:
-      required: false
-  - type: dropdown
-    id: os
-    attributes:
-      label: "OS"
-      description: What is the impacted environment ?
-      multiple: true
-      options:
-        - Windows
-        - Linux
-        - Mac
-    validations:
-      required: false
+      required: true

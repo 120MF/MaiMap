@@ -1,63 +1,43 @@
-name: "💡 Feature Request"
-description: Create a new ticket for a new feature request
-title: "💡 [REQUEST] - <title>"
-labels: [
-  "question"
-]
+name: "💡 功能建议"
+description: 创建一条关于应用功能建议的反馈.
+title: "💡 [建议] - 标题"
+labels: ["enhancement"]
 body:
-  - type: input
-    id: start_date
+  - type: markdown
     attributes:
-      label: "Start Date"
-      description: Start of development
-      placeholder: "month/day/year"
+      value: |
+        感谢提出功能建议，我们将仔细考虑！
+  - type: textarea
+    id: related-problem
+    attributes:
+      label: 你的功能建议是否和某个问题相关？
+      description: 清晰并简洁地描述问题是什么，例如，当我...时，我总是感到困扰。
     validations:
       required: false
   - type: textarea
-    id: implementation_pr
+    id: desired-solution
     attributes:
-      label: "Implementation PR"
-      description: Pull request used
-      placeholder: "#Pull Request ID"
-    validations:
-      required: false
-  - type: textarea
-    id: reference_issues
-    attributes:
-      label: "Reference Issues"
-      description: Common issues
-      placeholder: "#Issues IDs"
-    validations:
-      required: false
-  - type: textarea
-    id: summary
-    attributes:
-      label: "Summary"
-      description: Provide a brief explanation of the feature
-      placeholder: Describe in a few lines your feature request
+      label: 你希望看到什么解决方案？
+      description: 清晰并简洁地描述你希望发生的事情。
     validations:
       required: true
   - type: textarea
-    id: basic_example
+    id: alternatives
     attributes:
-      label: "Basic Example"
-      description: Indicate here some basic examples of your feature.
-      placeholder: A few specific words about your feature request.
-    validations:
-      required: true
-  - type: textarea
-    id: drawbacks
-    attributes:
-      label: "Drawbacks"
-      description: What are the drawbacks/impacts of your feature request ?
-      placeholder: Identify the drawbacks and impacts while being neutral on your feature request
-    validations:
-      required: true
-  - type: textarea
-    id: unresolved_question
-    attributes:
-      label: "Unresolved questions"
-      description: What questions still remain unresolved ?
-      placeholder: Identify any unresolved issues.
+      label: 你考虑过哪些替代方案？
+      description: 清晰并简洁地描述你考虑过的任何替代解决方案或功能。
     validations:
       required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: 你有其他上下文或截图吗？
+      description: 在此处添加有关功能请求的任何其他上下文或截图。
+    validations:
+      required: false
+  - type: checkboxes
+    attributes:
+      label: 意向参与贡献
+      options:
+        - label: 我有意向参与具体功能的开发实现并将代码贡献回到上游社区
+          required: false

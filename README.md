@@ -15,6 +15,10 @@ _邂逅每个目的地与迪拉熊_
 - 在搜索栏中搜索目的地并在地图上跳转至相应位置；
 - 实时更改机厅搜索半径。
 
+## 进行反馈
+
+我们需要你的反馈让项目变得更好。如果你有任何功能建议或Bug报告，请前往Issue页面提交相关反馈！
+
 ## 进行开发
 
 ### 快速开始
@@ -22,7 +26,7 @@ _邂逅每个目的地与迪拉熊_
 ```shell
 git clone https://github.com/MoonBite666/MaiMap.git
 cd MaiMap
-npm i
+npm ci
 npm run dev
 ```
 

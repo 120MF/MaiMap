@@ -42,7 +42,7 @@ function Footer() {
           </Link>
           <Link
             underline={"hover"}
-            href="https://gitee.com/moonfeather/MaiMap/issues"
+            href="https://gitee.com/moonfeather/MaiMap/issues/new"
             target="_blank"
             rel="noopener noreferrer"
             className="border-l border-gray-300 pl-2 m-0 text-sm"
