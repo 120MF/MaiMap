@@ -41,6 +41,7 @@ export default function SearchBar() {
     if (input) {
       params.set("lat", lat);
       params.set("lng", lng);
+      params.delete("detailId");
     } else {
       params.delete("lat");
       params.delete("lng");

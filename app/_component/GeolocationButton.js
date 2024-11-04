@@ -23,7 +23,7 @@ function GeolocationButton() {
         const params = new URLSearchParams(searchParams);
         params.set("lat", lat);
         params.set("lng", lng);
-        params.set("detailId", null);
+        params.delete("detailId");
         replace(`${pathname}?${params.toString()}`);
         setIsLoading(false);
       },
