@@ -6,13 +6,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 import { IoReturnUpBack } from "react-icons/io5";
 
-import { Button, Link } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider, SelectItem } from "@nextui-org/react";
 import { Select } from "@nextui-org/select";
 
-import { LL2Distance } from "@/app/_lib/LL2Distance";
 import pinyin from "pinyin";
+import PathButton from "@/app/_component/PathButton";
 
 function SideBox() {
   const searchParams = useSearchParams();
@@ -29,7 +29,6 @@ function SideBox() {
   const [arcadeDetail, setArcadeDetail] = useState({});
   const [sortMethod, setSortMethod] = useState("");
   const [isBoxOpen, setIsBoxOpen] = useState(false);
-  const [pathUrl, setPathUrl] = useState("");
 
   useEffect(() => {
     async function fetchArcades() {
@@ -45,29 +44,12 @@ function SideBox() {
   }, [lat, lng, range]);
 
   useEffect(() => {
-    async function fetchPathUrl(detailArcade) {
-      const base_Url =
-        "https://map.baidu.com/dir/@12957990.28211534,4826154.198241538,16.83z?querytype=bt&c=167&sn=2";
-      const detail_address = await (
-        await fetch(
-          `/api/QMap/poi?lat=${detailArcade.store_lat}&lng=${detailArcade.store_lng}`,
-        )
-      ).json();
-      const url_address = await (
-        await fetch(`/api/QMap/poi?lat=${lat}&lng=${lng}`)
-      ).json();
-      console.log(detail_address, url_address);
-      setPathUrl(
-        `${base_Url}\$\$\$\$\$\$${url_address}\$\$0\$\$\$\$&en=2\$\$\$\$\$\$${detail_address}\$\$&sc=167&ec=167&pn=0&rn=5&version=5&da_src=shareurl`,
-      );
-    }
     if (detailId) {
       const detail = arcadeList.find((element) => {
         return Number(element.id) === Number(detailId);
       });
       if (detail) {
         setArcadeDetail(detail);
-        fetchPathUrl(detail);
         setIsBoxOpen(true);
       }
     }
@@ -76,11 +58,7 @@ function SideBox() {
   useEffect(() => {
     if (sortMethod === "按距离") {
       let tempList = [...arcadeList];
-      tempList.sort(
-        (a, b) =>
-          LL2Distance(a.store_lng, a.store_lat, lng, lat) -
-          LL2Distance(b.store_lng, b.store_lat, lng, lat),
-      );
+      tempList.sort((a, b) => a.distance - b.distance);
       setArcadeList(tempList);
     } else if (sortMethod === "按首字母") {
       let tempList = [...arcadeList];
@@ -141,7 +119,7 @@ function SideBox() {
                 }}
                 isIconOnly
                 showAnchorIcon
-                variant="solid"
+                variant="bordered"
                 className="ml-auto"
               >
                 <IoReturnUpBack />
@@ -160,16 +138,6 @@ function SideBox() {
                     地址：{arcadeDetail.store_address}
                   </li>
                 </ul>
-                <Button
-                  href={pathUrl}
-                  as={Link}
-                  className="ml-auto"
-                  variant="solid"
-                  showAnchorIcon
-                  isExternal
-                >
-                  查看路线
-                </Button>
               </>
             ) : arcadeList.length > 0 ? (
               <ul>
@@ -213,6 +181,17 @@ function SideBox() {
               </p>
             )}
           </CardBody>
+          {detailId && (
+            <CardFooter>
+              <PathButton
+                endAddress={arcadeDetail.store_address}
+                startLat={lat}
+                startLng={lng}
+              >
+                查看路线
+              </PathButton>
+            </CardFooter>
+          )}
         </Card>
         <Button
           onClick={() => setIsBoxOpen((state) => !state)}
