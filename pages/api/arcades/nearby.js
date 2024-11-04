@@ -25,7 +25,13 @@ export default function handler(req, res) {
       console.error("an error occurs", error);
       return res.status(500).json({ error: error.message });
     }
+    const arcades = results.map((result) => ({
+      ...result,
+      store_lat: Number(result.store_lat),
+      store_lng: Number(result.store_lng),
+      id: Number(result.id),
+    }));
 
-    return res.status(200).json(results);
+    return res.status(200).json(arcades);
   });
 }

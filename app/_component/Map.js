@@ -102,10 +102,7 @@ export default function MapContainer({}) {
       if (detailArcade)
         dispatch({
           type: "center/update",
-          payload: [
-            Number(detailArcade.store_lng),
-            Number(detailArcade.store_lat),
-          ],
+          payload: [detailArcade.store_lng, detailArcade.store_lat],
         });
     } else {
       if (state.hasParams)
@@ -156,8 +153,8 @@ function MaiMap({ state }) {
           offset={new AMap.Pixel(-15, -42)}
           key={index}
           visible={true}
-          position={[Number(arcade.store_lng), Number(arcade.store_lat)]}
-          zIndex={Number(state.detailId) === Number(arcade.id) ? 200 : 100}
+          position={[arcade.store_lng, arcade.store_lat]}
+          zIndex={state.detailId === arcade.id ? 200 : 100}
           title={arcade.store_name}
           onClick={() => {
             const params = new URLSearchParams(searchParams);
@@ -165,7 +162,7 @@ function MaiMap({ state }) {
             replace(`${pathname}?${params.toString()}`);
           }}
         >
-          {Number(state.detailId) === Number(arcade.id) ? (
+          {state.detailId === arcade.id ? (
             <Image
               src="/nail-arcade-selected.png"
               alt="arcade"
