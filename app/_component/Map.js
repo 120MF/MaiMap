@@ -33,6 +33,7 @@ function reducer(state, action) {
     case "nearby/update":
       return { ...state, nearbyArcades: action.payload };
     case "detailId/update":
+      console.log("detailId upload:", action.payload);
       return { ...state, detailId: action.payload };
   }
 }
@@ -155,7 +156,7 @@ function MaiMap({ state }) {
           key={index}
           visible={true}
           position={[Number(arcade.store_lng), Number(arcade.store_lat)]}
-          zIndex={state.detailId === arcade.id ? 200 : 100}
+          zIndex={Number(state.detailId) === Number(arcade.id) ? 200 : 100}
           title={arcade.store_name}
           onClick={() => {
             const params = new URLSearchParams(searchParams);
@@ -163,7 +164,7 @@ function MaiMap({ state }) {
             replace(`${pathname}?${params.toString()}`);
           }}
         >
-          {state.detailId === arcade.id ? (
+          {Number(state.detailId) === Number(arcade.id) ? (
             <Image
               src="/nail-arcade-selected.png"
               alt="arcade"

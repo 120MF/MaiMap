@@ -39,6 +39,7 @@ function SideBox() {
       const result = await res.json();
 
       setArcadeList(result);
+      setSortMethod("");
     }
     fetchArcades();
   }, [lat, lng, range]);
@@ -69,10 +70,6 @@ function SideBox() {
         fetchPathUrl(detail);
         setIsBoxOpen(true);
       }
-      // else {
-      //   params.delete("detailId");
-      //   replace(`${pathname}?${params.toString()}`);
-      // }
     }
   }, [detailId]);
 

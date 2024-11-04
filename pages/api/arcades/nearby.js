@@ -25,7 +25,6 @@ export default function handler(req, res) {
       console.error("an error occurs", error);
       return res.status(500).json({ error: error.message });
     }
-    // console.log(results);
 
     return res.status(200).json(results);
   });
