@@ -95,7 +95,7 @@ export default function MapContainer({}) {
 
   useEffect(() => {
     dispatch({ type: "detailId/update", payload: detailId });
-    if (detailId) {
+    if (detailId && state.nearbyArcades.length > 0) {
       const detailArcade = state.nearbyArcades.find(
         (element) => Number(element.id) === Number(detailId),
       );

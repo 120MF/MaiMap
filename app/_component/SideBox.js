@@ -71,7 +71,7 @@ function SideBox() {
         setIsBoxOpen(true);
       }
     }
-  }, [detailId]);
+  }, [detailId, arcadeList]);
 
   useEffect(() => {
     if (sortMethod === "按距离") {
