@@ -19,15 +19,12 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Create .env.local
-        run: |
-          echo "NEXT_PUBLIC_AMAP_AKEY=${{ secrets.NEXT_PUBLIC_AMAP_AKEY }}" >> .env.local
-          echo "NEXT_PUBLIC_QMAP_API_KEY=${{ secrets.NEXT_PUBLIC_QMAP_API_KEY }}" >> .env.local
       -
         name: Build and push
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimap-docker:latest
+          build-args: |
+            NEXT_PUBLIC_AMAP_AKEY:${{ secrets.NEXT_PUBLIC_AMAP_AKEY }}
+            NEXT_PUBLIC_QMAP_API_KEY:${{ secrets.NEXT_PUBLIC_QMAP_API_KEY }}
