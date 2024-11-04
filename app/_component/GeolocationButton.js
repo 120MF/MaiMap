@@ -11,23 +11,31 @@ function GeolocationButton() {
   const [isLoading, setIsLoading] = useState(false);
 
   function handleGeoLocation() {
-    AMap.plugin(["AMap.Geolocation"], () => {
-      setIsLoading(true);
-      const instance = new AMap.Geolocation({});
-      instance.getCityInfo((status, result) => {
-        if (status === "complete") {
-          const [lng, lat] = result.position;
-          const params = new URLSearchParams(searchParams);
-          params.set("lat", lat);
-          params.set("lng", lng);
-          params.set("detailId", null);
-          replace(`${pathname}?${params.toString()}`);
-        } else {
-          throw new Error("GeoLocation Error");
-        }
+    if (!navigator.geolocation) {
+      throw new Error("Geolocation is not supported by this browser.");
+    }
+
+    setIsLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude: lat, longitude: lng } = position.coords;
+        const params = new URLSearchParams(searchParams);
+        params.set("lat", lat);
+        params.set("lng", lng);
+        params.set("detailId", null);
+        replace(`${pathname}?${params.toString()}`);
         setIsLoading(false);
-      });
-    });
+      },
+      (error) => {
+        console.error("Geolocation Error:", error);
+        setIsLoading(false);
+      },
+      {
+        timeout: 10000,
+        enableHighAccuracy: true,
+      },
+    );
   }
 
   return (
