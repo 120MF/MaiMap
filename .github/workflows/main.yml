@@ -1,7 +1,8 @@
-name: ci
+name: maimap-docker-ci
 
 on:
-  push:
+  release:
+    types: [created]
 
 jobs:
   docker:
