@@ -1,6 +1,6 @@
 {
   "name": "maimap",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,6 +12,7 @@
     "@babel/runtime": "^7.25.7",
     "@nextui-org/button": "^2.0.38",
     "@nextui-org/card": "^2.0.34",
+    "@nextui-org/input": "^2.2.5",
     "@nextui-org/link": "^2.0.35",
     "@nextui-org/modal": "^2.0.41",
     "@nextui-org/react": "^2.4.8",

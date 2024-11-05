@@ -13,6 +13,8 @@ import { Select } from "@nextui-org/select";
 
 import pinyin from "pinyin";
 import PathButton from "@/app/_component/PathButton";
+import ArcadeList from "@/app/_component/ArcadeList";
+import ArcadeDetail from "@/app/_component/ArcadeDetail";
 
 function SideBox() {
   const searchParams = useSearchParams();
@@ -102,7 +104,6 @@ function SideBox() {
                   defaultSelectedKeys=""
                   selectedKeys={[sortMethod]}
                   onChange={(e) => {
-                    console.log(e.target.value);
                     setSortMethod(e.target.value);
                   }}
                 >
@@ -129,52 +130,9 @@ function SideBox() {
           <Divider />
           <CardBody className="custom-scrollbar px-0 py-0">
             {detailId && arcadeDetail.store_name ? (
-              <>
-                <ul className="left-4 pt-2">
-                  <li className="text-2xl text-stone-950 py-1 px-1">
-                    {arcadeDetail.store_name}
-                  </li>
-                  <li className="text-xl text-stone-800 py-1 px-1">
-                    地址：{arcadeDetail.store_address}
-                  </li>
-                </ul>
-              </>
+              <ArcadeDetail arcadeDetail={arcadeDetail} />
             ) : arcadeList.length > 0 ? (
-              <ul>
-                {arcadeList.map((arcade) => (
-                  <Card
-                    fullWidth
-                    key={arcade.store_id}
-                    isBlurred={true}
-                    radius={"none"}
-                    isPressable
-                    isHoverable
-                    onPress={() => {
-                      const params = new URLSearchParams(searchParams);
-                      params.set("detailId", arcade.store_id);
-                      replace(`${pathname}?${params.toString()}`);
-                    }}
-                  >
-                    <CardBody>
-                      <ul className="px-2">
-                        <li className="text-xl text-stone-950 py-1 px-1">
-                          {arcade.store_name}
-                        </li>
-                        <li className="text-xs text-stone-800 py-1 px-1">
-                          {arcade.store_address}
-                        </li>
-                      </ul>
-                    </CardBody>
-                    <CardFooter className="flex justify-end">
-                      <p className="text-sm text-stone-700">
-                        直线距离:
-                        {(arcade.distance / 1000).toFixed(4)}
-                        km
-                      </p>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </ul>
+              <ArcadeList arcadeList={arcadeList} />
             ) : (
               <p className="w-full text-xl p-5 text-stone-600">
                 在指定范围内没有找到机厅。别气馁啦！
