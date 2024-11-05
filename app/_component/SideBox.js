@@ -46,7 +46,7 @@ function SideBox() {
   useEffect(() => {
     if (detailId) {
       const detail = arcadeList.find((element) => {
-        return Number(element.id) === Number(detailId);
+        return Number(element.store_id) === Number(detailId);
       });
       if (detail) {
         setArcadeDetail(detail);
@@ -144,14 +144,14 @@ function SideBox() {
                 {arcadeList.map((arcade) => (
                   <Card
                     fullWidth
-                    key={arcade.id}
+                    key={arcade.store_id}
                     isBlurred={true}
                     radius={"none"}
                     isPressable
                     isHoverable
                     onPress={() => {
                       const params = new URLSearchParams(searchParams);
-                      params.set("detailId", arcade.id);
+                      params.set("detailId", arcade.store_id);
                       replace(`${pathname}?${params.toString()}`);
                     }}
                   >

@@ -97,7 +97,7 @@ export default function MapContainer({}) {
     dispatch({ type: "detailId/update", payload: detailId });
     if (detailId && state.nearbyArcades.length > 0) {
       const detailArcade = state.nearbyArcades.find(
-        (element) => Number(element.id) === Number(detailId),
+        (element) => Number(element.store_id) === Number(detailId),
       );
       if (detailArcade)
         dispatch({
@@ -154,15 +154,15 @@ function MaiMap({ state }) {
           key={index}
           visible={true}
           position={[arcade.store_lng, arcade.store_lat]}
-          zIndex={state.detailId === arcade.id ? 200 : 100}
+          zIndex={state.detailId === arcade.store_id ? 200 : 100}
           title={arcade.store_name}
           onClick={() => {
             const params = new URLSearchParams(searchParams);
-            params.set("detailId", arcade.id);
+            params.set("detailId", arcade.store_id);
             replace(`${pathname}?${params.toString()}`);
           }}
         >
-          {state.detailId === arcade.id ? (
+          {state.detailId === arcade.store_id ? (
             <Image
               src="/nail-arcade-selected.png"
               alt="arcade"

@@ -29,7 +29,7 @@ export default function handler(req, res) {
       ...result,
       store_lat: Number(result.store_lat),
       store_lng: Number(result.store_lng),
-      id: Number(result.id),
+      store_id: Number(result.store_id),
     }));
 
     return res.status(200).json(arcades);
