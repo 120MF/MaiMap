@@ -1,12 +1,14 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-
 import { Suspense } from "react";
+
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import Footer from "@/components/Footer";
+
 import clsx from "clsx";
+
 import { fontSans } from "@/config/fonts";
 
 export const metadata: Metadata = {
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
   },
 };
-
+// due to uncertain bug, the color is reversed.
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
@@ -36,7 +38,7 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <body
         className={clsx(
-          "m-0 p-0 min-h-screen h-full overflow-hidden bg-background font-sans antialiased",
+          "m-0 p-0 h-full overflow-hidden bg-background font-sans antialiased",
           fontSans.variable,
         )}
       >

@@ -1,9 +1,9 @@
-import { ThemeSwitch } from "@/components/theme-switch";
+import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 
 function Footer() {
   return (
     <div>
-      <ThemeSwitch />
+      <ThemeSwitcher />
     </div>
   );
 }
