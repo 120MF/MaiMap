@@ -24,7 +24,7 @@ function GeolocationButton() {
 
         params.set("lat", String(lat));
         params.set("lng", String(lng));
-        params.delete("detailId");
+        params.delete("arcadeId");
         replace(`${pathname}?${params.toString()}`);
         setIsLoading(false);
       },

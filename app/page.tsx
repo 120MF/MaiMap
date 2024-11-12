@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Updater />
       <div className="absolute top-0 left-0">
-        <MapContainer />
+        <MapContainer></MapContainer>
       </div>
     </>
   );

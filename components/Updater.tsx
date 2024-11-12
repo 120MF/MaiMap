@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useMap, MapState } from "@/stores/useMap";
+import { ArcadesState, useArcades } from "@/stores/useArcades";
 
 function Updater() {
   const searchParams = useSearchParams();
@@ -12,15 +13,26 @@ function Updater() {
   const arcadeId = Number(searchParams.get("arcadeId")) || null;
 
   const update_center = useMap((state: MapState) => state.update_center);
+  const update_target = useMap((state: MapState) => state.update_target);
   const update_range = useMap((state: MapState) => state.update_range);
+  const fetch_nearby_arcades = useArcades(
+    (state: ArcadesState) => state.fetch_nearby_arcade,
+  );
 
   useEffect(() => {
-    if (lat && lng) update_center([lat, lng]);
+    if (lat && lng) {
+      update_center([lat, lng]);
+      update_target([lat, lng]);
+    }
   }, [lat, lng]);
 
   useEffect(() => {
     if (range) update_range(range);
   }, [range]);
+
+  useEffect(() => {
+    if (lat && lng && range) fetch_nearby_arcades(lat, lng, range);
+  }, [lat, lng, range]);
 
   // useEffect(() => {
   //   const state_lng = state.urlPos[0];
