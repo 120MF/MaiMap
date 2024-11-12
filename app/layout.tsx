@@ -1,13 +1,13 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import { Link } from "@nextui-org/link";
-import clsx from "clsx";
 
+import { Suspense } from "react";
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
+import Footer from "@/components/Footer";
+import clsx from "clsx";
 import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
 
 export const metadata: Metadata = {
   title: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.png",
   },
 };
 
@@ -34,30 +34,20 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "m-0 p-0 min-h-screen h-full overflow-hidden bg-background font-sans antialiased",
           fontSans.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-screen">
-            <Navbar />
-            <main className="container mx-auto max-w-7xl pt-16 px-6 flex-grow">
-              {children}
-            </main>
-            <footer className="w-full flex items-center justify-center py-3">
-              <Link
-                isExternal
-                className="flex items-center gap-1 text-current"
-                href="https://nextui-docs-v2.vercel.app?utm_source=next-app-template"
-                title="nextui.org homepage"
-              >
-                <span className="text-default-600">Powered by</span>
-                <p className="text-primary">NextUI</p>
-              </Link>
-            </footer>
+        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+          <div className="flex-1 flex flex-col">
+            <div className="m-0 p-0" style={{ height: "95vh" }}>
+              <Suspense>{children}</Suspense>
+            </div>
+            <div style={{ height: "5vh" }}>
+              <Footer></Footer>
+            </div>
           </div>
         </Providers>
       </body>
