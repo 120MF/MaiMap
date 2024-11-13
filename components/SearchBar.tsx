@@ -63,7 +63,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="relative flex flex-1 flex-shrink-0 z-10">
+    <div className="relative flex flex-1 z-10">
       <div className="w-full flex">
         <Input
           label="输入地点"
@@ -98,11 +98,11 @@ export default function SearchBar() {
         suggestions.length > 0 &&
         !isLoading &&
         isSuggestionsOpen && (
-          <div className="absolute top-full mt-1">
+          <div className="absolute top-full mt-1 w-full">
             <Card
               fullWidth
               isBlurred
-              className="h-48 overflow-y-scroll"
+              className="h-96 overflow-y-auto"
               radius="sm"
             >
               <CardHeader className="h-10">搜索结果</CardHeader>
@@ -118,10 +118,11 @@ export default function SearchBar() {
                       setInputValue(suggestion.title);
                       handleSearch(suggestion.location);
                     }}
+                    className="min-h-20"
                   >
                     <CardBody>
-                      <div>{suggestion.title}</div>
-                      <div>{suggestion.address}</div>
+                      <p className="text-xl">{suggestion.title}</p>
+                      <p className="text-md">{suggestion.address}</p>
                     </CardBody>
                   </Card>
                 ))}
