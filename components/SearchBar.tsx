@@ -2,15 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { Input } from "@nextui-org/input";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import { Button } from "@nextui-org/button";
 
 import { getSuggestion } from "@/lib/QMapSuggestion";
 import { suggestion } from "@/types/suggestion";
 
+import { BsSlashSquareFill } from "react-icons/bs";
+import { FaAngleUp, FaAngleDown } from "react-icons/fa6";
+
 export default function SearchBar() {
   const [inputValue, setInputValue] = useState<string>("");
   const [suggestions, setSuggestions] = useState<suggestion[]>([]);
-  const [isFocus, setIsFocus] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -19,6 +25,7 @@ export default function SearchBar() {
   useEffect(() => {
     if (inputValue) {
       setIsLoading(true);
+      setIsSuggestionsOpen(true);
       const handler = setTimeout(async () => {
         try {
           const data = await getSuggestion(inputValue);
@@ -52,45 +59,77 @@ export default function SearchBar() {
       params.delete("lng");
     }
     replace(`${pathname}?${params.toString()}`);
-  }
-
-  function handleFocus(state: boolean) {
-    setIsFocus(state);
+    setIsSuggestionsOpen(false);
   }
 
   return (
     <div className="relative flex flex-1 flex-shrink-0 z-10">
-      <input
-        className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-        placeholder={"输入地点"}
-        value={inputValue}
-        onBlur={() =>
-          setTimeout(() => {
-            handleFocus(false);
-          }, 100)
-        }
-        onChange={(e) => setInputValue(e.target.value)}
-        onFocus={() => handleFocus(true)}
-      />
-      {suggestions && suggestions.length > 0 && isFocus && !isLoading && (
-        <ul className="absolute top-full left-0 w-full bg-background font-sans border border-gray-200 mt-1 rounded-md shadow-lg">
-          {suggestions.map((suggestion, index) => (
-            // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
-            <li
-              key={index}
-              className="px-4 py-2 hover:bg-gray-400 cursor-pointer"
-              onClick={() => {
-                setInputValue(suggestion.title);
-                handleSearch(suggestion.location);
-              }}
+      <div className="w-full flex">
+        <Input
+          label="输入地点"
+          radius="none"
+          size="sm"
+          value={inputValue}
+          variant="faded"
+          onValueChange={setInputValue}
+        />
+
+        <Button
+          disableAnimation={!inputValue}
+          isIconOnly
+          size="lg"
+          radius="none"
+          onClick={() => {
+            setIsSuggestionsOpen((state) => !state);
+          }}
+        >
+          {inputValue ? (
+            isSuggestionsOpen ? (
+              <FaAngleUp />
+            ) : (
+              <FaAngleDown />
+            )
+          ) : (
+            <BsSlashSquareFill />
+          )}
+        </Button>
+      </div>
+      {suggestions &&
+        suggestions.length > 0 &&
+        !isLoading &&
+        isSuggestionsOpen && (
+          <div className="absolute top-full mt-1">
+            <Card
+              fullWidth
+              isBlurred
+              className="h-48 overflow-y-scroll"
+              radius="sm"
             >
-              <div>{suggestion.title}</div>
-              <div>{suggestion.address}</div>
-            </li>
-          ))}
-        </ul>
-      )}
-      {isLoading && isFocus && (
+              <CardHeader className="h-10">搜索结果</CardHeader>
+              <CardBody className="custom-scrollbar px-0 py-0">
+                {suggestions.map((suggestion, index) => (
+                  <Card
+                    key={index}
+                    isBlurred
+                    isHoverable
+                    isPressable
+                    radius="none"
+                    onClick={() => {
+                      setInputValue(suggestion.title);
+                      handleSearch(suggestion.location);
+                    }}
+                  >
+                    <CardBody>
+                      <div>{suggestion.title}</div>
+                      <div>{suggestion.address}</div>
+                    </CardBody>
+                  </Card>
+                ))}
+              </CardBody>
+            </Card>
+          </div>
+        )}
+      {isLoading && (
         <ul className="absolute top-full left-0 w-full bg-background border border-gray-200 mt-1 rounded-md shadow-lg">
           <li className="px-4 py-2 bg-background cursor-not-allowed">
             加载中……

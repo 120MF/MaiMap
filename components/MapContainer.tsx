@@ -45,7 +45,7 @@ function MaiMap() {
       style={{ height: "95vh", width: "100vw" }}
     >
       <ScaleControl offset={[20, 10]} position="LB" visible={true} />
-      <ToolBarControl offset={[10, 50]} position="RT" visible={true} />
+      <ToolBarControl offset={[10, 70]} position="RT" visible={true} />
       <Circle
         key={range}
         center={[targetLng, targetLat]}
