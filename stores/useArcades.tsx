@@ -15,10 +15,9 @@ const useArcades = create<ArcadesState>()((set) => ({
   update_arcadeId: (id) => set({ arcadeId: id }),
   update_nearby: (items) => set({ nearbyArcades: items }),
   fetch_nearby_arcade: async (lat, lng, range) => {
-    const res = await fetch("/arcades/get/nearby", {
-      method: "POST",
-      body: JSON.stringify({ lat, lng, range }),
-    });
+    const res = await fetch(
+      `/arcades/get/nearby?lat=${lat}&lng=${lng}&range=${range}`,
+    );
 
     if (res.status === 500) {
       return;

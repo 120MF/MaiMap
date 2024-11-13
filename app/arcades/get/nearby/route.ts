@@ -3,8 +3,13 @@ import { RowDataPacket } from "mysql2";
 
 import { pool } from "@/lib/db";
 
-export async function POST(request: Request) {
-  const { lat, lng, range } = await request.json();
+import { type NextRequest } from "next/server";
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams;
+  const lat = searchParams.get("lat");
+  const lng = searchParams.get("lng");
+  const range = searchParams.get("range");
 
   if (!lat || !lng || !range) {
     return new Response(

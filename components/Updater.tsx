@@ -8,8 +8,8 @@ function Updater() {
   const searchParams = useSearchParams();
 
   const range = Number(searchParams.get("range")) || 40;
-  const lat = Number(searchParams.get("lat")) || null;
-  const lng = Number(searchParams.get("lng")) || null;
+  const lat = Number(searchParams.get("lat")) || 39.909333;
+  const lng = Number(searchParams.get("lng")) || 116.397183;
   const arcadeId = Number(searchParams.get("arcadeId")) || null;
 
   const update_center = useMap((state: MapState) => state.update_center);
