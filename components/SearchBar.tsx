@@ -46,7 +46,7 @@ export default function SearchBar() {
     if (input) {
       params.set("lat", lat);
       params.set("lng", lng);
-      params.delete("detailId");
+      params.delete("arcadeId");
     } else {
       params.delete("lat");
       params.delete("lng");

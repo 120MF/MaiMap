@@ -1,8 +1,10 @@
 "use client";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+
 import { useMap, MapState } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
+import { arcade } from "@/types/arcades";
 
 function Updater() {
   const searchParams = useSearchParams();
@@ -13,7 +15,7 @@ function Updater() {
   const arcadeId = Number(searchParams.get("arcadeId")) || null;
 
   const update_center = useMap((state: MapState) => state.update_center);
-  const update_arcadId = useArcades(
+  const update_arcadeId = useArcades(
     (state: ArcadesState) => state.update_arcadeId,
   );
   const update_target = useMap((state: MapState) => state.update_target);
@@ -24,8 +26,8 @@ function Updater() {
 
   useEffect(() => {
     if (lat && lng) {
-      update_center([lat, lng]);
-      update_target([lat, lng]);
+      update_center([lng, lat]);
+      update_target([lng, lat]);
     }
   }, [lat, lng]);
 
@@ -38,8 +40,19 @@ function Updater() {
   }, [lat, lng, range]);
 
   useEffect(() => {
-    if (arcadeId) update_arcadId(arcadeId);
-  }, [arcadeId]);
+    async function fetchArcade(id: number) {
+      const res = await fetch(`/arcades/get/byId?id=${id}`);
+
+      if (res.status !== 200) throw new Error("fetch Arcade by Id failed.");
+      const data: arcade = await res.json();
+
+      update_center([data.store_lng, data.store_lat]);
+    }
+    if (arcadeId) {
+      update_arcadeId(arcadeId);
+      fetchArcade(arcadeId);
+    }
+  }, []);
 
   // useEffect(() => {
   //   const state_lng = state.urlPos[0];
