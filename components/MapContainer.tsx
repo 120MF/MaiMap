@@ -13,11 +13,13 @@ import { Circle } from "@uiw/react-amap-circle";
 import GeolocationButton from "@/components/GeolocationButton";
 import { MapState, useMap } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
+import { useTheme } from "next-themes";
 
 function MaiMap() {
   const centerPos = useMap((state: MapState) => state.centerPos);
   const targetPos = useMap((state: MapState) => state.targetPos);
   const range = useMap((state: MapState) => state.range);
+  const update_center = useMap((state: MapState) => state.update_center);
   const nearbyArcades = useArcades(
     (state: ArcadesState) => state.nearbyArcades,
   );
@@ -27,13 +29,17 @@ function MaiMap() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  const { theme } = useTheme();
+
   // @ts-ignore
   return (
     <Map
       center={centerPos}
       style={{ height: "95vh", width: "100vw" }}
-      // mapStyle="amap://styles/light"
-      mapStyle="amap://styles/dark"
+      // mapStyle=
+      mapStyle={
+        theme === "light" ? "amap://styles/light" : "amap://styles/dark"
+      }
     >
       <ScaleControl offset={[20, 10]} position="LB" visible={true} />
       <ToolBarControl offset={[10, 50]} position="RT" visible={true} />
@@ -68,8 +74,9 @@ function MaiMap() {
           onClick={() => {
             const params = new URLSearchParams(searchParams);
 
-            params.set("detailId", String(arcade.store_id));
+            params.set("arcadeId", String(arcade.store_id));
             replace(`${pathname}?${params.toString()}`);
+            update_center([arcade.store_lng, arcade.store_lat]);
           }}
         >
           {arcadeId === arcade.store_id ? (
