@@ -23,6 +23,7 @@ function Updater() {
   const fetch_nearby_arcades = useArcades(
     (state: ArcadesState) => state.fetch_nearby_arcade,
   );
+  const fetch_detailArcade = useArcades((state) => state.fetch_detailArcade);
 
   useEffect(() => {
     if (lat && lng) {
@@ -53,6 +54,9 @@ function Updater() {
       fetchArcade(arcadeId);
     }
   }, []);
+  useEffect(() => {
+    if (arcadeId) fetch_detailArcade(arcadeId);
+  }, [arcadeId]);
 
   // useEffect(() => {
   //   const state_lng = state.urlPos[0];

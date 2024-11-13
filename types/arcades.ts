@@ -6,4 +6,5 @@ export type arcade = {
   store_lng: number;
   store_pos: string;
   arcade_type: string;
+  distance: number;
 };
