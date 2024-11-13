@@ -1,8 +1,6 @@
 "use client";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import Image from "next/image";
-
-import RangeSlider from "@/components/RangeSlider";
 import { Link } from "@nextui-org/link";
 import {
   Modal,
@@ -12,9 +10,10 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/modal";
-
-import version from "@/lib/version";
 import { useTheme } from "next-themes";
+
+import RangeSlider from "@/components/RangeSlider";
+import version from "@/lib/version";
 
 function Footer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -23,7 +22,7 @@ function Footer() {
   return (
     <>
       <div
-        className={`h-full border-t border-gray-300 flex items-center justify-between px-2 py-2 ${theme === "light" ? "bg-gray-50" : "bg-gray-600"}`}
+        className={`h-full border-t border-gray-300 flex items-center justify-between px-2 py-2 ${theme === "light" ? "bg-gray-50" : "bg-gray-800"}`}
       >
         <div className="flex items-center">
           <Image
@@ -60,11 +59,11 @@ function Footer() {
             <>
               <ModalHeader>
                 <Image
-                  src="/Logo.png"
                   alt="Logo"
-                  quality={80}
-                  width={150}
                   height={70}
+                  quality={80}
+                  src="/Logo.png"
+                  width={150}
                 />
               </ModalHeader>
               <ModalBody>

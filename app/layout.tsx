@@ -19,7 +19,6 @@ export const metadata: Metadata = {
     icon: "/favicon.png",
   },
 };
-// due to uncertain bug, the color is reversed.
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
@@ -46,7 +45,7 @@ export default function RootLayout({
               <Suspense>{children}</Suspense>
             </div>
             <div style={{ height: "5vh" }}>
-              <Footer></Footer>
+              <Footer />
             </div>
           </div>
         </Providers>

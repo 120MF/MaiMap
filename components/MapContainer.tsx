@@ -35,11 +35,10 @@ function MaiMap() {
   return (
     <Map
       center={centerPos}
-      style={{ height: "95vh", width: "100vw" }}
-      // mapStyle=
       mapStyle={
         theme === "light" ? "amap://styles/light" : "amap://styles/dark"
       }
+      style={{ height: "95vh", width: "100vw" }}
     >
       <ScaleControl offset={[20, 10]} position="LB" visible={true} />
       <ToolBarControl offset={[10, 50]} position="RT" visible={true} />
