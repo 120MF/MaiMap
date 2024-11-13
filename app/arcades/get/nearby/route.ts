@@ -1,15 +1,15 @@
 // nearby api
 import { RowDataPacket } from "mysql2";
+import { type NextRequest } from "next/server";
 
 import { pool } from "@/lib/db";
-
-import { type NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const lat = searchParams.get("lat");
   const lng = searchParams.get("lng");
   const range = searchParams.get("range");
+  const sortMethod = searchParams.get("sortMethod");
 
   if (!lat || !lng || !range) {
     return new Response(
@@ -19,6 +19,26 @@ export async function GET(request: NextRequest) {
         headers: { "Content-Type": "application/json" },
       },
     );
+  }
+
+  let order: string;
+
+  switch (sortMethod) {
+    case "DistanceAscending":
+      order = "ORDER BY distance;";
+      break;
+    case "DistanceDescending":
+      order = "ORDER BY distance DESC;";
+      break;
+    case "PinyinAscending":
+      order = "ORDER BY CONVERT(store_name USING gbk);";
+      break;
+    case "PinyinDescending":
+      order = "ORDER BY CONVERT(store_name USING gbk) DESC;";
+      break;
+    case "Default":
+    default:
+      order = ";";
   }
 
   const query = `
@@ -31,7 +51,7 @@ export async function GET(request: NextRequest) {
     WHERE ST_Distance_Sphere(
               store_pos,
               ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))
-          ) <= ? * 1000;
+          ) <= ? * 1000 ${order}
   `;
 
   try {
