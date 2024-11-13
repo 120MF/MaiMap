@@ -51,6 +51,7 @@ interface ArcadesState {
   update_arcadeId: (id: number) => void;
   fetch_nearby_arcade: (lat: number, lng: number, range: number) => void;
   fetch_detailArcade: (id: number) => void;
+  update_detailArcade: (arcade: arcade | null) => void;
   update_sortMethod: (newMethod: SortMethod) => void;
 }
 
@@ -86,6 +87,9 @@ const useArcades = create<ArcadesState>()((set, get) => ({
     const data: arcade = await res.json();
 
     set({ detailArcade: data });
+  },
+  update_detailArcade: (arcade) => {
+    set({ detailArcade: arcade });
   },
   update_sortMethod: (newMethod) => {
     set({ sortMethod: newMethod });

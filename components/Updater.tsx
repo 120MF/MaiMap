@@ -24,6 +24,7 @@ function Updater() {
     (state: ArcadesState) => state.fetch_nearby_arcade,
   );
   const fetch_detailArcade = useArcades((state) => state.fetch_detailArcade);
+  const update_detailArcade = useArcades((state) => state.update_detailArcade);
 
   useEffect(() => {
     if (lat && lng) {
@@ -56,60 +57,8 @@ function Updater() {
   }, []);
   useEffect(() => {
     if (arcadeId) fetch_detailArcade(arcadeId);
+    else update_detailArcade(null);
   }, [arcadeId]);
-
-  // useEffect(() => {
-  //   const state_lng = state.urlPos[0];
-  //   const state_lat = state.urlPos[1];
-  //
-  //   if (lng !== state_lng || lat !== state_lat) {
-  //     dispatch({
-  //       type: "url/pos_update",
-  //       payload: [lng, lat],
-  //     });
-  //   }
-  //   if (range !== state.range) {
-  //     dispatch({
-  //       type: "url/range_update",
-  //       payload: range,
-  //     });
-  //   }
-  //
-  //   async function fetchArcades() {
-  //     try {
-  //       const res = await fetch(
-  //         `/api/arcades/nearby?lat=${lat}&lng=${lng}&distance=${range}`,
-  //       );
-  //       if (!res.ok) {
-  //         throw new Error(`HTTP error! status: ${res.status}`);
-  //       }
-  //       const result = await res.json();
-  //       dispatch({ type: "nearby/update", payload: result });
-  //     } catch (error) {
-  //       console.error("Failed to fetch arcades:", error);
-  //     }
-  //   }
-  //   if (lng !== state_lng || lat !== state_lat || range !== state.range) {
-  //     fetchArcades();
-  //   }
-  // }, [lat, lng, range, state.urlPos, state.range]);
-  //
-  // useEffect(() => {
-  //   dispatch({ type: "detailId/update", payload: detailId });
-  //   if (detailId && state.nearbyArcades.length > 0) {
-  //     const detailArcade = state.nearbyArcades.find(
-  //       (element) => Number(element.store_id) === Number(detailId),
-  //     );
-  //     if (detailArcade)
-  //       dispatch({
-  //         type: "center/update",
-  //         payload: [detailArcade.store_lng, detailArcade.store_lat],
-  //       });
-  //   } else {
-  //     if (state.hasParams)
-  //       dispatch({ type: "center/update", payload: state.urlPos });
-  //   }
-  // }, [detailId, state.hasParams, state.nearbyArcades, state.urlPos]);
 
   return <></>;
 }
