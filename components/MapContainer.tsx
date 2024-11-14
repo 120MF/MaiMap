@@ -47,6 +47,7 @@ function MaiMap() {
   // @ts-ignore
   return (
     <Map
+      key={theme}
       center={[centerLng, centerLat]}
       mapStyle={
         theme === "light" ? "amap://styles/default" : "amap://styles/dark"
@@ -54,7 +55,7 @@ function MaiMap() {
       style={{ height: "93vh", width: "100vw" }}
       zoom={10}
     >
-      <ScaleControl offset={[20, 10]} position="LB" visible={true} />
+      <ScaleControl offset={[20, 40]} position="LB" visible={true} />
       <ToolBarControl offset={[10, 60]} position="LT" visible={true} />
       <Circle
         key={range}

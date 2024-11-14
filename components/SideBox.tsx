@@ -95,7 +95,6 @@ function SideBox() {
                       update_sortMethod(
                         SortMethod[e.target.value as keyof typeof SortMethod],
                       );
-                      console.log(e.target.value);
                     }}
                   >
                     <SelectItem key="DistanceAscending">距离升序</SelectItem>
@@ -111,6 +110,7 @@ function SideBox() {
                 <Button
                   isIconOnly
                   className="order-3 mr-2"
+                  size="sm"
                   variant="bordered"
                   onClick={() => {
                     params.delete("arcadeId");
