@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import clsx from "clsx";
-import { ScrollRestoration } from "next-scroll-restoration";
 
 import { Providers } from "./providers";
 
@@ -40,17 +39,18 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <div className="flex-1 flex flex-col">
-            <div className="m-0 p-0" style={{ height: "95vh" }}>
-              <Suspense>{children}</Suspense>
+        <Suspense fallback={<p>loading</p>}>
+          <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+            <div className="flex-1 flex flex-col">
+              <div className="m-0 p-0" style={{ height: "95vh" }}>
+                {children}
+              </div>
+              <div style={{ height: "5vh" }}>
+                <Footer />
+              </div>
             </div>
-            <div style={{ height: "5vh" }}>
-              <Footer />
-            </div>
-          </div>
-          <ScrollRestoration />
-        </Providers>
+          </Providers>
+        </Suspense>
       </body>
     </html>
   );

@@ -16,7 +16,7 @@ export default function Home() {
       <SearchBar />
       <SideBox />
       <div className="absolute top-0 left-0">
-        <MapContainer></MapContainer>
+        <MapContainer />
       </div>
     </>
   );
