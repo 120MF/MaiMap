@@ -2,36 +2,33 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-
-import { FaList } from "react-icons/fa6";
+import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import { IoReturnUpBack } from "react-icons/io5";
-
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
-import {
-  sortMethodToChineseString,
-  chineseStringToSortMethod,
-  useArcades,
-} from "@/stores/useArcades";
+import { Skeleton } from "@nextui-org/skeleton";
+
+import { useArcades, SortMethod } from "@/stores/useArcades";
 import PathButton from "@/components/PathButton";
 import { useMap } from "@/stores/useMap";
 import ArcadeList from "@/components/ArcadeList";
 import { useReviews } from "@/stores/useReviews";
-import { Skeleton } from "@nextui-org/skeleton";
 
 function SideBox() {
   const ArcadeDetail = dynamic(() => import("@/components/ArcadeDetail"), {
     loading: () => (
       <div className="w-full flex items-center gap-3">
         <div className="px-2 w-full flex flex-col gap-2">
-          <Skeleton className="h-5 w-3/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
-          <Skeleton className="h-3 w-4/5 rounded-lg" />
+          <Skeleton className="h-6 w-9/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
+          <Skeleton className="h-4 w-11/12 rounded-lg" />
         </div>
       </div>
     ),
@@ -51,11 +48,8 @@ function SideBox() {
   const detailArcade = useArcades((state) => state.detailArcade);
   const arcadeReviews = useReviews((state) => state.currentReviews);
   const nearbyArcades = useArcades((state) => state.nearbyArcades);
-  const fetch_nearby_arcade = useArcades((state) => state.fetch_nearby_arcade);
-  const range = useMap((state) => state.range);
-  const sortMethod: string = sortMethodToChineseString(
-    useArcades((state) => state.sortMethod),
-  );
+  const sortMethod: string =
+    SortMethod[useArcades((state) => state.sortMethod)];
   const update_sortMethod = useArcades((state) => state.update_sortMethod);
 
   function toggleBox() {
@@ -68,61 +62,60 @@ function SideBox() {
 
   return (
     <div className="relative z-20">
-      <Button
-        color="primary"
-        onClick={toggleBox}
-        className="fixed bottom-[12%] right-4"
-        isIconOnly
-      >
-        <FaList />
-      </Button>
-
       {/* 侧边栏 */}
       <div
-        className={`fixed top-[24%] left-0 transform -translate-y-1/2 w-[80%] h-[35%] transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-[-100%]"
+        className={`fixed bottom-[7%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${
+          isOpen ? "translate-y-0" : "translate-y-[90%]"
         }`}
       >
         <div className="flex items-center h-full">
-          <Card
-            className={`flex w-full h-full overflow-y-auto opacity-90`}
-            isBlurred={true}
-          >
-            <CardHeader className="flex justify-between items-center h-14">
+          <Card className={`flex w-full h-full overflow-y-auto`} isBlurred>
+            <CardHeader className="flex justify-between h-[10%]">
+              <button className="h-3 fixed" onClick={toggleBox}>
+                {isOpen ? (
+                  <IoIosArrowDown className="h-[5%] top-[3%] fixed w-full" />
+                ) : (
+                  <IoIosArrowUp className="h-[5%] top-[3%] fixed w-full" />
+                )}
+              </button>
               {arcadeId > 0 ? (
-                <p className="text-xl">机厅详情</p>
+                <p className="text-xl order-1 ml-2">机厅详情</p>
               ) : (
                 <>
-                  <p className="text-xl">机厅列表</p>
+                  <p className="text-xl order-1 ml-2">机厅列表</p>
                   <Select
-                    className="max-w-40"
+                    className="max-w-40 order-3 mr-2"
                     defaultSelectedKeys=""
                     label="排序方式"
+                    labelPlacement="outside-left"
                     selectedKeys={[sortMethod]}
+                    size="sm"
                     variant="underlined"
                     onChange={(e) => {
                       update_sortMethod(
-                        chineseStringToSortMethod(e.target.value),
+                        SortMethod[e.target.value as keyof typeof SortMethod],
                       );
+                      console.log(e.target.value);
                     }}
                   >
-                    <SelectItem key="按距离升序">按距离升序</SelectItem>
-                    <SelectItem key="按距离降序">按距离降序</SelectItem>
-                    <SelectItem key="按拼音升序">按拼音升序</SelectItem>
-                    <SelectItem key="按拼音降序">按拼音降序</SelectItem>
-                    <SelectItem key="默认">默认</SelectItem>
+                    <SelectItem key="DistanceAscending">距离升序</SelectItem>
+                    <SelectItem key="DistanceDescending">距离降序</SelectItem>
+                    <SelectItem key="PinyinAscending">拼音升序</SelectItem>
+                    <SelectItem key="PinyinDescending">拼音降序</SelectItem>
+                    <SelectItem key="Default">默认</SelectItem>
                   </Select>
                 </>
               )}
+
               {arcadeId > 0 && (
                 <Button
+                  isIconOnly
+                  className="order-3 mr-2"
+                  variant="bordered"
                   onClick={() => {
                     params.delete("arcadeId");
                     replace(`${pathname}?${params.toString()}`);
                   }}
-                  isIconOnly
-                  variant="bordered"
-                  className="ml-auto"
                 >
                   <IoReturnUpBack />
                 </Button>
@@ -136,7 +129,10 @@ function SideBox() {
                   arcadeReviews={arcadeReviews}
                 />
               ) : nearbyArcades.length > 0 ? (
-                <ArcadeList arcadeList={nearbyArcades} />
+                <ArcadeList
+                  arcadeList={nearbyArcades}
+                  sortMethod={sortMethod}
+                />
               ) : (
                 <p className="w-full text-xl p-5 text-stone-600">
                   在指定范围内没有找到机厅。别气馁啦！

@@ -63,7 +63,7 @@ export default function SearchBar() {
   }
 
   return (
-    <div className="relative flex flex-1 z-10">
+    <div className="relative flex flex-1 z-30">
       <div className="w-full flex">
         <Input
           label="输入地点"

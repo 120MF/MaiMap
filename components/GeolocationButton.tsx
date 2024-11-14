@@ -44,7 +44,7 @@ function GeolocationButton() {
       isIconOnly
       isLoading={isLoading}
       color={"primary"}
-      className="absolute bottom-4 right-4"
+      className="absolute top-[7%] right-[1%]"
       onClick={handleGeoLocation}
     >
       <FaMapLocationDot />

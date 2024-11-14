@@ -49,13 +49,13 @@ function MaiMap() {
     <Map
       center={[centerLng, centerLat]}
       mapStyle={
-        theme === "light" ? "amap://styles/light" : "amap://styles/dark"
+        theme === "light" ? "amap://styles/default" : "amap://styles/dark"
       }
       zoom={10}
-      style={{ height: "95vh", width: "100vw" }}
+      style={{ height: "93vh", width: "100vw" }}
     >
       <ScaleControl offset={[20, 10]} position="LB" visible={true} />
-      <ToolBarControl offset={[10, 70]} position="RT" visible={true} />
+      <ToolBarControl offset={[10, 60]} position="LT" visible={true} />
       <Circle
         key={range}
         center={[targetLng, targetLat]}

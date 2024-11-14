@@ -22,7 +22,7 @@ function Footer() {
   return (
     <>
       <div
-        className={`h-full border-t border-gray-300 flex items-center justify-between px-2 py-2 ${theme === "light" ? "bg-gray-50" : "bg-gray-800"}`}
+        className={`h-full border-t border-gray-300 flex items-center justify-between px-2 py-2 bg-background`}
       >
         <div className="flex items-center">
           <Image
