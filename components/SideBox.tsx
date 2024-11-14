@@ -51,6 +51,8 @@ function SideBox() {
   const detailArcade = useArcades((state) => state.detailArcade);
   const arcadeReviews = useReviews((state) => state.currentReviews);
   const nearbyArcades = useArcades((state) => state.nearbyArcades);
+  const fetch_nearby_arcade = useArcades((state) => state.fetch_nearby_arcade);
+  const range = useMap((state) => state.range);
   const sortMethod: string = sortMethodToChineseString(
     useArcades((state) => state.sortMethod),
   );
@@ -67,6 +69,7 @@ function SideBox() {
   return (
     <div className="relative z-20">
       <Button
+        color="primary"
         onClick={toggleBox}
         className="fixed bottom-[12%] right-4"
         isIconOnly
