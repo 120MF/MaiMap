@@ -7,11 +7,14 @@ interface ArcadeListPorps {
 
 function ArcadeList({ arcadeList }: ArcadeListPorps) {
   return (
-    <ul>
+    <div
+      data-scroll-restoration-id="container"
+      className="custom-scrollbar overflow-y-auto"
+    >
       {arcadeList.map((arcade) => (
         <ArcadeCard key={arcade.store_id} arcade={arcade} />
       ))}
-    </ul>
+    </div>
   );
 }
 

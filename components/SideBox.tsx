@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import dynamic from "next/dynamic";
 
 import { FaList } from "react-icons/fa6";
 import { IoReturnUpBack } from "react-icons/io5";
@@ -17,9 +18,26 @@ import {
 import PathButton from "@/components/PathButton";
 import { useMap } from "@/stores/useMap";
 import ArcadeList from "@/components/ArcadeList";
-import ArcadeDetail from "@/components/ArcadeDetail";
+import { useReviews } from "@/stores/useReviews";
+import { Skeleton } from "@nextui-org/skeleton";
 
 function SideBox() {
+  const ArcadeDetail = dynamic(() => import("@/components/ArcadeDetail"), {
+    loading: () => (
+      <div className="w-full flex items-center gap-3">
+        <div className="px-2 w-full flex flex-col gap-2">
+          <Skeleton className="h-5 w-3/5 rounded-lg" />
+          <Skeleton className="h-3 w-4/5 rounded-lg" />
+          <Skeleton className="h-3 w-4/5 rounded-lg" />
+          <Skeleton className="h-3 w-4/5 rounded-lg" />
+          <Skeleton className="h-3 w-4/5 rounded-lg" />
+          <Skeleton className="h-3 w-4/5 rounded-lg" />
+        </div>
+      </div>
+    ),
+    ssr: true,
+  });
+
   const [isOpen, setIsOpen] = useState(false);
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -31,6 +49,7 @@ function SideBox() {
 
   const arcadeId = useArcades((state) => state.arcadeId);
   const detailArcade = useArcades((state) => state.detailArcade);
+  const arcadeReviews = useReviews((state) => state.currentReviews);
   const nearbyArcades = useArcades((state) => state.nearbyArcades);
   const sortMethod: string = sortMethodToChineseString(
     useArcades((state) => state.sortMethod),
@@ -40,6 +59,10 @@ function SideBox() {
   function toggleBox() {
     setIsOpen(!isOpen);
   }
+
+  useEffect(() => {
+    if (arcadeId > 0) setIsOpen(true);
+  }, [arcadeId]);
 
   return (
     <div className="relative z-20">
@@ -53,8 +76,8 @@ function SideBox() {
 
       {/* 侧边栏 */}
       <div
-        className={`fixed top-1/2 right-0 transform -translate-y-1/2 w-[60%] h-[60%] transition-transform duration-300 ${
-          isOpen ? "translate-x-0" : "translate-x-full"
+        className={`fixed top-[24%] left-0 transform -translate-y-1/2 w-[80%] h-[35%] transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "translate-x-[-100%]"
         }`}
       >
         <div className="flex items-center h-full">
@@ -95,8 +118,6 @@ function SideBox() {
                     replace(`${pathname}?${params.toString()}`);
                   }}
                   isIconOnly
-                  //@ts-ignore
-                  showAnchorIcon
                   variant="bordered"
                   className="ml-auto"
                 >
@@ -105,9 +126,12 @@ function SideBox() {
               )}
             </CardHeader>
             <Divider />
-            <CardBody className="custom-scrollbar px-0 py-0">
+            <CardBody className="px-0 py-0">
               {arcadeId > 0 && detailArcade?.store_name ? (
-                <ArcadeDetail arcadeId={arcadeId} />
+                <ArcadeDetail
+                  arcadeDetail={detailArcade}
+                  arcadeReviews={arcadeReviews}
+                />
               ) : nearbyArcades.length > 0 ? (
                 <ArcadeList arcadeList={nearbyArcades} />
               ) : (

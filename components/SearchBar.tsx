@@ -99,12 +99,7 @@ export default function SearchBar() {
         !isLoading &&
         isSuggestionsOpen && (
           <div className="absolute top-full mt-1 w-full">
-            <Card
-              fullWidth
-              isBlurred
-              className="h-96 overflow-y-auto"
-              radius="sm"
-            >
+            <Card fullWidth isBlurred className="h-96" radius="sm">
               <CardHeader className="h-10">搜索结果</CardHeader>
               <CardBody className="custom-scrollbar px-0 py-0">
                 {suggestions.map((suggestion, index) => (
@@ -113,16 +108,16 @@ export default function SearchBar() {
                     isBlurred
                     isHoverable
                     isPressable
+                    className="min-h-28"
                     radius="none"
                     onClick={() => {
                       setInputValue(suggestion.title);
                       handleSearch(suggestion.location);
                     }}
-                    className="min-h-20"
                   >
-                    <CardBody>
-                      <p className="text-xl">{suggestion.title}</p>
-                      <p className="text-md">{suggestion.address}</p>
+                    <CardBody className="h-auto flex justify-center">
+                      <p className="text-xl block">{suggestion.title}</p>
+                      <p className="text-md block">{suggestion.address}</p>
                     </CardBody>
                   </Card>
                 ))}

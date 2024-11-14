@@ -31,12 +31,14 @@ function PathButton({
   const [isLoading, setIsLoading] = useState(false);
   const [pathUrl, setPathUrl] = useState("");
   const key = process.env.NEXT_PUBLIC_QMAP_API_KEY;
-  const URL = "https://apis.map.qq.com/ws/geocoder/v1?";
+  const URL = "/api/qmap/geocoder";
 
   async function getAddress() {
     setIsLoading(true);
     const data = await (
-      await fetch(`${URL}location=${startLat},${startLng}&key=${key}&get_poi=0`)
+      await fetch(
+        `${URL}?location=${startLat},${startLng}&key=${key}&get_poi=0`,
+      )
     ).json();
     const startAddress = data.result.formatted_addresses.standard_address;
 
@@ -49,10 +51,9 @@ function PathButton({
   return (
     <>
       <Button
-        // @ts-ignore
-        showAnchorIcon
         className="ml-auto"
         color="primary"
+        size="sm"
         variant="bordered"
         onPress={() => {
           onOpen();

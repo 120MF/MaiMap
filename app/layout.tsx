@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import clsx from "clsx";
+import { ScrollRestoration } from "next-scroll-restoration";
 
 import { Providers } from "./providers";
 
@@ -48,6 +49,7 @@ export default function RootLayout({
               <Footer />
             </div>
           </div>
+          <ScrollRestoration />
         </Providers>
       </body>
     </html>

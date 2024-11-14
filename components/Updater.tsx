@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useMap, MapState } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
 import { arcade } from "@/types/arcades";
+import { useReviews } from "@/stores/useReviews";
 
 function Updater() {
   const searchParams = useSearchParams();
@@ -26,6 +27,13 @@ function Updater() {
   const fetch_detailArcade = useArcades((state) => state.fetch_detailArcade);
   const update_detailArcade = useArcades((state) => state.update_detailArcade);
 
+  const update_currentReviews = useReviews(
+    (state) => state.update_currentReviews,
+  );
+  const fetch_currentReviews = useReviews(
+    (state) => state.fetch_currentReviews,
+  );
+
   useEffect(() => {
     if (lat && lng) {
       update_center([lng, lat]);
@@ -42,22 +50,15 @@ function Updater() {
   }, [lat, lng, range]);
 
   useEffect(() => {
-    async function fetchArcade(id: number) {
-      const res = await fetch(`/arcades/get/byId?id=${id}`);
-
-      if (res.status !== 200) throw new Error("fetch Arcade by Id failed.");
-      const data: arcade = await res.json();
-
-      update_center([data.store_lng, data.store_lat]);
-    }
     if (arcadeId) {
       update_arcadeId(arcadeId);
-      fetchArcade(arcadeId);
+      fetch_detailArcade(arcadeId);
+      fetch_currentReviews(arcadeId);
+    } else {
+      update_arcadeId(-1);
+      update_detailArcade(null);
+      update_currentReviews([]);
     }
-  }, []);
-  useEffect(() => {
-    if (arcadeId) fetch_detailArcade(arcadeId);
-    else update_detailArcade(null);
   }, [arcadeId]);
 
   return <></>;

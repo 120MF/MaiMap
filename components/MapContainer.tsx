@@ -7,12 +7,14 @@ import { APILoader } from "@uiw/react-amap-api-loader";
 import { ScaleControl } from "@uiw/react-amap-scale-control";
 import { ToolBarControl } from "@uiw/react-amap-tool-bar-control";
 import { Marker } from "@uiw/react-amap-marker";
+import { LabelMarker } from "@uiw/react-amap-label-marker";
 import { Circle } from "@uiw/react-amap-circle";
 import { useTheme } from "next-themes";
 
 import GeolocationButton from "@/components/GeolocationButton";
 import { MapState, useMap } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
+import { useEffect } from "react";
 
 function MaiMap() {
   const centerLat = useMap((state: MapState) => state.centerLat);
@@ -25,6 +27,7 @@ function MaiMap() {
     (state: ArcadesState) => state.nearbyArcades,
   );
   const arcadeId = useArcades((state: ArcadesState) => state.arcadeId);
+  const detailArcade = useArcades((state) => state.detailArcade);
   const update_arcadeId = useArcades(
     (state: ArcadesState) => state.update_arcadeId,
   );
@@ -35,6 +38,12 @@ function MaiMap() {
 
   const { theme } = useTheme();
 
+  useEffect(() => {
+    if (detailArcade)
+      update_center([detailArcade.store_lat, detailArcade.store_lng]);
+    else update_center([targetLat, targetLng]);
+  }, [detailArcade]);
+
   // @ts-ignore
   return (
     <Map
@@ -42,6 +51,7 @@ function MaiMap() {
       mapStyle={
         theme === "light" ? "amap://styles/light" : "amap://styles/dark"
       }
+      zoom={10}
       style={{ height: "95vh", width: "100vw" }}
     >
       <ScaleControl offset={[20, 10]} position="LB" visible={true} />
@@ -67,32 +77,54 @@ function MaiMap() {
       </Marker>
 
       {nearbyArcades.map((arcade, index) => (
-        <Marker
-          key={index}
-          offset={new AMap.Pixel(-15, -42)}
-          position={[arcade.store_lng, arcade.store_lat]}
-          title={arcade.store_name}
-          visible={true}
-          zIndex={arcadeId === arcade.store_id ? 200 : 100}
-          onClick={() => {
-            const params = new URLSearchParams(searchParams);
-            params.set("arcadeId", String(arcade.store_id));
-            replace(`${pathname}?${params.toString()}`);
-            update_center([arcade.store_lng, arcade.store_lat]);
-            update_arcadeId(arcade.store_id);
-          }}
-        >
-          {arcadeId === arcade.store_id ? (
-            <Image
-              alt="arcade"
-              height={50}
-              src="/nail-arcade-selected.png"
-              width={30}
-            />
-          ) : (
-            <Image alt="arcade" height={50} src="/nail-arcade.png" width={30} />
-          )}
-        </Marker>
+        <div key={index}>
+          <Marker
+            offset={new AMap.Pixel(-15, -42)}
+            position={[arcade.store_lng, arcade.store_lat]}
+            title={arcade.store_name}
+            visible={true}
+            zIndex={arcadeId === arcade.store_id ? 200 : 100}
+            onClick={() => {
+              const params = new URLSearchParams(searchParams);
+              params.set("arcadeId", String(arcade.store_id));
+              replace(`${pathname}?${params.toString()}`);
+              update_center([arcade.store_lng, arcade.store_lat]);
+              update_arcadeId(arcade.store_id);
+            }}
+          >
+            {arcadeId === arcade.store_id ? (
+              <Image
+                alt="arcade"
+                height={50}
+                src="/nail-arcade-selected.png"
+                width={30}
+              />
+            ) : (
+              <Image
+                alt="arcade"
+                height={50}
+                src="/nail-arcade.png"
+                width={30}
+              />
+            )}
+          </Marker>
+          <LabelMarker
+            icon={null}
+            text={{
+              content: arcade.store_name,
+              direction: "top",
+              offset: [0, 18],
+              style: {
+                strokeColor: "#ffffff",
+                fontSize: 10,
+                fillColor: "#60666E",
+                strokeWidth: 4,
+                backgroundColor: "rgba(0,0,0,0)",
+              },
+            }}
+            position={[arcade.store_lng, arcade.store_lat]}
+          />
+        </div>
       ))}
     </Map>
   );

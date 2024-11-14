@@ -2,39 +2,17 @@ import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 
 import { review } from "@/types/reviews";
+import { arcade } from "@/types/arcades";
 import { getAverage, getMostFrequent } from "@/lib/utils";
 import NewReviewButton from "@/components/NewReviewButton";
 
-interface ArcadeDetailProps {
-  arcadeId: number;
+interface ArcadeDetailPageProps {
+  arcadeDetail: arcade;
+  arcadeReviews: review[];
 }
-
-async function getArcadeDetail(id: number) {
-  const res = await fetch(`/arcades/get/byId?id=${id}`);
-
-  if (res.status !== 200) {
-    throw new Error("fetch arcade failed");
-  }
-
-  return await res.json();
-}
-
-async function getArcadeReviews(id: number) {
-  const res = await fetch(`/reviews/get/byId?id=${id}`);
-
-  if (res.status !== 200) {
-    throw new Error("fetch reviews failed");
-  }
-
-  return await res.json();
-}
-
-async function ArcadeDetail({ arcadeId }: ArcadeDetailProps) {
-  const arcadeDetail = await getArcadeDetail(arcadeId);
-  const arcadeReviews = await getArcadeReviews(arcadeId);
-
+function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
   return (
-    <div className="left-4 pt-2">
+    <div className="custom-scrollbar overflow-y-auto left-4 pt-2">
       <h2 className="text-2xl py-1 px-1">{arcadeDetail.store_name}</h2>
       <p className="text-xl py-2 px-2">{arcadeDetail.store_address}</p>
       <p>机厅信息</p>

@@ -13,7 +13,6 @@ export default function Home() {
   return (
     <>
       <Updater />
-
       <SearchBar />
       <SideBox />
       <div className="absolute top-0 left-0">
