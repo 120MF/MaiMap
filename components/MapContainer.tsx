@@ -10,11 +10,11 @@ import { Marker } from "@uiw/react-amap-marker";
 import { LabelMarker } from "@uiw/react-amap-label-marker";
 import { Circle } from "@uiw/react-amap-circle";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 
 import GeolocationButton from "@/components/GeolocationButton";
 import { MapState, useMap } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
-import { useEffect } from "react";
 
 function MaiMap() {
   const centerLat = useMap((state: MapState) => state.centerLat);
@@ -51,8 +51,8 @@ function MaiMap() {
       mapStyle={
         theme === "light" ? "amap://styles/default" : "amap://styles/dark"
       }
-      zoom={10}
       style={{ height: "93vh", width: "100vw" }}
+      zoom={10}
     >
       <ScaleControl offset={[20, 10]} position="LB" visible={true} />
       <ToolBarControl offset={[10, 60]} position="LT" visible={true} />
@@ -86,6 +86,7 @@ function MaiMap() {
             zIndex={arcadeId === arcade.store_id ? 200 : 100}
             onClick={() => {
               const params = new URLSearchParams(searchParams);
+
               params.set("arcadeId", String(arcade.store_id));
               replace(`${pathname}?${params.toString()}`);
               update_center([arcade.store_lng, arcade.store_lat]);
@@ -110,6 +111,7 @@ function MaiMap() {
           </Marker>
           <LabelMarker
             icon={null}
+            position={[arcade.store_lng, arcade.store_lat]}
             text={{
               content: arcade.store_name,
               direction: "top",
@@ -122,7 +124,6 @@ function MaiMap() {
                 backgroundColor: "rgba(0,0,0,0)",
               },
             }}
-            position={[arcade.store_lng, arcade.store_lat]}
           />
         </div>
       ))}

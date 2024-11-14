@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@nextui-org/button";
-
 import { FaMapLocationDot } from "react-icons/fa6";
 
 function GeolocationButton() {
@@ -29,7 +28,6 @@ function GeolocationButton() {
         setIsLoading(false);
       },
       (error) => {
-        console.error("Geolocation Error:", error);
         setIsLoading(false);
       },
       {
@@ -42,9 +40,9 @@ function GeolocationButton() {
   return (
     <Button
       isIconOnly
-      isLoading={isLoading}
-      color={"primary"}
       className="absolute top-[7%] right-[1%]"
+      color="primary"
+      isLoading={isLoading}
       onClick={handleGeoLocation}
     >
       <FaMapLocationDot />

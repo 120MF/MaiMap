@@ -1,8 +1,7 @@
+import pinyin from "pinyin";
+
 import { arcade } from "@/types/arcades";
 import ArcadeCard from "@/components/ArcadeCard";
-import { SortMethod } from "@/stores/useArcades";
-import pinyin from "pinyin";
-import { a } from "@nextui-org/slider/dist/use-slider-a94a4c83";
 
 interface ArcadeListPorps {
   arcadeList: arcade[];
@@ -11,6 +10,7 @@ interface ArcadeListPorps {
 
 function sortByMethod(list: arcade[], method: string): arcade[] {
   let tempList: arcade[] = [...list];
+
   switch (method) {
     case "DistanceAscending":
       tempList.sort((a, b) => a.distance - b.distance);

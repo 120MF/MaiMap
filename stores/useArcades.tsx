@@ -1,5 +1,6 @@
-import { arcade } from "@/types/arcades";
 import { create } from "zustand";
+
+import { arcade } from "@/types/arcades";
 
 export enum SortMethod {
   DistanceAscending,
