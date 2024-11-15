@@ -8,6 +8,8 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import Footer from "@/components/Footer";
 import { fontSans } from "@/config/fonts";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: {
@@ -51,6 +53,7 @@ export default function RootLayout({
             </div>
           </Providers>
         </Suspense>
+        <ToastContainer />
       </body>
     </html>
   );

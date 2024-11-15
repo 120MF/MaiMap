@@ -1,4 +1,4 @@
-export type review = {
+export interface review {
   review_id: number;
   store_id: number;
   username: string;
@@ -10,4 +10,5 @@ export type review = {
   comment: string;
   created_at: string;
   vote: string;
-};
+  show_email: boolean;
+}

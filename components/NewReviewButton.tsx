@@ -15,7 +15,7 @@ function NewReviewButton() {
 
   return (
     <>
-      <Button size="sm" color="success" variant="bordered" onPress={onOpen}>
+      <Button color="success" size="sm" variant="bordered" onPress={onOpen}>
         新建评论
       </Button>
       <Modal isOpen={isOpen} placement="center" onOpenChange={onOpenChange}>

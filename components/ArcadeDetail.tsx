@@ -4,7 +4,6 @@ import { Divider } from "@nextui-org/divider";
 import { review } from "@/types/reviews";
 import { arcade } from "@/types/arcades";
 import { getAverage, getMostFrequent } from "@/lib/utils";
-import NewReviewButton from "@/components/NewReviewButton";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;

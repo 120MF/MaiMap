@@ -1,6 +1,6 @@
 {
 	"name": "maimap",
-	"version": "0.3.0",
+	"version": "0.3.1",
 	"private": true,
 	"scripts": {
 		"dev": "next dev --turbo",
@@ -43,6 +43,7 @@
 		"react-dom": "18.3.1",
 		"react-hook-form": "^7.53.2",
 		"react-icons": "^5.3.0",
+		"react-toastify": "^10.0.6",
 		"segmentit": "^2.0.3",
 		"sharp": "^0.33.5",
 		"zustand": "^5.0.1"

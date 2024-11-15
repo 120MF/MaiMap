@@ -8,10 +8,17 @@ import { FaCoins } from "react-icons/fa";
 import { FaRegStar } from "react-icons/fa";
 import { Button } from "@nextui-org/button";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { toast, Bounce } from "react-toastify";
 
-interface IFormInput {
+import { review } from "@/types/reviews";
+import { useArcades } from "@/stores/useArcades";
+import { useTheme } from "next-themes";
+import { useState } from "react";
+import { useReviews } from "@/stores/useReviews";
+
+interface IFormInput extends review {
   email: string;
-  showEmail: boolean;
+  show_email: boolean;
   username: string;
   rating: number;
   arcade_count: number;
@@ -20,12 +27,60 @@ interface IFormInput {
   comment: string;
 }
 function NewReviewForm({ onClose }) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>();
-  const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+  const { theme } = useTheme();
+  const arcadeId = useArcades((state) => state.arcadeId);
+  const fetch_currentReviews = useReviews(
+    (state) => state.fetch_currentReviews,
+  );
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    setIsLoading(true);
+    const value: review = { ...data, store_id: arcadeId };
+    const res = await fetch("/reviews/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(value),
+    });
+
+    if (res.status !== 200) {
+      toast.success("评论上传失败", {
+        position: "top-right",
+        type: "error",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: theme,
+        transition: Bounce,
+      });
+    } else {
+      toast.success("评论上传成功", {
+        position: "top-right",
+        autoClose: 3000,
+        type: "success",
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: theme,
+        transition: Bounce,
+      });
+    }
+
+    setIsLoading(false);
+    fetch_currentReviews(arcadeId);
+    onClose();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -53,7 +108,7 @@ function NewReviewForm({ onClose }) {
           )}
         </div>
         <Checkbox
-          {...register("showEmail")}
+          {...register("show_email")}
           defaultSelected
           className="ml-4 max-w-[50%]"
           color="primary"
@@ -90,7 +145,7 @@ function NewReviewForm({ onClose }) {
           <Input
             {...register("arcade_count", {
               required: true,
-              pattern: /^[1-30]$/i,
+              pattern: /^(3[0]|2[1-9]|1[1-9]|[1-9])$/,
             })}
             isRequired
             label="机台数"
@@ -178,7 +233,15 @@ function NewReviewForm({ onClose }) {
           <p className="text-red-400 text-xs pl-2">请输入你的评价</p>
         )}
       </div>
-      <Button fullWidth color="primary" type="submit">
+      <Button
+        fullWidth
+        color="primary"
+        type="submit"
+        onPress={() => {
+          if (!errors) onClose();
+        }}
+        isLoading={isLoading}
+      >
         提交
       </Button>
     </form>
