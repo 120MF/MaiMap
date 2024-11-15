@@ -30,7 +30,6 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
       <Divider />
       <div className="flex justify-between">
         <p className="text-xl py-2 px-1">评论区</p>
-        <NewReviewButton />
       </div>
       <div>
         {arcadeReviews.length > 0 ? (

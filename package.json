@@ -1,9 +1,9 @@
 {
 	"name": "maimap",
-	"version": "0.2.3",
+	"version": "0.3.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev --turbo",
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
@@ -11,6 +11,7 @@
 	"dependencies": {
 		"@nextui-org/button": "2.0.38",
 		"@nextui-org/card": "^2.0.34",
+		"@nextui-org/checkbox": "^2.1.5",
 		"@nextui-org/input": "2.2.5",
 		"@nextui-org/link": "2.0.35",
 		"@nextui-org/listbox": "2.1.27",
@@ -40,6 +41,7 @@
 		"pinyin": "4.0.0-alpha.2",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
+		"react-hook-form": "^7.53.2",
 		"react-icons": "^5.3.0",
 		"segmentit": "^2.0.3",
 		"sharp": "^0.33.5",

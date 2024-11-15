@@ -15,6 +15,7 @@ import PathButton from "@/components/PathButton";
 import { useMap } from "@/stores/useMap";
 import ArcadeList from "@/components/ArcadeList";
 import { useReviews } from "@/stores/useReviews";
+import NewReviewButton from "@/components/NewReviewButton";
 
 function SideBox() {
   const ArcadeDetail = dynamic(() => import("@/components/ArcadeDetail"), {
@@ -140,7 +141,7 @@ function SideBox() {
               )}
             </CardBody>
             {arcadeId && detailArcade && (
-              <CardFooter>
+              <CardFooter className="flex items-center justify-items-end gap-2">
                 <PathButton
                   endAddress={detailArcade.store_address}
                   startLat={targetLat}
@@ -148,6 +149,7 @@ function SideBox() {
                 >
                   查看路线
                 </PathButton>
+                <NewReviewButton />
               </CardFooter>
             )}
           </Card>
