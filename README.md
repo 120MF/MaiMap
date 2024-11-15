@@ -34,8 +34,8 @@ _邂逅每个目的地与迪拉熊_
 ```shell
 git clone https://github.com/MoonBite666/MaiMap.git
 cd MaiMap
-npm ci
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ### Docker部署
@@ -57,9 +57,9 @@ NEXT_PUBLIC_QMAP_API_KEY=腾讯地图WebAPI密钥
 NEXT_PUBLIC_BUILD_FROM=local
 ```
 
-- 需要自行建立`mysql`数据库并在[此文件](./app/_lib/db.js)中配置数据库连接；
-- 数据库的建立（即机厅数据获取）指南尚未完成。
+- 需要在[此文件](./lib/db.ts)中修改默认数据库连接地址；
 - 同时用腾讯地图和高德地图的API，是因为腾讯地图的Web API免费限额较宽裕，高德地图有第三方的React组件可用。若有专业付费Key，可单独使用高德地图API进行开发。
+- 在Windows上，如果使用`run dev`指令时发现编译极慢，请尝试切换`nodejs`版本至`22.11.0`以上。另外，根据个人经验，使用`--turbo`参数反而会导致编译变慢。
 
 ## API
 
