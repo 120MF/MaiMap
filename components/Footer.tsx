@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Link } from "@nextui-org/link";
 import { useDisclosure } from "@nextui-org/modal";
-import { GoInfo } from "react-icons/go";
+import IconInfoCircle from "@/components/icons/IconInfoCircle";
 
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import RangeSlider from "@/components/RangeSlider";
@@ -33,7 +33,7 @@ function Footer() {
             color="foreground"
             onClick={onOpen}
           >
-            <GoInfo size={20} />
+            <IconInfoCircle height="20px" width="20px" />
           </Link>
           <div className="border-l h-[20px] border-gray-300 pl-2 m-0">
             <ThemeSwitcher />

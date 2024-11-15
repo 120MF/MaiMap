@@ -1,20 +1,20 @@
 import { Input, Textarea } from "@nextui-org/input";
-import { TbMailFilled } from "react-icons/tb";
 import { Checkbox } from "@nextui-org/checkbox";
-import { FaRegUserCircle } from "react-icons/fa";
-import { CgSmartHomeWashMachine } from "react-icons/cg";
-import { TbCoinYuan } from "react-icons/tb";
-import { FaCoins } from "react-icons/fa";
-import { FaRegStar } from "react-icons/fa";
 import { Button } from "@nextui-org/button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast, Bounce } from "react-toastify";
+import { useTheme } from "next-themes";
+import { useState } from "react";
 
 import { review } from "@/types/reviews";
 import { useArcades } from "@/stores/useArcades";
-import { useTheme } from "next-themes";
-import { useState } from "react";
 import { useReviews } from "@/stores/useReviews";
+import Icon388Mail from "@/components/icons/Icon388Mail";
+import IconBxUserCircle from "@/components/icons/IconBxUserCircle";
+import IconSmartHomeWashMachine from "@/components/icons/IconSmartHomeWashMachine";
+import IconCurrencyYuan from "@/components/icons/IconCurrencyYuan";
+import IconCoins from "@/components/icons/IconCoins";
+import IconStar from "@/components/icons/IconStar";
 
 interface IFormInput extends review {
   email: string;
@@ -96,7 +96,7 @@ function NewReviewForm({ onClose }) {
             label="电子邮箱"
             placeholder="you@example.com"
             size="sm"
-            startContent={<TbMailFilled />}
+            startContent={<Icon388Mail />}
             type="email"
             variant="bordered"
           />
@@ -125,7 +125,7 @@ function NewReviewForm({ onClose }) {
             label="用户名"
             placeholder="迪拉熊"
             size="sm"
-            startContent={<FaRegUserCircle />}
+            startContent={<IconBxUserCircle />}
             variant="bordered"
           />
           {errors?.username?.type === "required" && (
@@ -145,13 +145,13 @@ function NewReviewForm({ onClose }) {
           <Input
             {...register("arcade_count", {
               required: true,
-              pattern: /^(3[0]|2[1-9]|1[1-9]|[1-9])$/,
+              pattern: /^(30|2[1-9]|1[1-9]|[1-9])$/,
             })}
             isRequired
             label="机台数"
             placeholder="1P+2P=1台舞萌"
             size="sm"
-            startContent={<CgSmartHomeWashMachine />}
+            startContent={<IconSmartHomeWashMachine />}
             type="number"
             variant="bordered"
           />
@@ -168,7 +168,7 @@ function NewReviewForm({ onClose }) {
             label="币价（元/枚）"
             placeholder="0.00"
             size="sm"
-            startContent={<TbCoinYuan />}
+            startContent={<IconCurrencyYuan />}
             type="number"
             variant="bordered"
           />
@@ -189,7 +189,7 @@ function NewReviewForm({ onClose }) {
             labelPlacement="inside"
             placeholder="0"
             size="sm"
-            startContent={<FaCoins />}
+            startContent={<IconCoins />}
             type="number"
             variant="bordered"
           />
@@ -207,7 +207,7 @@ function NewReviewForm({ onClose }) {
             label="你的评分"
             placeholder="1~5分"
             size="sm"
-            startContent={<FaRegStar />}
+            startContent={<IconStar />}
             type="number"
             variant="bordered"
           />
@@ -236,11 +236,11 @@ function NewReviewForm({ onClose }) {
       <Button
         fullWidth
         color="primary"
+        isLoading={isLoading}
         type="submit"
         onPress={() => {
           if (!errors) onClose();
         }}
-        isLoading={isLoading}
       >
         提交
       </Button>

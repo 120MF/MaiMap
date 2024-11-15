@@ -2,7 +2,8 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { LuSunMoon, LuMoonStar } from "react-icons/lu";
+import IconSunMoon from "@/components/icons/IconSunMoon";
+import IconMoonStars from "@/components/icons/IconMoonStars";
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
@@ -17,7 +18,11 @@ export function ThemeSwitcher() {
   return (
     <div>
       <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-        {theme === "light" ? <LuMoonStar size={20} /> : <LuSunMoon size={20} />}
+        {theme === "light" ? (
+          <IconMoonStars height="20px" width="20px" />
+        ) : (
+          <IconSunMoon height="20px" width="20px" />
+        )}
       </button>
     </div>
   );

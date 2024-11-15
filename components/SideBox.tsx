@@ -2,14 +2,15 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { IoReturnUpBack } from "react-icons/io5";
 import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Skeleton } from "@nextui-org/skeleton";
 
+import IconReturnDownBack from "@/components/icons/IconReturnDownBack";
+import IconBxArrowToBottom from "@/components/icons/IconBxArrowToBottom";
+import IconBxArrowFromBottom from "@/components/icons/IconBxArrowFromBottom";
 import { useArcades, SortMethod } from "@/stores/useArcades";
 import PathButton from "@/components/PathButton";
 import { useMap } from "@/stores/useMap";
@@ -70,13 +71,18 @@ function SideBox() {
         }`}
       >
         <div className="flex items-center h-full">
-          <Card className={`flex w-full h-full overflow-y-auto`} isBlurred>
+          <Card
+            isBlurred
+            className={`flex w-full h-full overflow-y-auto rounded-top`}
+            radius="none"
+            shadow="md"
+          >
             <CardHeader className="flex justify-between h-[10%]">
               <button className="h-3 fixed" onClick={toggleBox}>
                 {isOpen ? (
-                  <IoIosArrowDown className="h-[5%] top-[3%] fixed w-full" />
+                  <IconBxArrowToBottom className="h-[5%] top-[3%] fixed w-full" />
                 ) : (
-                  <IoIosArrowUp className="h-[5%] top-[3%] fixed w-full" />
+                  <IconBxArrowFromBottom className="h-[5%] top-[3%] fixed w-full" />
                 )}
               </button>
               {arcadeId > 0 ? (
@@ -118,7 +124,7 @@ function SideBox() {
                     replace(`${pathname}?${params.toString()}`);
                   }}
                 >
-                  <IoReturnUpBack />
+                  <IconReturnDownBack />
                 </Button>
               )}
             </CardHeader>
@@ -141,7 +147,7 @@ function SideBox() {
               )}
             </CardBody>
             {arcadeId && detailArcade && (
-              <CardFooter className="flex items-center justify-items-end gap-2">
+              <CardFooter className="h-20 flex items-center justify-items-end gap-2">
                 <PathButton
                   endAddress={detailArcade.store_address}
                   startLat={targetLat}

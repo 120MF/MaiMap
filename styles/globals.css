@@ -33,6 +33,10 @@
     .rounded-right {
         border-radius: 0 1rem 1rem 0;
     }
+    .rounded-top {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+    }
 }
 
 .amap-logo {

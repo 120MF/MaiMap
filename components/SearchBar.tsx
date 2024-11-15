@@ -5,9 +5,10 @@ import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Input } from "@nextui-org/input";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
-import { BsSlashSquareFill } from "react-icons/bs";
-import { FaAngleUp, FaAngleDown } from "react-icons/fa6";
 
+import IconSlashSquareFill from "@/components/icons/IconSlashSquareFill";
+import IconAngleUp from "@/components/icons/IconAngleUp";
+import IconAngleDown from "@/components/icons/IconAngleDown";
 import { getSuggestion } from "@/lib/QMapSuggestion";
 import { suggestion } from "@/types/suggestion";
 
@@ -84,12 +85,12 @@ export default function SearchBar() {
         >
           {inputValue ? (
             isSuggestionsOpen ? (
-              <FaAngleUp />
+              <IconAngleUp />
             ) : (
-              <FaAngleDown />
+              <IconAngleDown />
             )
           ) : (
-            <BsSlashSquareFill />
+            <IconSlashSquareFill />
           )}
         </Button>
       </div>

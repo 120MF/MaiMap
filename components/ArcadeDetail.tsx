@@ -15,17 +15,24 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
       <h2 className="text-2xl py-1 px-1">{arcadeDetail.store_name}</h2>
       <p className="text-xl py-2 px-2">{arcadeDetail.store_address}</p>
       <p>机厅信息</p>
-      <span className="flex">
-        <p>平均评分：{getAverage<review>(arcadeReviews, "rating")}</p>
-        <p className="px-2">
+      <span className="flex flex-row justify-start gap-4">
+        <p>
+          平均评分：{getAverage<review>(arcadeReviews, "rating").toFixed(2)} /
+          5.00
+        </p>
+        <p className="">
           机台数：{getMostFrequent<review>(arcadeReviews, "arcade_count")}
         </p>
       </span>
-      <p>
-        机厅币价：{getMostFrequent<review>(arcadeReviews, "coin_price")}{" "}
-        PC单价：
-        {getMostFrequent<review>(arcadeReviews, "pc_coin_count")}
-      </p>
+      <span className="flex flex-row justify-start gap-4">
+        <p>
+          机厅币价：{getMostFrequent<review>(arcadeReviews, "coin_price")} 元
+        </p>
+        <p>
+          PC单价：
+          {getMostFrequent<review>(arcadeReviews, "pc_coin_count")} 币/局
+        </p>
+      </span>
       <Divider />
       <div className="flex justify-between">
         <p className="text-xl py-2 px-1">评论区</p>
@@ -33,7 +40,7 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
       <div>
         {arcadeReviews.length > 0 ? (
           arcadeReviews.map((review: review) => (
-            <Card key={review.review_id}>
+            <Card key={review.review_id} radius="none" shadow="md">
               <CardHeader className="flex flex-col items-start my-0 py-1">
                 <p className="text-md py-1 px-1">{review.username}</p>
                 <span className="flex">

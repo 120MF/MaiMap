@@ -1,4 +1,5 @@
 import { create } from "zustand";
+
 import { review } from "@/types/reviews";
 
 async function getArcadeReviews(id: number) {

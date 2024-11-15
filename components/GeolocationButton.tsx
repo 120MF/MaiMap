@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@nextui-org/button";
-import { FaMapLocationDot } from "react-icons/fa6";
+
+import IconLocationCrosshairs from "@/components/icons/IconLocationCrosshairs";
 
 function GeolocationButton() {
   const searchParams = useSearchParams();
@@ -45,7 +46,7 @@ function GeolocationButton() {
       isLoading={isLoading}
       onClick={handleGeoLocation}
     >
-      <FaMapLocationDot />
+      <IconLocationCrosshairs />
     </Button>
   );
 }
