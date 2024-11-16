@@ -14,7 +14,7 @@ _邂逅每个目的地与迪拉熊_
 - 点击地图钉跳转显示机厅具体信息；
 - 在搜索栏中搜索目的地并在地图上跳转至相应位置；
 - 实时更改机厅搜索半径；
-- 评论功能（开发中）；
+- 匿名评论功能；
 - 为第三方Bot提供API服务；
 
 ## 让MaiMap变得更好
@@ -25,11 +25,13 @@ _邂逅每个目的地与迪拉熊_
 
 - 选择适合你的仓库（[Github](https://github.com/MoonBite666/MaiMap)、[Gitee](https://gitee.com/moonfeather/MaiMap)）。如果你所在的网络不便访问Github，就使用Gitee的镜像仓库；
 - 注册并登录相关平台的账号；
-- 点击上方工具栏的Issue，依据指示提交反馈。
+- 点击上方工具栏的Issue，接着点击新建Issue，然后依据指示提交反馈。
 
 ## 进行开发
 
 ### 快速开始
+
+推荐使用pnpm包管理器。
 
 ```shell
 git clone https://github.com/MoonBite666/MaiMap.git
@@ -41,11 +43,11 @@ pnpm run dev
 ### Docker部署
 
 ```shell
-# 参考官方Dockerfile进行构建
-docker build -t maimap-docker .
+# 参考官方Dockerfile，使用pnpm部署
+docker build -t maimap-docker . --build-arg NEXT_PUBLIC_AMAP_AKEY=... --build-arg NEXT_PUBLIC_QMAP_API_KEY=... --build-arg NEXT_PUBLIC_BUILD_FROM=local .
 # 可选：上传Docker Hub
-docker tag maimap-docker:latest my-dockerhub-username/maimap-docker:latest
-docker push my-dockerhub-username/maimap-docker:latest
+# docker tag maimap-docker:latest my-dockerhub-username/maimap-docker:latest
+# docker push my-dockerhub-username/maimap-docker:latest
 ```
 
 ### 注意事项
@@ -63,24 +65,14 @@ NEXT_PUBLIC_BUILD_FROM=local
 
 ## API
 
-### 获取附近机厅
-  
-- URL：
-    ```text
-    https://maimap.tech/arcades/get/nearby?
-    ```
-- 参数：
-  - 目标经度`lng`，必填；
-  - 目标维度`lat`，必填；
-  - 查询范围`range`，单位km，必填；
-  - 排序方法`sortMethod`，为[SortMethod](stores/useArcades.tsx)类型字符串，可选。
+请参考Wiki中的[API](https://github.com/MoonBite666/MaiMap/wiki/API)页。
 
 ## Todo
 
 - [ ] 制作fallback页面
-- [ ] API文档
+- [ ] Wiki
 - [x] 增加机厅评论功能
-- [ ] 完善评论区布局
+- [x] 完善评论区布局
 - [ ] 桌面端网页
 
 ## Credit
