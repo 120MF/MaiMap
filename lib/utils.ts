@@ -1,5 +1,3 @@
-import { review } from "@/types/reviews";
-
 export function getAverage<T>(array: T[], property: keyof T): number {
   const sum = array.reduce(
     (acc, item) => acc + (item[property] as unknown as number),

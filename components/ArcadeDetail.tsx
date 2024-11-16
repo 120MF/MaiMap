@@ -1,13 +1,12 @@
-import { Avatar } from "@nextui-org/avatar";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { Divider } from "@nextui-org/divider";
+import { Textarea } from "@nextui-org/input";
+import { User } from "@nextui-org/user";
 
 import { review } from "@/types/reviews";
 import { arcade } from "@/types/arcades";
 import { getAverage, getMostFrequent } from "@/lib/utils";
-import { Textarea } from "@nextui-org/input";
-import { User } from "@nextui-org/user";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;
