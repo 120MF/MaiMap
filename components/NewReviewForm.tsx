@@ -168,7 +168,7 @@ function NewReviewForm({ onClose }) {
         <div className="flex flex-col items-start">
           <Input
             {...register("coin_price", { pattern: /^(10|[0-9](\.[0-9]+)?)$/ })}
-            label="币价（元/枚）"
+            label="最低币价（元/枚）"
             placeholder="0.00"
             size="sm"
             startContent={<IconCurrencyYuan />}
@@ -205,7 +205,10 @@ function NewReviewForm({ onClose }) {
         </div>
         <div className="flex flex-col items-start">
           <Input
-            {...register("rating", { required: true, pattern: /^[1-5]$/i })}
+            {...register("rating", {
+              required: true,
+              pattern: /^(5|5.0|[0-4](\.[0-9]+)?)$/i,
+            })}
             isRequired
             label="你的评分"
             placeholder="1~5分"
@@ -218,7 +221,7 @@ function NewReviewForm({ onClose }) {
             <p className="text-red-400 text-xs pl-2">请输入你的评分</p>
           )}
           {errors?.rating?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2">请输入0~5之间的整数</p>
+            <p className="text-red-400 text-xs pl-2">请输入0~5之间的数</p>
           )}
         </div>
       </div>

@@ -32,3 +32,17 @@ export function getMostFrequent<T>(array: T[], property: keyof T): T[keyof T] {
 
   return mostFrequentValue;
 }
+
+export function formatReadableDate(isoString: string): string {
+  const date = new Date(isoString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+
+  return date.toLocaleDateString("zh-CN", options);
+}
