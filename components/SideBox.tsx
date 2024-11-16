@@ -17,6 +17,7 @@ import { useMap } from "@/stores/useMap";
 import ArcadeList from "@/components/ArcadeList";
 import { useReviews } from "@/stores/useReviews";
 import NewReviewButton from "@/components/NewReviewButton";
+import IssueButton from "@/components/IssueButton";
 
 function SideBox() {
   const ArcadeDetail = dynamic(() => import("@/components/ArcadeDetail"), {
@@ -147,7 +148,10 @@ function SideBox() {
               )}
             </CardBody>
             {arcadeId && detailArcade && (
-              <CardFooter className="min-h-12 max-h-12 flex items-center justify-items-end gap-2 border-t-1 border-gray-400">
+              <CardFooter className="min-h-12 max-h-12 flex items-center gap-2 border-t-1 border-gray-400">
+                <div className="ml-0">
+                  <IssueButton arcadeId={arcadeId}>信息有误</IssueButton>
+                </div>
                 <PathButton
                   endAddress={detailArcade.store_address}
                   startLat={targetLat}
