@@ -84,7 +84,10 @@ function NewReviewForm({ onClose }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <h2 className="pb-1">个人信息</h2>
+      <p className="pb-1 text-sm text-center italic underline text-red-400">
+        请避免在评论中留下个人敏感信息！
+      </p>
+      <h2>个人信息</h2>
       <div className="flex flex-row items-center pb-1">
         <div className="flex flex-col items-start max-w-[50%]">
           <Input

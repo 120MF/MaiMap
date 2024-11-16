@@ -64,7 +64,6 @@ function SideBox() {
 
   return (
     <div className="relative z-20">
-      {/* 侧边栏 */}
       <div
         className={`fixed bottom-[7%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${
           isOpen ? "translate-y-0" : "translate-y-[90%]"
@@ -73,6 +72,7 @@ function SideBox() {
         <div className="flex items-center h-full">
           <Card
             isBlurred
+            isFooterBlurred
             className={`flex w-full h-full overflow-y-auto rounded-top`}
             radius="none"
             shadow="md"
@@ -147,7 +147,7 @@ function SideBox() {
               )}
             </CardBody>
             {arcadeId && detailArcade && (
-              <CardFooter className="h-20 flex items-center justify-items-end gap-2">
+              <CardFooter className="min-h-12 max-h-12 flex items-center justify-items-end gap-2 border-t-1 border-gray-400">
                 <PathButton
                   endAddress={detailArcade.store_address}
                   startLat={targetLat}

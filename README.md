@@ -78,9 +78,9 @@ NEXT_PUBLIC_BUILD_FROM=local
 ## Todo
 
 - [ ] 制作fallback页面
-- [x] 机厅排序功能
 - [ ] API文档
-- [ ] 增加机厅评论功能
+- [x] 增加机厅评论功能
+- [ ] 完善评论区布局
 - [ ] 桌面端网页
 
 ## Credit
@@ -88,3 +88,4 @@ NEXT_PUBLIC_BUILD_FROM=local
 - Logo及加载动画由[120glowing](https://space.bilibili.com/237708867)绘制
 - 地图部分使用[高德地图组件库](https://github.com/uiwjs/react-amap)
 - UI使用[NextUI](https://github.com/nextui-org/nextui)
+- Icon来自于[React Svg Icons](https://reactsvgicons.com/)
