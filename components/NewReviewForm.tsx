@@ -185,7 +185,7 @@ function NewReviewForm({ onClose }) {
           <Input
             {...register("pc_coin_count", {
               required: true,
-              pattern: /^[0-10]$/i,
+              pattern: /\b([1-9]|10)\b/,
             })}
             isRequired
             label="单局所需币数"
