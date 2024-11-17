@@ -50,7 +50,7 @@ function NewReviewForm({ onClose }) {
     });
 
     if (res.status !== 200) {
-      toast.success("评论上传失败", {
+      toast.error("评论上传失败", {
         position: "top-right",
         type: "error",
         autoClose: 3000,
@@ -178,6 +178,12 @@ function NewReviewForm({ onClose }) {
           {errors?.coin_price?.type === "pattern" && (
             <p className="text-red-400 text-xs pl-2">请输入正确的人民币价格</p>
           )}
+          {errors?.arcade_count?.type === "required" && (
+            <p className="text-red-400 text-xs pl-2 opacity-0">占位</p>
+          )}
+          {errors?.arcade_count?.type === "pattern" && (
+            <p className="text-red-400 text-xs pl-2 opacity-0">占位</p>
+          )}
         </div>
       </div>
       <div className="flex flex-row items-center justify-evenly pb-1">
@@ -225,20 +231,14 @@ function NewReviewForm({ onClose }) {
           )}
         </div>
       </div>
-      <div className="flex flex-col items-start">
-        <Textarea
-          {...register("comment", { required: true })}
-          fullWidth
-          isRequired
-          className="pb-2"
-          label="文字评论"
-          placeholder="在这里写下你对机厅的评价吧……"
-          variant="bordered"
-        />
-        {errors?.comment?.type === "required" && (
-          <p className="text-red-400 text-xs pl-2">请输入你的评价</p>
-        )}
-      </div>
+      <Textarea
+        {...register("comment")}
+        fullWidth
+        className="pb-2"
+        label="文字评论"
+        placeholder="在这里写下你对机厅的评价吧……"
+        variant="bordered"
+      />
       <Button
         fullWidth
         color="primary"

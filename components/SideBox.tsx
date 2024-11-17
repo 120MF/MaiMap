@@ -24,6 +24,7 @@ function SideBox() {
     loading: () => (
       <div className="w-full flex items-center gap-3">
         <div className="px-2 w-full flex flex-col gap-2">
+          {/*TODO: make these into a component*/}
           <Skeleton className="h-6 w-9/12 rounded-lg" />
           <Skeleton className="h-4 w-11/12 rounded-lg" />
           <Skeleton className="h-4 w-11/12 rounded-lg" />
@@ -64,6 +65,8 @@ function SideBox() {
   }, [arcadeId]);
 
   return (
+    // TODO
+    //  FIXME some browsers can't properly render the box
     <div className="relative z-20">
       <div
         className={`fixed bottom-[7%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${

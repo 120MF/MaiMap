@@ -105,6 +105,7 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
                 shadow="sm"
               >
                 <CardHeader className="flex flex-row items-center my-0 pt-2 pb-1">
+                  {/*TODO: add a thumb-up button here to vote*/}
                   <User
                     avatarProps={{ showFallback: true }}
                     description={review.show_email ? review.email : "匿名邮箱"}
@@ -114,7 +115,11 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
                 <CardBody className="py-1">
                   <Textarea
                     isReadOnly
-                    defaultValue={review.comment}
+                    defaultValue={
+                      review.comment.length > 0
+                        ? review.comment
+                        : "该用户没有留下文字评论"
+                    }
                     description={formatReadableDate(review.created_at)}
                     label={`评分：${review.rating.toFixed(2)} / 5.00`}
                     labelPlacement="inside"
