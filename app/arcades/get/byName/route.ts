@@ -1,4 +1,4 @@
-// byId api
+// byName api
 import { RowDataPacket } from "mysql2";
 import { type NextRequest } from "next/server";
 
@@ -7,9 +7,9 @@ import { arcade } from "@/types/arcades";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const id = searchParams.get("id");
+  const name = searchParams.get("name");
 
-  if (!id) {
+  if (!name) {
     return new Response(
       JSON.stringify({ error: "Missing required parameters" }),
       {
@@ -22,17 +22,17 @@ export async function GET(request: NextRequest) {
   const query = `
     SELECT *
     FROM arcades
-    WHERE store_id = ?
+    WHERE store_name = ?
   `;
 
   try {
-    const [results] = await pool.promise().query(query, [id]);
+    const [results] = await pool.promise().query(query, [name]);
     const data = (results as RowDataPacket[])[0];
 
     const arcade: arcade = {
-      store_lat: Number(data.store_lat),
-      store_lng: Number(data.store_lng),
-      store_id: Number(data.store_id),
+      store_lat: data.store_lat,
+      store_lng: data.store_lng,
+      store_id: data.store_id,
       store_name: data.store_name,
       store_address: data.store_address,
       store_pos: data.store_pos,
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     return new Response(
-      JSON.stringify({ message: "Get arcade by Id failed." }),
+      JSON.stringify({ message: "Get arcade by name failed." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
