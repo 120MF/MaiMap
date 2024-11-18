@@ -10,6 +10,7 @@ import { siteConfig } from "@/config/site";
 import Footer from "@/components/Footer";
 import { fontSans } from "@/config/fonts";
 import "react-toastify/dist/ReactToastify.css";
+import Loading from "@/app/loading";
 
 export const metadata: Metadata = {
   title: {
@@ -41,7 +42,7 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Suspense fallback={<p>loading</p>}>
+        <Suspense fallback={<Loading />}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
             <div className="flex-1 flex flex-col">
               <div className="m-0 p-0" style={{ height: "93vh" }}>
