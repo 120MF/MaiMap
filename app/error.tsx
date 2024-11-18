@@ -40,7 +40,7 @@ export default function Error({
           </button>
           <a
             className="text-blue-500 pl-1 border-l-1 border-stone-500 underline"
-            href="https://gitee.com/moonfeather/MaiMap#%E8%AE%A9maimap%E5%8F%98%E5%BE%97%E6%9B%B4%E5%A5%BD"
+            href="https://maimap.mfnest.tech/"
             rel="noreferrer"
             target="_blank"
           >

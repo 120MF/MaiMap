@@ -8,6 +8,7 @@ import {
 import Image from "next/image";
 
 import version from "@/lib/version";
+import IconAnswer from "@/components/icons/IconAnwser";
 
 function About({ isOpen, onOpenChange }) {
   return (
@@ -37,6 +38,14 @@ function About({ isOpen, onOpenChange }) {
                 Version {version} {process.env.NEXT_PUBLIC_BUILD_FROM} build
               </p>
               <div className="flex items-center space-x-2">
+                <a
+                  className="m-0 p-0 -my-2"
+                  href="https://maimap.mfnest.tech/"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <IconAnswer />
+                </a>
                 <a
                   className="m-0 p-0 -my-2"
                   href="https://gitee.com/moonfeather/MaiMap"
