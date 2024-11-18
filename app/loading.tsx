@@ -8,7 +8,7 @@ function Loading() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDrink(false);
-    }, 2900);
+    }, 1200);
 
     return () => clearTimeout(timer);
   }, []);
@@ -24,7 +24,7 @@ function Loading() {
         width={230}
       />
       <h2 className="text-xl antialiased font-bold text-stone-700 animate-pulse">
-        地图展开中……
+        {drink ? "加载应用中……" : "展开地图中……"}
       </h2>
     </div>
   );

@@ -3,10 +3,11 @@ import dynamic from "next/dynamic";
 import Updater from "@/components/Updater";
 import SearchBar from "@/components/SearchBar";
 import SideBox from "@/components/SideBox";
+import MapLoading from "@/components/MapLoading";
 
 export default function Home() {
   const MapContainer = dynamic(() => import("@/components/MapContainer"), {
-    loading: () => <p>Loading...</p>,
+    loading: () => <MapLoading />,
     ssr: false,
   });
 
