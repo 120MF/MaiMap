@@ -65,8 +65,6 @@ function SideBox() {
   }, [arcadeId]);
 
   return (
-    // TODO
-    //  FIXME some browsers can't properly render the box
     <div className="relative z-20">
       <div
         className={`fixed bottom-[7%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${

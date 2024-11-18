@@ -3,8 +3,8 @@
 import Image from "next/image";
 import { Link } from "@nextui-org/link";
 import { useDisclosure } from "@nextui-org/modal";
-import IconInfoCircle from "@/components/icons/IconInfoCircle";
 
+import IconInfoCircle from "@/components/icons/IconInfoCircle";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import RangeSlider from "@/components/RangeSlider";
 import About from "@/components/About";
@@ -16,6 +16,7 @@ function Footer() {
     <>
       <div
         className={`h-full border-t border-gray-300 flex items-center justify-between px-2 py-2 bg-background`}
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div className="flex items-center">
           <Image
