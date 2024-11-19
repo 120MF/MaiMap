@@ -85,6 +85,11 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
                 PC单价：
                 {pcPrice} 币/局
               </Chip>
+              {arcadeDetail.arcade_dead && (
+                <Chip color="warning" variant="faded">
+                  已停业
+                </Chip>
+              )}
             </span>
           </>
         )}

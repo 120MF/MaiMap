@@ -8,7 +8,7 @@ function Loading() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDrink(false);
-    }, 1200);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);

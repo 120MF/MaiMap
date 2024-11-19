@@ -37,6 +37,7 @@ export async function GET(request: NextRequest) {
       store_address: data.store_address,
       store_pos: data.store_pos,
       arcade_type: data.arcade_type,
+      arcade_dead: data.arcade_dead,
       distance: 0,
     };
 

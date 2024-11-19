@@ -94,21 +94,16 @@ function MaiMap() {
               update_arcadeId(arcade.store_id);
             }}
           >
-            {arcadeId === arcade.store_id ? (
-              <Image
-                alt="arcade"
-                height={50}
-                src="/nail-arcade-selected.png"
-                width={30}
-              />
-            ) : (
-              <Image
-                alt="arcade"
-                height={50}
-                src="/nail-arcade.png"
-                width={30}
-              />
-            )}
+            {/*分支一：被选中，机厅停业，显示nail-arcade-dead-selected.png*/}
+            {/*分支二：被选中，机厅正常，显示nail-arcade-selected.png*/}
+            {/*分支三：未被选中，机厅停业，显示nail-arcade-dead.png*/}
+            {/*分支四：未被选中，机厅正常，显示nail-arcade.png*/}
+            <Image
+              alt="arcade"
+              height={50}
+              src={`${arcadeId === arcade.store_id ? (arcade.arcade_dead ? "/nail-arcade-dead-selected.png" : "/nail-arcade-selected.png") : arcade.arcade_dead ? "/nail-arcade-dead.png" : "/nail-arcade.png"}`}
+              width={30}
+            />
           </Marker>
           <LabelMarker
             icon={null}
