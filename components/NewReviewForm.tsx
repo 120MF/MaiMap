@@ -41,7 +41,7 @@ function NewReviewForm({ onClose }) {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     setIsLoading(true);
     const value: review = { ...data, store_id: arcadeId };
-    const res = await fetch("/reviews/post", {
+    const res = await fetch("/api/reviews/post", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

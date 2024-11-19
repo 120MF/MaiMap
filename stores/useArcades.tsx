@@ -35,7 +35,7 @@ const useArcades = create<ArcadesState>()((set, get) => ({
     const { sortMethod } = get();
     const methodString = SortMethod[sortMethod];
     const res = await fetch(
-      `/arcades/get/nearby?lat=${lat}&lng=${lng}&range=${range}&sortMethod=${methodString}`,
+      `/api/arcades/get/nearby?lat=${lat}&lng=${lng}&range=${range}&sortMethod=${methodString}`,
     );
 
     if (res.status === 500) {
@@ -46,7 +46,7 @@ const useArcades = create<ArcadesState>()((set, get) => ({
     set({ nearbyArcades: data });
   },
   fetch_detailArcade: async (id) => {
-    const res = await fetch(`arcades/get/byId?id=${id}`);
+    const res = await fetch(`/api/arcades/get/byId?id=${id}`);
 
     if (res.status === 500) {
       set({ detailArcade: null });

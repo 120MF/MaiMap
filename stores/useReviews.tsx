@@ -3,7 +3,7 @@ import { create } from "zustand";
 import { review } from "@/types/reviews";
 
 async function getArcadeReviews(id: number) {
-  const res = await fetch(`/reviews/get/byId?id=${id}`);
+  const res = await fetch(`/api/reviews/get/byId?id=${id}`);
 
   if (res.status !== 200) {
     throw new Error("fetch reviews failed");
