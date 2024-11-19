@@ -36,9 +36,9 @@ function ArcadeCard({ arcade }: ArcadeCardProps) {
         </ul>
       </CardBody>
       <CardFooter className="flex justify-end">
-        {arcade.arcade_dead && (
+        {arcade.arcade_dead ? (
           <p className="text-sm text-amber-700 pr-10">已停业</p>
-        )}
+        ) : null}
         <p className="text-sm">
           直线距离:
           {(arcade.distance / 1000).toFixed(4)}
