@@ -22,7 +22,7 @@ interface IFormInput extends review {
   username: string;
   rating: number;
   arcade_count: number;
-  coin_price: number;
+  coin_price: number | null;
   pc_coin_count: number;
   comment: string;
 }

@@ -7,7 +7,10 @@ export function getAverage<T>(array: T[], property: keyof T): number {
   return sum / array.length;
 }
 
-export function getMostFrequent<T>(array: T[], property: keyof T): T[keyof T] {
+export function getMostFrequent<T>(
+  array: T[],
+  property: keyof T,
+): T[keyof T] | null {
   const countMap: Record<string, number> = {};
 
   array.forEach((item) => {

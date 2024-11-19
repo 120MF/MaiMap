@@ -5,6 +5,8 @@ import { review } from "@/types/reviews";
 export async function POST(request: Request) {
   const formReview: review = await request.json();
 
+  if (String(formReview.coin_price) === "") formReview.coin_price = null;
+
   if (!formReview) {
     return new Response(JSON.stringify({ error: "Missing request body" }), {
       status: 400,

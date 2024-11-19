@@ -68,7 +68,7 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
                 }
                 variant="faded"
               >
-                最低币价：{coinPrice} 元
+                最低币价：{coinPrice === "null" ? "暂无" : `${coinPrice} 元`}
               </Chip>
               <Chip
                 color={
