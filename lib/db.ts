@@ -1,20 +1,32 @@
-import mysql from "mysql2";
+import { MongoClient, ServerApiVersion } from "mongodb";
 
-const pool = mysql.createPool({
-  connectionLimit: 10, // 连接池中最大连接数
-  host: "maimap-mysql.mfnest.tech",
-  user: "root",
-  password: "yelsjdhl",
-  database: "maimap",
-});
-// 可在本地建立一个数据库，并在系统hosts中设置将“maimap-mysql.mfnest.tech”域名映射到本地局域网ipv4地址；
-// 若想进行快速开发，可以使用下面的公共地址：
-// const pool = mysql.createPool({
-//   connectionLimit: 10,
-//   host: "mysql.sqlpub.com",
-//   user: "maimap_user",
-//   password: "vcLR4i74kLPg3Yyf",
-//   database: "maimap",
-// });
+const uri = "mongodb://salt:yelsjdhl@maimap-mysql.mfnest.tech:27017/maimap";
+const options = {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+};
 
-export { pool };
+let client: MongoClient;
+
+if (process.env.NODE_ENV === "development") {
+  // In development mode, use a global variable so that the value
+  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClient?: MongoClient;
+  };
+
+  if (!globalWithMongo._mongoClient) {
+    globalWithMongo._mongoClient = new MongoClient(uri, options);
+  }
+  client = globalWithMongo._mongoClient;
+} else {
+  // In production mode, it's best to not use a global variable.
+  client = new MongoClient(uri, options);
+}
+
+// Export a module-scoped MongoClient. By doing this in a
+// separate module, the client can be shared across functions.
+export default client;

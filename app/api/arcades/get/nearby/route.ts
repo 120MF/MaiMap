@@ -1,8 +1,6 @@
-// nearby api
-import { RowDataPacket } from "mysql2";
 import { type NextRequest } from "next/server";
 
-import { pool } from "@/lib/db";
+import client from "@/lib/db";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -21,49 +19,67 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  let order: string;
+  let sort: any;
+  let collation: any = null;
 
   switch (sortMethod) {
     case "DistanceAscending":
-      order = "ORDER BY distance;";
+      sort = { distance: 1 };
       break;
     case "DistanceDescending":
-      order = "ORDER BY distance DESC;";
+      sort = { distance: -1 };
       break;
     case "PinyinAscending":
-      order = "ORDER BY CONVERT(store_name USING gbk);";
+      sort = { store_name: 1 };
+      collation = { locale: "zh" };
       break;
     case "PinyinDescending":
-      order = "ORDER BY CONVERT(store_name USING gbk) DESC;";
+      sort = { store_name: -1 };
+      collation = { locale: "zh" };
       break;
     case "Default":
     default:
-      order = ";";
+      sort = { store_id: 1 };
   }
 
-  const query = `
-    SELECT *,
-           ST_Distance_Sphere(
-               store_pos,
-               ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))
-           ) AS distance
-    FROM arcades
-    WHERE ST_Distance_Sphere(
-              store_pos,
-              ST_GeomFromText(CONCAT('POINT(', ?, ' ', ?, ')'))
-          ) <= ? * 1000 ${order}
-  `;
-
   try {
-    const [results] = await pool
-      .promise()
-      .query(query, [lng, lat, lng, lat, range]);
-    const arcades = (results as RowDataPacket[]).map((result) => ({
-      ...result,
-      store_lat: Number(result.store_lat),
-      store_lng: Number(result.store_lng),
-      store_id: Number(result.store_id),
-    }));
+    await client.connect();
+    const db = client.db("maimap");
+    const collection = db.collection("arcades");
+
+    const arcades = await collection
+      .aggregate(
+        [
+          {
+            $geoNear: {
+              near: { type: "Point", coordinates: [Number(lng), Number(lat)] },
+              distanceField: "distance",
+              spherical: true,
+              maxDistance: Number(range) * 1000, // Use maxDistance directly
+            },
+          },
+          {
+            $match: {
+              distance: { $lte: Number(range) * 1000 }, // 过滤掉超出半径的点
+            },
+          },
+          {
+            $addFields: {
+              store_lat: { $toDouble: "$store_lat" },
+              store_lng: { $toDouble: "$store_lng" },
+            },
+          },
+          {
+            $project: {
+              _id: 0,
+              store_pos: 0,
+            },
+          },
+          { $sort: sort },
+        ],
+        { collation },
+      )
+      .toArray();
 
     return new Response(JSON.stringify(arcades), {
       status: 200,

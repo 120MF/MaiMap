@@ -1,9 +1,6 @@
-// byName api
-import { RowDataPacket } from "mysql2";
 import { type NextRequest } from "next/server";
 
-import { pool } from "@/lib/db";
-import { arcade } from "@/types/arcades";
+import client from "@/lib/db";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -19,34 +16,28 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const query = `
-    SELECT *
-    FROM arcades
-    WHERE store_name = ?
-  `;
-
   try {
-    const [results] = await pool.promise().query(query, [name]);
-    const data = (results as RowDataPacket[])[0];
+    await client.connect();
+    const db = client.db("maimap");
+    const collection = db.collection("arcades");
 
-    const arcade: arcade = {
-      store_lat: data.store_lat,
-      store_lng: data.store_lng,
-      store_id: data.store_id,
-      store_name: data.store_name,
-      store_address: data.store_address,
-      store_pos: data.store_pos,
-      arcade_type: data.arcade_type,
-      distance: 0,
-    };
+    const arcades = await collection
+      .find({ store_name: { $regex: name, $options: "i" } })
+      .project({ store_pos: 0 })
+      .toArray();
 
-    return new Response(JSON.stringify(arcade), {
+    for (let i = 0; i < arcades.length; i++) {
+      arcades[i].store_lat = parseFloat(arcades[i].store_lat.toString());
+      arcades[i].store_lng = parseFloat(arcades[i].store_lng.toString());
+    }
+
+    return new Response(JSON.stringify(arcades), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
     return new Response(
-      JSON.stringify({ message: "Get arcade by name failed." }),
+      JSON.stringify({ message: "Get arcades by name failed.", error: error }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },

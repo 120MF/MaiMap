@@ -1,7 +1,6 @@
-// Get Review byId api
 import { type NextRequest } from "next/server";
 
-import { pool } from "@/lib/db";
+import client from "@/lib/db";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -17,16 +16,27 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const query = `
-    SELECT *
-    FROM reviews
-    WHERE store_id = ?
-  `;
-
   try {
-    const [results] = await pool.promise().query(query, [id]);
+    await client.connect();
+    const db = client.db("maimap");
+    const collection = db.collection("reviews");
 
-    return new Response(JSON.stringify(results), {
+    const reviews = await collection.find({ store_id: Number(id) }).toArray();
+
+    const length = reviews.length;
+
+    if (length === 0) {
+      return new Response(JSON.stringify([]), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+    for (let i = 0; i < length; i++) {
+      reviews[i].rating = parseFloat(String(reviews[i].rating));
+      reviews[i].coin_price = parseFloat(String(reviews[i].coin_price));
+    }
+
+    return new Response(JSON.stringify(reviews), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

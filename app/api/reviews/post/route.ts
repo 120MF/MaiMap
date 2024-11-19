@@ -1,8 +1,9 @@
-// POST Review byId api
-import { pool } from "@/lib/db";
+import { type NextRequest } from "next/server";
+
+import client from "@/lib/db";
 import { review } from "@/types/reviews";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const formReview: review = await request.json();
 
   if (String(formReview.coin_price) === "") formReview.coin_price = null;
@@ -14,13 +15,6 @@ export async function POST(request: Request) {
     });
   }
 
-  const query = `
-      INSERT INTO reviews (
-          store_id, username, email, rating,
-          arcade_count, coin_price, pc_coin_count, 
-          comment, created_at, vote, show_email
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-  `;
   const timestamp = new Date()
     .toLocaleString("en-CA", {
       timeZone: "Asia/Shanghai",
@@ -35,29 +29,25 @@ export async function POST(request: Request) {
     .replace(/, /g, " ")
     .replace(/\//g, "-");
 
-  const values = [
-    formReview.store_id,
-    formReview.username,
-    formReview.email,
-    formReview.rating,
-    formReview.arcade_count,
-    formReview.coin_price,
-    formReview.pc_coin_count,
-    formReview.comment,
-    timestamp,
-    0,
-    formReview.show_email,
-  ];
+  const reviewDocument = {
+    ...formReview,
+    created_at: timestamp,
+    vote: 0,
+  };
 
   try {
-    const [results] = await pool.promise().query(query, values);
+    await client.connect();
+    const db = client.db("maimap");
+    const collection = db.collection("reviews");
 
-    return new Response(JSON.stringify(results), {
+    const result = await collection.insertOne(reviewDocument);
+
+    return new Response(JSON.stringify(result), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error, values }), {
+    return new Response(JSON.stringify({ error }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });

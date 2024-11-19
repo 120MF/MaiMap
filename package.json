@@ -1,6 +1,6 @@
 {
 	"name": "maimap",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
@@ -9,6 +9,7 @@
 		"lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix"
 	},
 	"dependencies": {
+		"@auth/mongodb-adapter": "^3.7.4",
 		"@nextui-org/avatar": "^2.0.33",
 		"@nextui-org/button": "2.0.38",
 		"@nextui-org/card": "^2.0.34",
@@ -39,7 +40,7 @@
 		"clsx": "2.1.1",
 		"framer-motion": "~11.1.1",
 		"intl-messageformat": "^10.5.0",
-		"mysql2": "^3.11.4",
+		"mongodb": "^6.10.0",
 		"next": "14.2.10",
 		"next-auth": "5.0.0-beta.25",
 		"next-themes": "^0.2.1",
