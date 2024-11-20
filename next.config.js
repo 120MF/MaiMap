@@ -10,6 +10,10 @@ const nextConfig = {
         source: "/api/qmap/geocoder",
         destination: "https://apis.map.qq.com/ws/geocoder/v1",
       },
+      {
+        source: "/api/qmap/ip",
+        destination: "https://apis.map.qq.com/ws/location/v1/ip",
+      },
     ];
   },
   output: "standalone",
