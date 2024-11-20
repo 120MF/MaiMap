@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Link } from "@nextui-org/link";
 import { useDisclosure } from "@nextui-org/modal";
 import { Tabs, Tab } from "@nextui-org/tabs";
+import { useRouter, usePathname } from "next/navigation";
 
 import IconInfoCircle from "@/components/icons/IconInfoCircle";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
@@ -16,6 +17,8 @@ import IconBxsUserCircle from "@/components/icons/IconBxsUserCircle";
 
 function Footer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const router = useRouter();
+  const pathname = usePathname();
 
   return (
     <>
@@ -47,9 +50,18 @@ function Footer() {
           </div>
         </div>
         <div className="flex w-full">
-          <Tabs size="sm" aria-label="pages" fullWidth variant="underlined">
+          <Tabs
+            fullWidth
+            aria-label="pages"
+            selectedKey={pathname}
+            size="sm"
+            variant="underlined"
+            onSelectionChange={(key: string) => {
+              router.push(key);
+            }}
+          >
             <Tab
-              key="Arcade"
+              key="/arcades"
               title={
                 <div className="flex items-center space-x-2">
                   <IconStore />
@@ -58,16 +70,7 @@ function Footer() {
               }
             />
             <Tab
-              key="Review"
-              title={
-                <div className="flex items-center space-x-2">
-                  <IconBxsMessageDetail />
-                  <span>评论</span>
-                </div>
-              }
-            />
-            <Tab
-              key="Map"
+              key="/"
               title={
                 <div className="flex items-center space-x-2">
                   <IconMapLocationDot />
@@ -76,7 +79,16 @@ function Footer() {
               }
             />
             <Tab
-              key="User"
+              key="/reviews"
+              title={
+                <div className="flex items-center space-x-2">
+                  <IconBxsMessageDetail />
+                  <span>评论</span>
+                </div>
+              }
+            />
+            <Tab
+              key="/user"
               title={
                 <div className="flex items-center space-x-2">
                   <IconBxsUserCircle />

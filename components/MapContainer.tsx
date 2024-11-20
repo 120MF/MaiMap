@@ -50,7 +50,7 @@ function MaiMap() {
       key={theme}
       center={[centerLng, centerLat]}
       mapStyle={
-        theme === "light" ? "amap://styles/default" : "amap://styles/dark"
+        theme === "light" ? "amap://styles/normal" : "amap://styles/dark"
       }
       style={{ height: "90vh", width: "100vw" }}
       zoom={10}
