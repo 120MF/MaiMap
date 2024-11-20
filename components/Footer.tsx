@@ -18,7 +18,12 @@ import IconBxsUserCircle from "@/components/icons/IconBxsUserCircle";
 function Footer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const router = useRouter();
-  const pathname = usePathname();
+  let pathname = usePathname();
+
+  pathname =
+    pathname.split("/").length > 2
+      ? pathname.split("/").slice(0, -1).join("/")
+      : pathname;
 
   return (
     <>
@@ -55,7 +60,7 @@ function Footer() {
             size="sm"
             variant="underlined"
             onSelectionChange={(key: string) => {
-              router.push(key);
+              if (pathname !== "/signin") router.push(key);
             }}
           >
             <Tab
