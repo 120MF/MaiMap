@@ -67,7 +67,7 @@ function SideBox() {
   return (
     <div className="relative z-20">
       <div
-        className={`fixed bottom-[7%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${
+        className={`fixed bottom-[10%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${
           isOpen ? "translate-y-0" : "translate-y-[90%]"
         }`}
       >

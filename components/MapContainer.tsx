@@ -52,7 +52,7 @@ function MaiMap() {
       mapStyle={
         theme === "light" ? "amap://styles/default" : "amap://styles/dark"
       }
-      style={{ height: "93vh", width: "100vw" }}
+      style={{ height: "90vh", width: "100vw" }}
       zoom={10}
     >
       <ScaleControl offset={[20, 40]} position="LB" visible={true} />

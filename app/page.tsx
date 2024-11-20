@@ -20,7 +20,7 @@ export default function Home() {
       <SideBox />
       <div className="absolute top-0 left-0">
         <MapContainer />
-        <LoginButton />
+        {/*<LoginButton />*/}
       </div>
     </SessionProvider>
   );

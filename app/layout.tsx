@@ -45,10 +45,10 @@ export default function RootLayout({
         <Suspense fallback={<Loading />}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
             <div className="flex-1 flex flex-col">
-              <div className="m-0 p-0" style={{ height: "93svh" }}>
+              <div className="m-0 p-0" style={{ height: "90svh" }}>
                 {children}
               </div>
-              <div className="z-30" style={{ height: "7svh" }}>
+              <div className="z-30" style={{ height: "10svh" }}>
                 <Footer />
               </div>
             </div>

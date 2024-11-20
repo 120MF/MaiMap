@@ -1,6 +1,6 @@
 {
 	"name": "maimap",
-	"version": "0.5.1",
+	"version": "0.5.3",
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
@@ -25,6 +25,7 @@
 		"@nextui-org/slider": "^2.2.17",
 		"@nextui-org/snippet": "2.0.43",
 		"@nextui-org/system": "2.2.6",
+		"@nextui-org/tabs": "^2.0.37",
 		"@nextui-org/theme": "2.2.11",
 		"@nextui-org/user": "^2.0.34",
 		"@react-aria/ssr": "3.9.4",
