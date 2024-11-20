@@ -3,7 +3,7 @@ import GitHub from "next-auth/providers/github";
 import Nodemailer from "next-auth/providers/nodemailer";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 
-import client from "./lib/db";
+import client from "@/lib/db";
 import {
   EMAIL_FROM,
   EMAIL_SERVER_HOST,

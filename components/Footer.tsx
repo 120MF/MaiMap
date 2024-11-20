@@ -22,15 +22,13 @@ function Footer() {
 
   return (
     <>
-      <div
-        className={`h-full border-t border-gray-300 flex flex-col items-center bg-background px-2`}
-      >
-        <div className="flex items-center justify-around">
+      <div className="h-full border-t border-gray-300 flex flex-col items-center bg-background px-2">
+        <div className="flex items-center justify-around w-full gap-2">
           <div className="flex items-center">
             <Image
               alt="Logo"
               height={60}
-              quality={80}
+              quality={70}
               src="/Logo.png"
               width={130}
             />
@@ -49,7 +47,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="flex w-full">
+        <div className="flex w-full bottom-0">
           <Tabs
             fullWidth
             aria-label="pages"
