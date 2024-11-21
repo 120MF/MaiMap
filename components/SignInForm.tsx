@@ -101,7 +101,7 @@ function SignInForm(props: {
                 onPress={() => {
                   try {
                     setLoadingButton("osu");
-                    signIn("github", {
+                    signIn("osu", {
                       redirectTo: props.searchParams?.callbackUrl ?? "",
                     });
                   } catch (error) {

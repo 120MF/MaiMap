@@ -40,8 +40,8 @@ const providers: Provider[] = [
     // You can specify which fields should be submitted, by adding keys to the `credentials` object.
     // e.g. domain, username, password, 2FA token, etc.
     credentials: {
-      email: { label: "电子邮箱/用户名", type: "email" },
-      password: { label: "密码", type: "password" },
+      emailOrName: {},
+      password: {},
     },
     authorize: async (credentials) => {
       return null;

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import LoginRedirect from "@/components/LoginRedirect";
 import SignOutButton from "@/components/SignOutButton";
+import CompleteProfileForm from "@/components/CompleteProfileForm";
 
 export default async function User() {
   const session = await auth();
@@ -9,9 +10,13 @@ export default async function User() {
 
   return (
     <div>
-      <p>User Page</p>
-      <p>{session?.user?.email}</p>
+      <p>欢迎！</p>
+      <p>{!!session.user.name ? session.user.name : session.user.email}</p>
       <SignOutButton />
+      <div>
+        <p>补充信息</p>
+        <CompleteProfileForm session={session} />
+      </div>
     </div>
   );
 }
