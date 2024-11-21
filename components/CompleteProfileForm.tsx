@@ -2,8 +2,12 @@
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { useEffect, useState } from "react";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useTheme } from "next-themes";
+import { signOut } from "next-auth/react";
+import { ToastProps } from "next/dist/client/components/react-dev-overlay/internal/components/Toast/Toast";
+
+import { toastStyle } from "@/lib/toastStyle";
 
 function CompleteProfileForm({ session }) {
   const { theme } = useTheme();
@@ -19,6 +23,17 @@ function CompleteProfileForm({ session }) {
   const [handlePasswordSubmit, setHandlePasswordSubmit] =
     useState<boolean>(false);
 
+  /**
+   * 更新用户信息逻辑
+   * 按钮按下时,handle Username/Password Submit的值改变,触发useEffect.
+   * 先对Input中的值进行相应的检查,若有误则更新错误信息并显示;
+   * 若无误则使用update/xxx api进行信息更新流程.
+   * 注意:信息在数据库上更新,而 auth.js 规定 credentials 登陆方法必须使用jwt储存用户信息
+   * 也就是说,更新完数据后即使刷新页面,jwt也不会有变化
+   * 所以必须让用户重新登录一次
+   * 傻逼auth.js
+   */
+
   useEffect(() => {
     async function updateUsername() {
       const value = userName;
@@ -31,34 +46,20 @@ function CompleteProfileForm({ session }) {
       });
 
       if (res.status === 200) {
-        toast.success("修改用户名信息成功，即将刷新……", {
-          position: "top-right",
-          autoClose: 1000,
+        toast.success("修改用户名信息成功，请使用新信息重新登录!", {
+          ...(toastStyle as ToastProps),
           type: "success",
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: theme,
-          transition: Bounce,
         });
       } else {
         toast.error(`修改用户名信息失败`, {
-          position: "top-right",
-          autoClose: 1000,
+          ...(toastStyle as ToastProps),
           type: "error",
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: theme,
-          transition: Bounce,
         });
       }
       setInterval(() => {
-        window.location.reload();
+        signOut({ redirectTo: "/user" });
       }, 1500);
     }
     if (handleUsernameSubmit) {
@@ -83,34 +84,20 @@ function CompleteProfileForm({ session }) {
         body: JSON.stringify({ value, token }),
       });
       if (res.status === 200) {
-        toast.success("修改密码成功，即将刷新……", {
-          position: "top-right",
-          autoClose: 1000,
+        toast.success("修改密码成功，请使用新密码重新登录!", {
+          ...(toastStyle as ToastProps),
           type: "success",
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: theme,
-          transition: Bounce,
         });
       } else {
         toast.error(`修改密码失败！`, {
-          position: "top-right",
-          autoClose: 1000,
+          ...(toastStyle as ToastProps),
           type: "error",
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: theme,
-          transition: Bounce,
         });
       }
       setInterval(() => {
-        window.location.reload();
+        signOut({ redirectTo: "/user" });
       }, 1500);
     }
     if (handlePasswordSubmit) {

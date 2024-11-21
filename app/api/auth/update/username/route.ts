@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
       const db = client.db("maimap");
       const collection = db.collection("users");
       const result = await collection.updateOne(
-        { name: session.user.name },
+        { _id: new ObjectId(session.user.id) },
         { $set: { name: value } },
       );
       console.log(result);
