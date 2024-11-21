@@ -6,6 +6,7 @@ import Nodemailer from "next-auth/providers/nodemailer";
 import Osu from "next-auth/providers/osu";
 import Credentials from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import bcrypt from "bcrypt";
 
 import client from "@/lib/db";
 import {
@@ -15,7 +16,6 @@ import {
   EMAIL_SERVER_PORT,
   EMAIL_SERVER_USER,
 } from "@/lib/smtp";
-import bcrypt from "bcrypt";
 
 const providers: Provider[] = [
   GitHub({
@@ -44,21 +44,21 @@ const providers: Provider[] = [
     },
     authorize: async (credentials) => {
       if (!credentials?.emailOrName || !credentials?.password) {
-        throw new Error("错误的邮箱、用户名或密码");
+        return { error: "错误的邮箱、用户名或密码" } as User;
       }
 
       const emailOrName = credentials.emailOrName as string;
       let user = await getUserFromDb(emailOrName);
 
       if (!user) {
-        throw new Error("错误的邮箱或用户名");
+        return { error: "错误的邮箱或用户名" } as User;
       }
       const password = credentials.password as string;
       const passwordHash = user.passwordHash;
       const result: boolean = bcrypt.compare(password, passwordHash);
 
       if (result) return user as User;
-      else throw new Error("错误的密码");
+      else return { error: "错误的密码" } as User;
     },
   }),
 ];
@@ -87,13 +87,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async jwt({ token, user }) {
+      //@ts-ignore
+      if (user?.error ?? false)
+        //@ts-ignore
+        return { error: user?.error ?? "undefined error" };
       if (user) {
         token.sub = user.id;
       }
 
       return token;
     },
-    async session({ session, user, token }) {
+    async signIn({ user }) {
+      //@ts-ignore
+      if (user?.error ?? false) {
+        //@ts-ignore
+        throw new Error(user?.error);
+      }
+
+      return true;
+    },
+
+    async session({ session, token }) {
       if (session?.user) {
         session.user.id = token.sub;
       }
@@ -107,13 +121,12 @@ async function getUserFromDb(emailOrName: string) {
   await client.connect();
   const db = client.db("maimap");
   const collection = db.collection("users");
-  // Try to find the user by email
   let user = await collection.findOne({ email: emailOrName });
 
-  // If not found, try to find the user by username
   if (!user) {
     user = await collection.findOne({ name: emailOrName });
   }
+  if (!user) return null;
   user = { ...user, id: user._id.toString() };
   delete user._id;
 

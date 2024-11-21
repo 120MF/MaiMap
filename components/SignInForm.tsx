@@ -7,11 +7,16 @@ import { Button } from "@nextui-org/button";
 import { Input } from "@nextui-org/input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signIn } from "next-auth/react";
+import { toast } from "react-toastify";
+import { ToastProps } from "next/dist/client/components/react-dev-overlay/internal/components/Toast/Toast";
+import { useTheme } from "next-themes";
+import { useSearchParams } from "next/navigation";
 
 import IconGithub from "@/components/icons/IconGithub";
 import IconOsu from "@/components/icons/IconOsu";
 import Icon388Mail from "@/components/icons/Icon388Mail";
 import IconKey from "@/components/icons/IconKey";
+import { toastStyle } from "@/lib/toastStyle";
 
 interface OneClickFormInput {
   email: string;
@@ -25,6 +30,10 @@ interface PasswordFormInput {
 function SignInForm(props: {
   searchParams: { callbackUrl: string | undefined };
 }) {
+  const { theme } = useTheme();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/";
+
   const [selectedKey, setSelectedKey] = useState<string>("one-click");
   const [loadingButton, setLoadingButton] = useState<string>("null");
   const {
@@ -50,12 +59,28 @@ function SignInForm(props: {
   };
   const onPasswordClickSubmit: SubmitHandler<PasswordFormInput> = async (
     data,
+    e,
   ) => {
-    console.log(data);
-    await signIn("credentials", {
+    e.preventDefault();
+    setLoadingButton("password");
+    const res = await signIn("credentials", {
       ...data,
-      redirectTo: props.searchParams?.callbackUrl ?? "",
+      redirect: false,
     });
+
+    if (res?.error) {
+      toast(`登陆失败,账号或密码有误`, {
+        ...(toastStyle as ToastProps),
+        theme: theme,
+        type: "error",
+      });
+      setLoadingButton("");
+    } else {
+      await signIn("credentials", {
+        ...data,
+        redirectTo: callbackUrl,
+      });
+    }
   };
 
   return (
@@ -184,6 +209,7 @@ function SignInForm(props: {
               fullWidth
               color="primary"
               endContent={<IconKey />}
+              isLoading={loadingButton === "password"}
               size="lg"
               type="submit"
             >

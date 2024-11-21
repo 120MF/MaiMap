@@ -9,7 +9,7 @@ import { ToastProps } from "next/dist/client/components/react-dev-overlay/intern
 
 import { toastStyle } from "@/lib/toastStyle";
 
-function CompleteProfileForm({ session }) {
+function UpdateProfileForm({ session }) {
   const { theme } = useTheme();
   const [userName, setUserName] = useState<string>(
     !!session?.user?.name ? session.user.name : "",
@@ -83,6 +83,7 @@ function CompleteProfileForm({ session }) {
         },
         body: JSON.stringify({ value, token }),
       });
+
       if (res.status === 200) {
         toast.success("修改密码成功，请使用新密码重新登录!", {
           ...(toastStyle as ToastProps),
@@ -121,7 +122,9 @@ function CompleteProfileForm({ session }) {
         value={userName}
         onValueChange={setUserName}
       />
+      {/* autoComplete="off"反而没用,怪 */}
       <Input
+        autoComplete="new-password"
         isInvalid={!!passwordError}
         label="新的密码"
         type="password"
@@ -129,6 +132,7 @@ function CompleteProfileForm({ session }) {
         onValueChange={setPassword}
       />
       <Input
+        autoComplete="new-password"
         description="设置密码后，可以使用用户名/邮箱+密码登录"
         errorMessage={passwordError}
         isInvalid={!!passwordError}
@@ -163,4 +167,4 @@ function CompleteProfileForm({ session }) {
   );
 }
 
-export default CompleteProfileForm;
+export default UpdateProfileForm;
