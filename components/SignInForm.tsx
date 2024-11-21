@@ -52,6 +52,10 @@ function SignInForm(props: {
     data,
   ) => {
     console.log(data);
+    await signIn("credentials", {
+      ...data,
+      redirectTo: props.searchParams?.callbackUrl ?? "",
+    });
   };
 
   return (

@@ -2,8 +2,11 @@
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { useEffect, useState } from "react";
+import { Bounce, toast } from "react-toastify";
+import { useTheme } from "next-themes";
 
 function CompleteProfileForm({ session }) {
+  const { theme } = useTheme();
   const [userName, setUserName] = useState<string>(
     !!session?.user?.name ? session.user.name : "",
   );
@@ -17,22 +20,104 @@ function CompleteProfileForm({ session }) {
     useState<boolean>(false);
 
   useEffect(() => {
+    async function updateUsername() {
+      const value = userName;
+      const res = await fetch("/api/auth/update/username", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ value }),
+      });
+
+      if (res.status === 200) {
+        toast.success("修改用户名信息成功，即将刷新……", {
+          position: "top-right",
+          autoClose: 1000,
+          type: "success",
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+          transition: Bounce,
+        });
+      } else {
+        toast.error(`修改用户名信息失败`, {
+          position: "top-right",
+          autoClose: 1000,
+          type: "error",
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+          transition: Bounce,
+        });
+      }
+      setInterval(() => {
+        window.location.reload();
+      }, 1500);
+    }
     if (handleUsernameSubmit) {
       if (userName === session?.user?.name) {
         setUserNameError("用户名与修改前相同！");
       } else {
-        console.log(userName);
         setUserNameError("");
+        updateUsername();
       }
       setHandleUsernameSubmit(false);
     }
   }, [handleUsernameSubmit]);
   useEffect(() => {
+    async function updatePassword() {
+      const token = session.sessionToken;
+      const value = password;
+      const res = await fetch("/api/auth/update/password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ value, token }),
+      });
+      if (res.status === 200) {
+        toast.success("修改密码成功，即将刷新……", {
+          position: "top-right",
+          autoClose: 1000,
+          type: "success",
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+          transition: Bounce,
+        });
+      } else {
+        toast.error(`修改密码失败！`, {
+          position: "top-right",
+          autoClose: 1000,
+          type: "error",
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+          transition: Bounce,
+        });
+      }
+      setInterval(() => {
+        window.location.reload();
+      }, 1500);
+    }
     if (handlePasswordSubmit) {
       if (password !== confirmPassword) {
         setPasswordError("两次密码不一致！");
       } else {
-        console.log(password);
+        updatePassword();
         setPasswordError("");
       }
       setHandlePasswordSubmit(false);
