@@ -141,7 +141,7 @@ function UpdateProfileForm({ session }) {
         value={confirmPassword}
         onValueChange={setConfirmPassword}
       />
-      <div className="flex flex-row justify-around">
+      <div className="flex flex-row justify-around gap-4">
         <Button
           fullWidth
           color="secondary"

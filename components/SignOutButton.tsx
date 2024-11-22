@@ -3,10 +3,10 @@
 import { Button } from "@nextui-org/button";
 import { signOut } from "next-auth/react";
 
-function SignOutButton() {
+function SignOutButton({ buttonProps }) {
   return (
     <Button
-      fullWidth
+      {...buttonProps}
       onPress={() => {
         signOut({ redirectTo: "/" });
       }}

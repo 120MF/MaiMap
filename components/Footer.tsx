@@ -12,7 +12,6 @@ import RangeSlider from "@/components/RangeSlider";
 import About from "@/components/About";
 import IconMapLocationDot from "@/components/icons/IconMapLocationDot";
 import IconStore from "@/components/icons/IconStore";
-import IconBxsMessageDetail from "@/components/icons/IconBxsMessageDetail";
 import IconBxsUserCircle from "@/components/icons/IconBxsUserCircle";
 
 function Footer() {
@@ -27,7 +26,7 @@ function Footer() {
 
   return (
     <>
-      <div className="h-full border-t border-gray-300 flex flex-col items-center bg-background px-2">
+      <div className="h-full border-t border-gray-300 flex flex-col items-center justify-between bg-background px-2">
         <div className="flex items-center justify-around w-full gap-2">
           <div className="flex items-center">
             <Image
@@ -52,7 +51,7 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="flex w-full bottom-0">
+        <div className="flex w-full">
           <Tabs
             fullWidth
             aria-label="pages"
@@ -78,15 +77,6 @@ function Footer() {
                 <div className="flex items-center space-x-2">
                   <IconMapLocationDot />
                   <span>地图</span>
-                </div>
-              }
-            />
-            <Tab
-              key="/reviews"
-              title={
-                <div className="flex items-center space-x-2">
-                  <IconBxsMessageDetail />
-                  <span>评论</span>
                 </div>
               }
             />
