@@ -1,8 +1,9 @@
+import { ObjectId } from "mongodb";
+
 export interface review {
-  review_id: number;
+  _id: ObjectId;
   store_id: number;
-  username: string;
-  email: string;
+  user_id: ObjectId;
   rating: number;
   arcade_count: number;
   coin_price: number | null;
@@ -10,5 +11,4 @@ export interface review {
   comment: string;
   created_at: string;
   vote: number;
-  show_email: boolean;
 }

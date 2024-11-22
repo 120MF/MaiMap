@@ -1,4 +1,5 @@
 import "@/styles/globals.css";
+import "@smastrom/react-rating/style.css";
 import { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import clsx from "clsx";

@@ -1,243 +1,156 @@
-import { Input, Textarea } from "@nextui-org/input";
-import { Checkbox } from "@nextui-org/checkbox";
+import { Textarea } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { Rating } from "@smastrom/react-rating";
 import { toast, Bounce } from "react-toastify";
 import { useTheme } from "next-themes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { review } from "@/types/reviews";
 import { useArcades } from "@/stores/useArcades";
 import { useReviews } from "@/stores/useReviews";
-import Icon388Mail from "@/components/icons/Icon388Mail";
-import IconBxUserCircle from "@/components/icons/IconBxUserCircle";
-import IconSmartHomeWashMachine from "@/components/icons/IconSmartHomeWashMachine";
-import IconCurrencyYuan from "@/components/icons/IconCurrencyYuan";
-import IconCoins from "@/components/icons/IconCoins";
-import IconStar from "@/components/icons/IconStar";
 
-interface IFormInput extends review {
-  email: string;
-  show_email: boolean;
-  username: string;
-  rating: number;
-  arcade_count: number;
-  coin_price: number | null;
-  pc_coin_count: number;
-  comment: string;
-}
-function NewReviewForm({ onClose }) {
+function NewReviewForm({ session, onClose }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormInput>();
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(-1);
+  const [onSubmit, setOnSubmit] = useState(false);
+  const [commentError, setCommentError] = useState(false);
+  const [ratingError, setRatingError] = useState(false);
+
+  useEffect(() => {
+    async function postReview() {
+      const value = {
+        user_id: session.user.id,
+        comment: comment,
+        rating: rating,
+        store_id: arcadeId,
+      } as review;
+      const res = await fetch("/api/reviews/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+
+      if (res.status !== 200) {
+        toast.error("评论上传失败", {
+          position: "top-right",
+          type: "error",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+          transition: Bounce,
+        });
+      } else {
+        toast.success("评论上传成功", {
+          position: "top-right",
+          autoClose: 3000,
+          type: "success",
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+          transition: Bounce,
+        });
+      }
+
+      setIsLoading(false);
+      fetch_currentReviews(arcadeId);
+      onClose();
+    }
+    if (onSubmit) {
+      setIsLoading(true);
+      setRatingError(rating === -1);
+      setCommentError(comment.length < 10);
+      // State为Batch Update,不能在Effect中直接判断ratingError的值
+      if (rating !== -1 && comment.length > 10) {
+        postReview();
+      }
+
+      setIsLoading(false);
+      setOnSubmit(false);
+    }
+  }, [onSubmit]);
   const { theme } = useTheme();
   const arcadeId = useArcades((state) => state.arcadeId);
   const fetch_currentReviews = useReviews(
     (state) => state.fetch_currentReviews,
   );
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    setIsLoading(true);
-    const value: review = { ...data, store_id: arcadeId };
-    const res = await fetch("/api/reviews/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(value),
-    });
-
-    if (res.status !== 200) {
-      toast.error("评论上传失败", {
-        position: "top-right",
-        type: "error",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: theme,
-        transition: Bounce,
-      });
-    } else {
-      toast.success("评论上传成功", {
-        position: "top-right",
-        autoClose: 3000,
-        type: "success",
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: theme,
-        transition: Bounce,
-      });
-    }
-
-    setIsLoading(false);
-    fetch_currentReviews(arcadeId);
-    onClose();
-  };
+  // const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  //   setIsLoading(true);
+  //   const value: review = { ...data, store_id: arcadeId };
+  //   const res = await fetch("/api/reviews/post", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(value),
+  //   });
+  //
+  //   if (res.status !== 200) {
+  //     toast.error("评论上传失败", {
+  //       position: "top-right",
+  //       type: "error",
+  //       autoClose: 3000,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: theme,
+  //       transition: Bounce,
+  //     });
+  //   } else {
+  //     toast.success("评论上传成功", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //       type: "success",
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: theme,
+  //       transition: Bounce,
+  //     });
+  //   }
+  //
+  //   setIsLoading(false);
+  //   fetch_currentReviews(arcadeId);
+  //   onClose();
+  // };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <p className="pb-1 text-sm text-center italic underline text-red-400">
+    <div className="flex flex-col">
+      <p className="pb-1 text-sm text-center italic underline text-red-500">
         请避免在评论中留下个人敏感信息！
       </p>
-      <h2>个人信息</h2>
-      <div className="flex flex-row items-center pb-1">
-        <div className="flex flex-col items-start max-w-[50%]">
-          <Input
-            {...register("email", {
-              required: true,
-              pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i,
-            })}
-            isRequired
-            label="电子邮箱"
-            placeholder="you@example.com"
-            size="sm"
-            startContent={<Icon388Mail />}
-            type="email"
-            variant="bordered"
-          />
-          {errors?.email?.type === "required" && (
-            <p className="text-red-400 text-xs pl-2">请输入电子邮箱</p>
-          )}
-          {errors?.email?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2">请输入正确的电子邮箱</p>
-          )}
-        </div>
-        <Checkbox
-          {...register("show_email")}
-          defaultSelected
-          className="ml-4 max-w-[50%]"
-          color="primary"
-        >
-          展示电子邮箱
-        </Checkbox>
+      <div className="py-2 w-[50%] mx-auto">
+        <Rating className="h-10" value={rating} onChange={setRating} />
       </div>
-      <div className="flex flex-row items-center pb-1">
-        <div className="flex flex-col items-start w-full">
-          <Input
-            {...register("username", { required: true })}
-            fullWidth
-            isRequired
-            label="用户名"
-            placeholder="迪拉熊"
-            size="sm"
-            startContent={<IconBxUserCircle />}
-            variant="bordered"
-          />
-          {errors?.username?.type === "required" && (
-            <p className="text-red-400 text-xs pl-2">请输入用户名</p>
-          )}
-        </div>
-        {/*<span>*/}
-        {/*  可使用*/}
-        {/*  <Link isExternal href="https://cravatar.com/" showAnchorIcon>*/}
-        {/*    Cravatar头像*/}
-        {/*  </Link>*/}
-        {/*</span>*/}
-      </div>
-      <h2 className="pb-1">机厅信息</h2>
-      <div className="flex flex-row items-center justify-evenly pb-1">
-        <div className="flex flex-col items-start">
-          <Input
-            {...register("arcade_count", {
-              required: true,
-              pattern: /^(30|2[1-9]|1[1-9]|[1-9])$/,
-            })}
-            isRequired
-            label="机台数"
-            placeholder="1P+2P=1台舞萌"
-            size="sm"
-            startContent={<IconSmartHomeWashMachine />}
-            type="number"
-            variant="bordered"
-          />
-          {errors?.arcade_count?.type === "required" && (
-            <p className="text-red-400 text-xs pl-2">请输入机台数</p>
-          )}
-          {errors?.arcade_count?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2">请输入0至30的整数</p>
-          )}
-        </div>
-        <div className="flex flex-col items-start">
-          <Input
-            {...register("coin_price", { pattern: /^(10|[0-9](\.[0-9]+)?)$/ })}
-            label="最低币价（元/枚）"
-            placeholder="0.00"
-            size="sm"
-            startContent={<IconCurrencyYuan />}
-            type="number"
-            variant="bordered"
-          />
-          {errors?.coin_price?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2">请输入正确的人民币价格</p>
-          )}
-          {errors?.arcade_count?.type === "required" && (
-            <p className="text-red-400 text-xs pl-2 opacity-0">占位</p>
-          )}
-          {errors?.arcade_count?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2 opacity-0">占位</p>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-row items-center justify-evenly pb-1">
-        <div className="flex flex-col items-start">
-          <Input
-            {...register("pc_coin_count", {
-              required: true,
-              pattern: /\b([1-9]|10)\b/,
-            })}
-            isRequired
-            label="单局所需币数"
-            labelPlacement="inside"
-            placeholder="0"
-            size="sm"
-            startContent={<IconCoins />}
-            type="number"
-            variant="bordered"
-          />
-          {errors?.pc_coin_count?.type === "required" && (
-            <p className="text-red-400 text-xs pl-2">请输入单局所需币数</p>
-          )}
-          {errors?.pc_coin_count?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2">请输入0~10之间的整数</p>
-          )}
-        </div>
-        <div className="flex flex-col items-start">
-          <Input
-            {...register("rating", {
-              required: true,
-              pattern: /^(5|5.0|[0-4](\.[0-9]+)?)$/i,
-            })}
-            isRequired
-            label="你的评分"
-            placeholder="1~5分"
-            size="sm"
-            startContent={<IconStar />}
-            type="number"
-            variant="bordered"
-          />
-          {errors?.rating?.type === "required" && (
-            <p className="text-red-400 text-xs pl-2">请输入你的评分</p>
-          )}
-          {errors?.rating?.type === "pattern" && (
-            <p className="text-red-400 text-xs pl-2">请输入0~5之间的数</p>
-          )}
-        </div>
-      </div>
+      {ratingError ? (
+        <p className="text-center text-xs text-red-500 pb-1 -mt-1">
+          请填写评分
+        </p>
+      ) : null}
+
       <Textarea
-        {...register("comment")}
         fullWidth
         className="pb-2"
+        errorMessage="请填写大于10字以上的评论"
+        isInvalid={commentError}
         label="文字评论"
         placeholder="在这里写下你对机厅的评价吧……"
+        value={comment}
         variant="bordered"
+        onValueChange={setComment}
       />
       <Button
         fullWidth
@@ -245,12 +158,12 @@ function NewReviewForm({ onClose }) {
         isLoading={isLoading}
         type="submit"
         onPress={() => {
-          if (!errors) onClose();
+          setOnSubmit(true);
         }}
       >
         提交
       </Button>
-    </form>
+    </div>
   );
 }
 
