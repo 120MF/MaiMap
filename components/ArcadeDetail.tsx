@@ -2,21 +2,21 @@ import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { Divider } from "@nextui-org/divider";
 import { Textarea } from "@nextui-org/input";
-import { User } from "@nextui-org/user";
 
 import { review } from "@/types/reviews";
 import { arcade } from "@/types/arcades";
-import { formatReadableDate, getAverage, getMostFrequent } from "@/lib/utils";
+import { formatReadableDate, getAverage } from "@/lib/utils";
+import UserCard from "@/components/UserCard";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;
   arcadeReviews: review[];
 }
 function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
-  const averageRating = getAverage<review>(arcadeReviews, "rating");
-  const arcadeCount = getMostFrequent<review>(arcadeReviews, "arcade_count");
-  const coinPrice = getMostFrequent<review>(arcadeReviews, "coin_price");
-  const pcPrice = getMostFrequent<review>(arcadeReviews, "pc_coin_count");
+  const averageRating = getAverage<review>(arcadeReviews, "rating") || -1;
+  const arcadeCount = arcadeDetail.store_arcade_count || -1;
+  const coinPrice = arcadeDetail.store_coin_price || -1;
+  const pcPrice = arcadeDetail.store_pc_coin_count || -1;
 
   return (
     <div className="custom-scrollbar overflow-y-auto left-4">
@@ -42,48 +42,48 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
               </Chip>
               <Chip
                 color={
-                  // @ts-ignore
-                  arcadeCount < 2
-                    ? "warning"
-                    : // @ts-ignore
-                      arcadeCount < 5
-                      ? "primary"
-                      : "success"
+                  arcadeCount === -1
+                    ? "default"
+                    : arcadeCount < 2
+                      ? "warning"
+                      : arcadeCount < 5
+                        ? "primary"
+                        : "success"
                 }
                 variant="faded"
               >
-                机台数：{arcadeCount}
+                机台数：{arcadeCount === -1 ? "未知" : arcadeCount}
               </Chip>
             </span>
             <span className="flex flex-row justify-start gap-4 pl-4 py-2">
               <Chip
                 color={
-                  // @ts-ignore
-                  coinPrice > 1
-                    ? "warning"
-                    : // @ts-ignore
-                      coinPrice > 0.7
-                      ? "primary"
-                      : "success"
+                  coinPrice === -1
+                    ? "default"
+                    : coinPrice > 1
+                      ? "warning"
+                      : coinPrice > 0.7
+                        ? "primary"
+                        : "success"
                 }
                 variant="faded"
               >
-                最低币价：{coinPrice === "null" ? "暂无" : `${coinPrice} 元`}
+                最低币价：{coinPrice === -1 ? "未知" : `${coinPrice} 元`}
               </Chip>
               <Chip
                 color={
-                  // @ts-ignore
-                  pcPrice > 5
-                    ? "warning"
-                    : // @ts-ignore
-                      coinPrice > 3
-                      ? "primary"
-                      : "success"
+                  pcPrice === -1
+                    ? "default"
+                    : pcPrice > 5
+                      ? "warning"
+                      : coinPrice > 3
+                        ? "primary"
+                        : "success"
                 }
                 variant="faded"
               >
                 PC单价：
-                {pcPrice} 币/局
+                {pcPrice === -1 ? "未知" : `${pcPrice} 币/局`}
               </Chip>
               {arcadeDetail.arcade_dead && (
                 <Chip color="warning" variant="faded">
@@ -103,7 +103,7 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
           <div>
             {arcadeReviews.map((review: review) => (
               <Card
-                key={review.review_id}
+                key={review._id.toString()}
                 isBlurred
                 className="py-1"
                 radius="none"
@@ -111,11 +111,7 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
               >
                 <CardHeader className="flex flex-row items-center my-0 pt-2 pb-1">
                   {/*TODO: add a thumb-up button here to vote*/}
-                  <User
-                    avatarProps={{ showFallback: true }}
-                    description={review.show_email ? review.email : "匿名邮箱"}
-                    name={review.username}
-                  />
+                  <UserCard user={null} userId={review.user_id} />
                 </CardHeader>
                 <CardBody className="py-1">
                   <Textarea

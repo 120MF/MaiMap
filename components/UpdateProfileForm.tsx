@@ -64,7 +64,9 @@ function UpdateProfileForm({ session }) {
     }
     if (handleUsernameSubmit) {
       if (userName === session?.user?.name) {
-        setUserNameError("用户名与修改前相同！");
+        setUserNameError("用户名与修改前相同");
+      } else if (userName.length <= 4 || userName.length >= 15) {
+        setUserNameError("用户名不得小于4或大于15个字符");
       } else {
         setUserNameError("");
         updateUsername();
