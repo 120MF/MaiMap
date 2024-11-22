@@ -1,31 +1,54 @@
 import { Textarea } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { Rating } from "@smastrom/react-rating";
-import { toast, Bounce } from "react-toastify";
+import { toast } from "react-toastify";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { ToastProps } from "react-toastify/dist/types";
 
 import { review } from "@/types/reviews";
 import { useArcades } from "@/stores/useArcades";
 import { useReviews } from "@/stores/useReviews";
+import { toastStyle } from "@/lib/toastStyle";
 
-function NewReviewForm({ session, onClose }) {
+function ReviewForm({
+  session,
+  onClose,
+  originComment = "",
+  originReviewId = "",
+  originRating = "",
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [comment, setComment] = useState("");
-  const [rating, setRating] = useState(-1);
+  const [comment, setComment] = useState(originComment);
+  const [rating, setRating] = useState(Number(originRating));
   const [onSubmit, setOnSubmit] = useState(false);
   const [commentError, setCommentError] = useState(false);
   const [ratingError, setRatingError] = useState(false);
 
+  const updateReview: boolean = originReviewId !== "";
+
+  const baseURL = updateReview ? "/api/reviews/update" : "/api/reviews/post";
+
   useEffect(() => {
     async function postReview() {
-      const value = {
-        user_id: session.user.id,
-        comment: comment,
-        rating: rating,
-        store_id: arcadeId,
-      } as review;
-      const res = await fetch("/api/reviews/post", {
+      let value;
+
+      if (updateReview) {
+        value = {
+          _id: originReviewId,
+          user_id: session.user.id,
+          comment: comment,
+          rating: rating,
+        };
+      } else {
+        value = {
+          user_id: session.user.id,
+          comment: comment,
+          rating: rating,
+          store_id: arcadeId,
+        } as review;
+      }
+      const res = await fetch(baseURL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,29 +58,15 @@ function NewReviewForm({ session, onClose }) {
 
       if (res.status !== 200) {
         toast.error("评论上传失败", {
-          position: "top-right",
+          ...(toastStyle as ToastProps),
           type: "error",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: theme,
-          transition: Bounce,
         });
       } else {
         toast.success("评论上传成功", {
-          position: "top-right",
-          autoClose: 3000,
+          ...(toastStyle as ToastProps),
           type: "success",
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
           theme: theme,
-          transition: Bounce,
         });
       }
 
@@ -83,49 +92,6 @@ function NewReviewForm({ session, onClose }) {
   const fetch_currentReviews = useReviews(
     (state) => state.fetch_currentReviews,
   );
-  // const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-  //   setIsLoading(true);
-  //   const value: review = { ...data, store_id: arcadeId };
-  //   const res = await fetch("/api/reviews/post", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify(value),
-  //   });
-  //
-  //   if (res.status !== 200) {
-  //     toast.error("评论上传失败", {
-  //       position: "top-right",
-  //       type: "error",
-  //       autoClose: 3000,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: theme,
-  //       transition: Bounce,
-  //     });
-  //   } else {
-  //     toast.success("评论上传成功", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //       type: "success",
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       theme: theme,
-  //       transition: Bounce,
-  //     });
-  //   }
-  //
-  //   setIsLoading(false);
-  //   fetch_currentReviews(arcadeId);
-  //   onClose();
-  // };
 
   return (
     <div className="flex flex-col">
@@ -167,4 +133,4 @@ function NewReviewForm({ session, onClose }) {
   );
 }
 
-export default NewReviewForm;
+export default ReviewForm;

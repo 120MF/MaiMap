@@ -7,14 +7,12 @@ import {
   ModalFooter,
   useDisclosure,
 } from "@nextui-org/modal";
-import { useSession } from "next-auth/react";
 
-import NewReviewForm from "@/components/NewReviewForm";
+import ReviewForm from "@/components/ReviewForm";
 import SignInRedirectModalContent from "@/components/SignInRedirectModalContent";
 
-function NewReviewButton() {
+function NewReviewButton({ session }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const { data: session } = useSession();
 
   return (
     <>
@@ -30,7 +28,7 @@ function NewReviewButton() {
                   新建一条评论……
                 </ModalHeader>
                 <ModalBody className="flex justify-between">
-                  <NewReviewForm session={session} onClose={onClose} />
+                  <ReviewForm session={session} onClose={onClose} />
                 </ModalBody>
                 <ModalFooter />
               </>

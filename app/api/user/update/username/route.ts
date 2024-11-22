@@ -8,7 +8,7 @@ import { auth } from "@/auth";
 export async function POST(request: NextRequest) {
   const { value } = await request.json();
   const session = await auth();
-  console.log(session);
+
   if (session) {
     try {
       await client.connect();
@@ -18,7 +18,6 @@ export async function POST(request: NextRequest) {
         { _id: new ObjectId(session.user.id) },
         { $set: { name: value } },
       );
-      console.log(result);
 
       return new Response(JSON.stringify(result), {
         status: 200,

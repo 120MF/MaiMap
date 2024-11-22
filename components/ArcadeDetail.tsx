@@ -2,17 +2,24 @@ import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
 import { Divider } from "@nextui-org/divider";
 import { Textarea } from "@nextui-org/input";
+import { Session } from "next-auth";
 
 import { review } from "@/types/reviews";
 import { arcade } from "@/types/arcades";
 import { formatReadableDate, getAverage } from "@/lib/utils";
 import UserCard from "@/components/UserCard";
+import UpdateReviewButton from "@/components/UpdateReviewButton";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;
   arcadeReviews: review[];
+  session: Session;
 }
-function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
+async function ArcadeDetail({
+  session,
+  arcadeDetail,
+  arcadeReviews,
+}: ArcadeDetailPageProps) {
   const averageRating = getAverage<review>(arcadeReviews, "rating") || -1;
   const arcadeCount = arcadeDetail.store_arcade_count || -1;
   const coinPrice = arcadeDetail.store_coin_price || -1;
@@ -109,9 +116,17 @@ function ArcadeDetail({ arcadeDetail, arcadeReviews }: ArcadeDetailPageProps) {
                 radius="none"
                 shadow="sm"
               >
-                <CardHeader className="flex flex-row items-center my-0 pt-2 pb-1">
+                <CardHeader className="flex flex-row items-center justify-between my-0 pt-2 pb-1">
                   {/*TODO: add a thumb-up button here to vote*/}
                   <UserCard user={null} userId={review.user_id} />
+                  {String(review.user_id) === session.user.id ? (
+                    <UpdateReviewButton
+                      originComment={review.comment}
+                      originRating={review.rating}
+                      originReviewId={review._id}
+                      session={session}
+                    />
+                  ) : null}
                 </CardHeader>
                 <CardBody className="py-1">
                   <Textarea

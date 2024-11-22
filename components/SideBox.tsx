@@ -7,6 +7,7 @@ import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
 import { Skeleton } from "@nextui-org/skeleton";
+import { useSession } from "next-auth/react";
 
 import IconReturnDownBack from "@/components/icons/IconReturnDownBack";
 import IconBxArrowToBottom from "@/components/icons/IconBxArrowToBottom";
@@ -20,6 +21,7 @@ import NewReviewButton from "@/components/NewReviewButton";
 import IssueButton from "@/components/IssueButton";
 
 function SideBox() {
+  const { data: session } = useSession();
   const ArcadeDetail = dynamic(() => import("@/components/ArcadeDetail"), {
     loading: () => (
       <div className="w-full flex items-center gap-3">
@@ -136,6 +138,7 @@ function SideBox() {
                 <ArcadeDetail
                   arcadeDetail={detailArcade}
                   arcadeReviews={arcadeReviews}
+                  session={session}
                 />
               ) : nearbyArcades.length > 0 ? (
                 <ArcadeList
@@ -160,7 +163,7 @@ function SideBox() {
                 >
                   查看路线
                 </PathButton>
-                <NewReviewButton />
+                <NewReviewButton session={session} />
               </CardFooter>
             )}
           </Card>

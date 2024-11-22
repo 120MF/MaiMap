@@ -37,7 +37,7 @@ function UpdateProfileForm({ session }) {
   useEffect(() => {
     async function updateUsername() {
       const value = userName;
-      const res = await fetch("/api/auth/update/username", {
+      const res = await fetch("/user/update/username", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ function UpdateProfileForm({ session }) {
     async function updatePassword() {
       const token = session.sessionToken;
       const value = password;
-      const res = await fetch("/api/auth/update/password", {
+      const res = await fetch("/user/update/password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
