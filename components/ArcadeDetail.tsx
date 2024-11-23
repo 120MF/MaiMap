@@ -18,7 +18,7 @@ interface ArcadeDetailPageProps {
   arcadeTags: tag[];
   session: Session;
 }
-async function ArcadeDetail({
+function ArcadeDetail({
   session,
   arcadeDetail,
   arcadeReviews,
@@ -33,10 +33,9 @@ async function ArcadeDetail({
     <div className="custom-scrollbar overflow-y-auto left-4">
       <Card fullWidth isBlurred radius="none" shadow="sm">
         <h2 className="text-2xl pl-4 pt-4">{arcadeDetail.store_name}</h2>
-        <p className="text-xl pl-4 pt-2 pb-4">{arcadeDetail.store_address}</p>
+        <p className="text-lg pl-4 pt-2 pb-4">{arcadeDetail.store_address}</p>
         <>
-          <Divider />
-          <h2 className="text-xl pl-4 pt-2">机厅信息</h2>
+          <h2 className="text-2xl pl-4 py-1">机厅信息</h2>
           <span className="flex flex-row justify-start gap-4 pl-4 pt-2">
             <Chip
               color={
@@ -50,7 +49,10 @@ async function ArcadeDetail({
               }
               variant="faded"
             >
-              平均评分：{averageRating.toFixed(2)} / 5.00
+              平均评分：
+              {averageRating === -1
+                ? "暂无"
+                : `${averageRating.toFixed(2)} / 5.00`}
             </Chip>
             <Chip
               color={
@@ -133,7 +135,7 @@ async function ArcadeDetail({
                 <CardHeader className="flex flex-row items-center justify-between my-0 pt-2 pb-1">
                   {/*TODO: add a thumb-up button here to vote*/}
                   <UserCard user={null} userId={review.user_id} />
-                  {String(review.user_id) === session.user.id ? (
+                  {String(review.user_id) === session?.user?.id ? (
                     <UpdateReviewButton
                       originComment={review.comment}
                       originRating={review.rating}

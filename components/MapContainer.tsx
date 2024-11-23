@@ -10,7 +10,7 @@ import { Marker } from "@uiw/react-amap-marker";
 import { LabelMarker } from "@uiw/react-amap-label-marker";
 import { Circle } from "@uiw/react-amap-circle";
 import { useTheme } from "next-themes";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import GeolocationButton from "@/components/GeolocationButton";
 import { MapState, useMap } from "@/stores/useMap";
@@ -21,8 +21,14 @@ function MaiMap() {
   const centerLng = useMap((state: MapState) => state.centerLng);
   const targetLat = useMap((state: MapState) => state.targetLat);
   const targetLng = useMap((state: MapState) => state.targetLng);
+  const markLat = useMap((state: MapState) => state.markLat);
+  const markLng = useMap((state: MapState) => state.markLng);
   const range = useMap((state: MapState) => state.range);
+  const isEditing = useMap((state: MapState) => state.isEditing);
+  const isMarking = useMap((state: MapState) => state.isMarking);
+  const setIsMarking = useMap((state: MapState) => state.setIsMarking);
   const update_center = useMap((state: MapState) => state.update_center);
+  const update_mark = useMap((state: MapState) => state.update_mark);
   const nearbyArcades = useArcades(
     (state: ArcadesState) => state.nearbyArcades,
   );
@@ -31,6 +37,9 @@ function MaiMap() {
   const update_arcadeId = useArcades(
     (state: ArcadesState) => state.update_arcadeId,
   );
+  const [pressedPosition, setPressedPosition] = useState<[number, number]>([
+    0, 0,
+  ]);
 
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -38,34 +47,68 @@ function MaiMap() {
 
   const { theme } = useTheme();
 
+  const [syncedCenter, setSyncedCenter] = useState([centerLng, centerLat]);
+  // const [settingDetailArcade, setSettingDetailArcade] = useState(false);
+
   useEffect(() => {
-    if (detailArcade)
-      update_center([detailArcade.store_lat, detailArcade.store_lng]);
-    else update_center([targetLat, targetLng]);
+    // setSettingDetailArcade(true);
+    if (detailArcade) {
+      setSyncedCenter([detailArcade.store_lng, detailArcade.store_lat]);
+      // update_center([detailArcade.store_lat, detailArcade.store_lng]);
+    } else {
+      setSyncedCenter([targetLng, targetLat]);
+      // update_center([targetLat, targetLng]);
+    }
   }, [detailArcade]);
+
+  useEffect(() => {
+    // if (settingDetailArcade) {
+    //   setSettingDetailArcade(false);
+    // } else
+    if (!isMarking) {
+      setSyncedCenter([centerLng, centerLat]);
+    }
+  }, [centerLat, centerLng]);
 
   // @ts-ignore
   return (
     <Map
       key={theme}
-      center={[centerLng, centerLat]}
+      center={syncedCenter}
       mapStyle={
         theme === "light" ? "amap://styles/normal" : "amap://styles/dark"
       }
       style={{ height: "90vh", width: "100vw" }}
       zoom={10}
+      onTouchEnd={(e) => {
+        if (
+          isMarking &&
+          Math.abs(pressedPosition[0] - e.pixel.x) < 10 &&
+          Math.abs(pressedPosition[1] - e.pixel.y) < 10
+        ) {
+          update_mark([e.lnglat.lat, e.lnglat.lng]);
+          setIsMarking(false);
+        }
+      }}
+      onTouchStart={(e) => {
+        if (isMarking) {
+          setPressedPosition([e.pixel.x, e.pixel.y]);
+        }
+      }}
     >
       <ScaleControl offset={[20, 40]} position="LB" visible={true} />
       <ToolBarControl offset={[10, 60]} position="LT" visible={true} />
-      <Circle
-        key={range}
-        center={[targetLng, targetLat]}
-        fillOpacity={0.1}
-        radius={range * 1000}
-        strokeColor="#fff"
-        strokeWeight={2}
-        visible={true}
-      />
+      {!isEditing ? (
+        <Circle
+          key={range}
+          center={[targetLng, targetLat]}
+          fillOpacity={0.1}
+          radius={range * 1000}
+          strokeColor="#fff"
+          strokeWeight={2}
+          visible={true}
+        />
+      ) : null}
 
       <Marker
         offset={new AMap.Pixel(-15, -42)}
@@ -76,6 +119,40 @@ function MaiMap() {
       >
         <Image alt="target" height={50} src="/nail-target.png" width={30} />
       </Marker>
+      {isEditing && markLat !== 0 ? (
+        <div>
+          <Marker
+            offset={new AMap.Pixel(-15, -42)}
+            position={[markLng, markLat]}
+            title={"标记位置"}
+            visible={true}
+            zIndex={300}
+          >
+            <Image
+              src="/nail-arcade-mark.png"
+              alt="marking"
+              width={30}
+              height={50}
+            />
+          </Marker>
+          <LabelMarker
+            icon={null}
+            position={[markLng, markLat]}
+            text={{
+              content: "标记位置",
+              direction: "top",
+              offset: [0, 18],
+              style: {
+                strokeColor: "#ffffff",
+                fontSize: 10,
+                fillColor: "#60666E",
+                strokeWidth: 4,
+                backgroundColor: "rgba(0,0,0,0)",
+              },
+            }}
+          />
+        </div>
+      ) : null}
 
       {nearbyArcades.map((arcade, index) => (
         <div key={index}>

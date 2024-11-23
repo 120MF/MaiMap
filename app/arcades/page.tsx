@@ -1,7 +1,7 @@
 export default async function Arcades() {
   return (
     <div>
-      <p>Arcade Page</p>
+      <p>开发中……</p>
     </div>
   );
 }
