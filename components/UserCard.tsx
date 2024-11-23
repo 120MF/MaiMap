@@ -11,7 +11,7 @@ function UserCard({ user, userId }) {
   const [cardUser, setCardUser] = useState(user);
 
   if (!userId && !user) {
-    return <User name="未注册用户" />;
+    return;
   }
 
   useEffect(() => {
@@ -39,7 +39,9 @@ function UserCard({ user, userId }) {
   const title: string = cardUser?.title ? cardUser.title : "新人出道";
   const id: string = cardUser?.id?.slice(-4);
 
-  return (
+  return !user && !userId ? (
+    <User name="未注册用户" />
+  ) : (
     <Skeleton isLoaded={!isLoading}>
       <User
         avatarProps={{
