@@ -19,6 +19,7 @@ import ArcadeList from "@/components/ArcadeList";
 import { useReviews } from "@/stores/useReviews";
 import NewReviewButton from "@/components/NewReviewButton";
 import IssueButton from "@/components/IssueButton";
+import { useTags } from "@/stores/useTags";
 
 function SideBox() {
   const { data: session } = useSession();
@@ -53,6 +54,7 @@ function SideBox() {
   const arcadeId = useArcades((state) => state.arcadeId);
   const detailArcade = useArcades((state) => state.detailArcade);
   const arcadeReviews = useReviews((state) => state.currentReviews);
+  const arcadeTags = useTags((state) => state.currentTags);
   const nearbyArcades = useArcades((state) => state.nearbyArcades);
   const sortMethod: string =
     SortMethod[useArcades((state) => state.sortMethod)];
@@ -138,6 +140,7 @@ function SideBox() {
                 <ArcadeDetail
                   arcadeDetail={detailArcade}
                   arcadeReviews={arcadeReviews}
+                  arcadeTags={arcadeTags}
                   session={session}
                 />
               ) : nearbyArcades.length > 0 ? (

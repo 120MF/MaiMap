@@ -26,7 +26,7 @@ function UpdateReviewButton({
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                新建一条评论……
+                编辑一条评论……
               </ModalHeader>
               <ModalBody className="flex justify-between">
                 <ReviewForm

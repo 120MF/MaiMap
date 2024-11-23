@@ -4,8 +4,8 @@ import { useSearchParams } from "next/navigation";
 
 import { useMap, MapState } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
-import { arcade } from "@/types/arcades";
 import { useReviews } from "@/stores/useReviews";
+import { useTags } from "@/stores/useTags";
 
 function Updater() {
   const searchParams = useSearchParams();
@@ -33,6 +33,7 @@ function Updater() {
   const fetch_currentReviews = useReviews(
     (state) => state.fetch_currentReviews,
   );
+  const fetch_currentTags = useTags((state) => state.fetch_currentTags);
 
   useEffect(() => {
     if (lat && lng) {
@@ -54,6 +55,7 @@ function Updater() {
       update_arcadeId(arcadeId);
       fetch_detailArcade(arcadeId);
       fetch_currentReviews(arcadeId);
+      fetch_currentTags(arcadeId);
     } else {
       update_arcadeId(-1);
       update_detailArcade(null);

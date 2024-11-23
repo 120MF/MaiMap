@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
               near: { type: "Point", coordinates: [Number(lng), Number(lat)] },
               distanceField: "distance",
               spherical: true,
-              maxDistance: Number(range) * 1000, // Use maxDistance directly
+              maxDistance: Number(range) * 1000,
             },
           },
           {

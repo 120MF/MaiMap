@@ -9,16 +9,20 @@ import { arcade } from "@/types/arcades";
 import { formatReadableDate, getAverage } from "@/lib/utils";
 import UserCard from "@/components/UserCard";
 import UpdateReviewButton from "@/components/UpdateReviewButton";
+import { tag } from "@/types/tags";
+import NewTagButton from "@/components/NewTagButton";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;
   arcadeReviews: review[];
+  arcadeTags: tag[];
   session: Session;
 }
 async function ArcadeDetail({
   session,
   arcadeDetail,
   arcadeReviews,
+  arcadeTags,
 }: ArcadeDetailPageProps) {
   const averageRating = getAverage<review>(arcadeReviews, "rating") || -1;
   const arcadeCount = arcadeDetail.store_arcade_count || -1;
@@ -30,76 +34,86 @@ async function ArcadeDetail({
       <Card fullWidth isBlurred radius="none" shadow="sm">
         <h2 className="text-2xl pl-4 pt-4">{arcadeDetail.store_name}</h2>
         <p className="text-xl pl-4 pt-2 pb-4">{arcadeDetail.store_address}</p>
-        {arcadeReviews.length > 0 && (
-          <>
-            <Divider />
-            <h2 className="text-xl pl-4 pt-2">机厅信息</h2>
-            <span className="flex flex-row justify-start gap-4 pl-4 pt-2">
-              <Chip
-                color={
-                  averageRating < 1.5
+        <>
+          <Divider />
+          <h2 className="text-xl pl-4 pt-2">机厅信息</h2>
+          <span className="flex flex-row justify-start gap-4 pl-4 pt-2">
+            <Chip
+              color={
+                averageRating === -1
+                  ? "default"
+                  : averageRating < 1.5
                     ? "warning"
                     : averageRating < 3.5
                       ? "primary"
                       : "success"
-                }
-                variant="faded"
-              >
-                平均评分：{averageRating.toFixed(2)} / 5.00
+              }
+              variant="faded"
+            >
+              平均评分：{averageRating.toFixed(2)} / 5.00
+            </Chip>
+            <Chip
+              color={
+                arcadeCount === -1
+                  ? "default"
+                  : arcadeCount < 2
+                    ? "warning"
+                    : arcadeCount < 5
+                      ? "primary"
+                      : "success"
+              }
+              variant="faded"
+            >
+              机台数：{arcadeCount === -1 ? "未知" : arcadeCount}
+            </Chip>
+          </span>
+          <span className="flex flex-row justify-start gap-4 pl-4 py-2">
+            <Chip
+              color={
+                coinPrice === -1
+                  ? "default"
+                  : coinPrice > 1
+                    ? "warning"
+                    : coinPrice > 0.7
+                      ? "primary"
+                      : "success"
+              }
+              variant="faded"
+            >
+              最低币价：{coinPrice === -1 ? "未知" : `${coinPrice} 元`}
+            </Chip>
+            <Chip
+              color={
+                pcPrice === -1
+                  ? "default"
+                  : pcPrice > 5
+                    ? "warning"
+                    : coinPrice > 3
+                      ? "primary"
+                      : "success"
+              }
+              variant="faded"
+            >
+              PC单价：
+              {pcPrice === -1 ? "未知" : `${pcPrice} 币/局`}
+            </Chip>
+            {arcadeDetail.arcade_dead && (
+              <Chip color="warning" variant="faded">
+                已停业
               </Chip>
-              <Chip
-                color={
-                  arcadeCount === -1
-                    ? "default"
-                    : arcadeCount < 2
-                      ? "warning"
-                      : arcadeCount < 5
-                        ? "primary"
-                        : "success"
-                }
-                variant="faded"
-              >
-                机台数：{arcadeCount === -1 ? "未知" : arcadeCount}
+            )}
+          </span>
+          <Divider />
+          <h2 className="text-xl pl-4 pt-2">机厅标签</h2>
+          <div className="flex flex-wrap justify-start gap-4 pl-4 py-2">
+            {arcadeTags.map((tag) => (
+              <Chip key={String(tag._id)} color="secondary" variant="dot">
+                {tag.name}
               </Chip>
-            </span>
-            <span className="flex flex-row justify-start gap-4 pl-4 py-2">
-              <Chip
-                color={
-                  coinPrice === -1
-                    ? "default"
-                    : coinPrice > 1
-                      ? "warning"
-                      : coinPrice > 0.7
-                        ? "primary"
-                        : "success"
-                }
-                variant="faded"
-              >
-                最低币价：{coinPrice === -1 ? "未知" : `${coinPrice} 元`}
-              </Chip>
-              <Chip
-                color={
-                  pcPrice === -1
-                    ? "default"
-                    : pcPrice > 5
-                      ? "warning"
-                      : coinPrice > 3
-                        ? "primary"
-                        : "success"
-                }
-                variant="faded"
-              >
-                PC单价：
-                {pcPrice === -1 ? "未知" : `${pcPrice} 币/局`}
-              </Chip>
-              {arcadeDetail.arcade_dead && (
-                <Chip color="warning" variant="faded">
-                  已停业
-                </Chip>
-              )}
-            </span>
-          </>
-        )}
+            ))}
+            <NewTagButton session={session} store_id={arcadeDetail.store_id} />
+          </div>
+        </>
       </Card>
       {arcadeReviews.length > 0 ? (
         <>

@@ -13,7 +13,7 @@ function UserCard({ user, userId }) {
   useEffect(() => {
     async function fetchUser() {
       setIsLoading(true);
-      const res = await fetch(`/api/user/get/byId?id=${userId}`);
+      const res = await fetch(`/api/users/get/byId?id=${userId}`);
 
       if (res.status === 200) {
         const data = await res.json();
