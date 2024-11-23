@@ -10,10 +10,6 @@ function UserCard({ user, userId }) {
   const [isLoading, setIsLoading] = useState(false);
   const [cardUser, setCardUser] = useState(user);
 
-  if (!userId && !user) {
-    return;
-  }
-
   useEffect(() => {
     async function fetchUser() {
       setIsLoading(true);
