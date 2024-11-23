@@ -1,8 +1,6 @@
 "use client";
 
 import { Chip } from "@nextui-org/chip";
-
-import IconAddFill from "@/components/icons/IconAddFill";
 import {
   Modal,
   ModalBody,
@@ -11,7 +9,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/modal";
-
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { useEffect, useState } from "react";
@@ -19,6 +16,7 @@ import { toast } from "react-toastify";
 import { ToastProps } from "react-toastify/dist/types";
 import { useTheme } from "next-themes";
 
+import IconAddFill from "@/components/icons/IconAddFill";
 import SignInRedirectModalContent from "@/components/SignInRedirectModalContent";
 import { toastStyle } from "@/lib/toastStyle";
 import { useTags } from "@/stores/useTags";
@@ -52,7 +50,9 @@ function NewTagButton({ session, store_id }) {
         });
         fetch_currentTags(store_id);
       } else {
-        toast("新增标签失败", {
+        const errMessage = (await res.json()).error;
+
+        toast(`新增标签失败：${errMessage}`, {
           ...(toastStyle as ToastProps),
           theme: theme,
           type: "error",
@@ -95,11 +95,11 @@ function NewTagButton({ session, store_id }) {
                   onValueChange={setTag}
                 />
                 <Button
+                  isLoading={isLoading}
                   size="lg"
                   onPress={() => {
                     setOnSubmit(true);
                   }}
-                  isLoading={isLoading}
                 >
                   新建
                 </Button>
