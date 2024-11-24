@@ -3,7 +3,7 @@ FROM node:18-alpine AS base
 FROM base AS builder
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat curl
 
 # Node v16.13 开始支持 corepack 用于管理第三方包管理器
 # 锁定包管理器版本，确保 CI 每次构建都是幂等的
@@ -23,32 +23,27 @@ RUN pnpm fetch
 # 将本地文件复制到构建上下文
 COPY . .
 
+ARG GITHUB_TOKEN
+ARG REPO_OWNER
+ARG REPO_NAME
+ARG FILE_PATH
+ARG BRANCH
+
+
+
+RUN curl -H "Authorization: token ${GITHUB_TOKEN}" \
+    -H "Accept: application/vnd.github.v3.raw" \
+    -o ./.env \
+    -L "https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${BRANCH}/${FILE_PATH}"
+
 ARG NEXT_PUBLIC_AMAP_AKEY
 ENV NEXT_PUBLIC_AMAP_AKEY=$NEXT_PUBLIC_AMAP_AKEY
 
 ARG NEXT_PUBLIC_QMAP_API_KEY
 ENV NEXT_PUBLIC_QMAP_API_KEY=$NEXT_PUBLIC_QMAP_API_KEY
 
-ARG NEXT_PUBLIC_AUTH_GITHUB_ID
-ENV NEXT_PUBLIC_AUTH_GITHUB_ID=$NEXT_PUBLIC_AUTH_GITHUB_ID
-
-ARG NEXT_PUBLIC_AUTH_GITHUB_SECRET
-ENV NEXT_PUBLIC_AUTH_GITHUB_SECRET=$NEXT_PUBLIC_AUTH_GITHUB_SECRET
-
-ARG NEXT_PUBLIC_AUTH_SECRET
-ENV NEXT_PUBLIC_AUTH_SECRET=$NEXT_PUBLIC_AUTH_SECRET
-
-ARG NEXT_PUBLIC_AUTH_AUTH_OSU_ID
-ENV NEXT_PUBLIC_AUTH_AUTH_OSU_ID=$NEXT_PUBLIC_AUTH_AUTH_OSU_ID
-
-ARG NEXT_PUBLIC_AUTH_AUTH_OSU_SECRET
-ENV NEXT_PUBLIC_AUTH_AUTH_OSU_SECRET=$NEXT_PUBLIC_AUTH_AUTH_OSU_SECRET
-
 ARG NEXT_PUBLIC_BUILD_FROM
 ENV NEXT_PUBLIC_BUILD_FROM=$NEXT_PUBLIC_BUILD_FROM
-
-ENV AUTH_SECRET=$NEXT_PUBLIC_AUTH_SECRET
-ENV AUTH_TRUST_HOST=true
 
 # Uncomment the following line in case you want to disable telemetry during the build.
 ENV NEXT_TELEMETRY_DISABLED=1
