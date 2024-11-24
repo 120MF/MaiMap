@@ -1,4 +1,5 @@
 import { type NextRequest } from "next/server";
+import { ObjectId } from "mongodb";
 
 import client from "@/lib/db";
 import { review } from "@/types/reviews";
@@ -29,6 +30,7 @@ export async function POST(request: NextRequest) {
 
   const reviewDocument = {
     ...formReview,
+    user_id: new ObjectId(formReview.user_id),
     created_at: timestamp,
     vote: 0,
   };
