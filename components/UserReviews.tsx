@@ -1,14 +1,12 @@
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { Textarea } from "@nextui-org/input";
 import { useEffect, useState } from "react";
-import { Skeleton } from "@nextui-org/skeleton";
 
 import UpdateReviewButton from "@/components/UpdateReviewButton";
 import { formatReadableDate } from "@/lib/utils";
 import { review } from "@/types/reviews";
 
 function UserReviews({ session }) {
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [reviews, setReviews] = useState([]);
 
@@ -24,14 +22,13 @@ function UserReviews({ session }) {
       setReviews(reviews);
     }
     fetchReviews();
-    setIsLoading(false);
   }, []);
 
   if (error) return <p>Unknown Error Happened.</p>;
   if (reviews.length === 0) return <p>未找到你的评论！</p>;
 
   return (
-    <Skeleton isLoaded={!isLoading}>
+    <div className="h-64 overflow-y-scroll">
       {reviews.map((review: review) => (
         <Card
           key={review._id.toString()}
@@ -63,7 +60,7 @@ function UserReviews({ session }) {
           </CardBody>
         </Card>
       ))}
-    </Skeleton>
+    </div>
   );
 }
 

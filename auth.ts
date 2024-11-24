@@ -7,6 +7,7 @@ import Osu from "next-auth/providers/osu";
 import Credentials from "next-auth/providers/credentials";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import bcrypt from "bcrypt";
+import { ObjectId } from "mongodb";
 
 import client from "@/lib/db";
 import {
@@ -103,6 +104,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         //@ts-ignore
         throw new Error(user?.error);
       }
+      if (user?.email) {
+        await migrateReview(user);
+      }
 
       return true;
     },
@@ -131,4 +135,31 @@ async function getUserFromDb(emailOrName: string) {
   delete user._id;
 
   return user;
+}
+
+async function migrateReview(user: User) {
+  await client.connect();
+  const db = client.db("maimap");
+  let collection = db.collection("users");
+
+  try {
+    let dataBaseUser = await collection.findOne({ _id: new ObjectId(user.id) });
+
+    if (dataBaseUser?.reviewMigrated) return;
+
+    collection = db.collection("reviews");
+    await collection.updateMany(
+      { email: user.email },
+      { $set: { user_id: new ObjectId(user.id) } },
+    );
+
+    collection = db.collection("users");
+
+    await collection.updateOne(
+      { _id: new ObjectId(user.id) },
+      { $set: { reviewMigrated: true } },
+    );
+  } catch (error) {
+    throw error;
+  }
 }
