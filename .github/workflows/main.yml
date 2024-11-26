@@ -24,7 +24,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimap-docker:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimap-docker-dev:latest
           build-args: |
             NEXT_PUBLIC_AMAP_AKEY=${{ secrets.NEXT_PUBLIC_AMAP_AKEY }}
             NEXT_PUBLIC_QMAP_API_KEY=${{ secrets.NEXT_PUBLIC_QMAP_API_KEY }}
