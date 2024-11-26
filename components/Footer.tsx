@@ -27,14 +27,14 @@ function Footer() {
   return (
     <>
       <div className="h-full border-t border-gray-300 flex flex-col items-center justify-between bg-background px-2">
-        <div className="flex items-center justify-around w-full gap-2">
+        <div className="flex items-center justify-around w-full gap-2 pt-0 h-md:pt-6">
           <div className="flex items-center">
             <Image
               alt="Logo"
-              height={60}
-              quality={70}
+              height={80}
+              quality={80}
               src="/Logo.png"
-              width={130}
+              width={150}
             />
           </div>
           <RangeSlider />
@@ -56,7 +56,7 @@ function Footer() {
             fullWidth
             aria-label="pages"
             selectedKey={pathname === "/signin" ? "/user" : pathname}
-            size="sm"
+            size="md"
             variant="underlined"
             onSelectionChange={(key: string) => {
               if (pathname !== "/signin") router.push(key);
