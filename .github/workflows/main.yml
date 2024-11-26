@@ -32,4 +32,5 @@ jobs:
             REPO_NAME=maimap-dev-env
             REPO_OWNER=MoonBite666
             FILE_PATH=.env
+            BRANCH=main
             GITHUB_TOKEN=${{ secrets.GH_TOKEN }}
