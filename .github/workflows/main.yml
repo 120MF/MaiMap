@@ -1,8 +1,7 @@
 name: maimap-docker-ci
 
 on:
-  release:
-    types: [created]
+  push:
 
 jobs:
   docker:
@@ -30,3 +29,7 @@ jobs:
             NEXT_PUBLIC_AMAP_AKEY=${{ secrets.NEXT_PUBLIC_AMAP_AKEY }}
             NEXT_PUBLIC_QMAP_API_KEY=${{ secrets.NEXT_PUBLIC_QMAP_API_KEY }}
             NEXT_PUBLIC_BUILD_FROM=GithubAction
+            REPO_NAME=maimap-dev-env
+            REPO_OWNER=MoonBite666
+            FILE_PATH=.env
+            GITHUB_TOKEN=${{ secrets.GH_TOKEN }}

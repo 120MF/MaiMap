@@ -24,9 +24,9 @@ function UserCard({ user, userId }) {
       }
       setIsLoading(false);
     }
-    if (!user) {
+    if (!user && userId) {
       fetchUser();
-    } else setCardUser(user);
+    } else if (user) setCardUser(user);
   }, []);
   if (error) return <p>Unknown Error happened.</p>;
   const name: string | null = cardUser?.name ? cardUser.name : null;
