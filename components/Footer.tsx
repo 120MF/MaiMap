@@ -55,11 +55,12 @@ function Footer() {
           <Tabs
             fullWidth
             aria-label="pages"
-            selectedKey={pathname}
+            selectedKey={pathname === "/signin" ? "/user" : pathname}
             size="sm"
             variant="underlined"
             onSelectionChange={(key: string) => {
               if (pathname !== "/signin") router.push(key);
+              else if (key !== "/user") router.push(key);
             }}
           >
             <Tab
