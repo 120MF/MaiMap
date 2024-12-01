@@ -24,12 +24,12 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimap-docker-dev:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maimap-docker:latest
           build-args: |
             NEXT_PUBLIC_AMAP_AKEY=${{ secrets.NEXT_PUBLIC_AMAP_AKEY }}
             NEXT_PUBLIC_QMAP_API_KEY=${{ secrets.NEXT_PUBLIC_QMAP_API_KEY }}
             NEXT_PUBLIC_BUILD_FROM=GithubAction
-            REPO_NAME=maimap-dev-env
+            REPO_NAME=maimap-env
             REPO_OWNER=MoonBite666
             FILE_PATH=.env
             BRANCH=main
