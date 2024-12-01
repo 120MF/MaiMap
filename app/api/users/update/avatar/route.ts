@@ -7,11 +7,12 @@ import { GridFSBucket, ObjectId } from "mongodb";
 import client from "@/lib/db";
 import { auth } from "@/auth";
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
+// TODO: the above break down in next build
 
 export async function POST(request: NextRequest) {
   const session = await auth();

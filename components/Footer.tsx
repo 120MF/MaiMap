@@ -63,15 +63,15 @@ function Footer() {
               else if (key !== "/user") router.push(key);
             }}
           >
-            <Tab
-              key="/arcades"
-              title={
-                <div className="flex items-center space-x-2">
-                  <IconStore />
-                  <span>机厅</span>
-                </div>
-              }
-            />
+            {/*<Tab*/}
+            {/*  key="/arcades"*/}
+            {/*  title={*/}
+            {/*    <div className="flex items-center space-x-2">*/}
+            {/*      <IconStore />*/}
+            {/*      <span>机厅</span>*/}
+            {/*    </div>*/}
+            {/*  }*/}
+            {/*/>*/}
             <Tab
               key="/"
               title={
