@@ -50,7 +50,7 @@ function NewTagButton({ session, store_id }) {
         });
         fetch_currentTags(store_id);
       } else {
-        const errMessage = (await res.json()).error;
+        const errMessage = await res.json();
 
         toast(`新增标签失败：${errMessage}`, {
           ...(toastStyle as ToastProps),
@@ -69,6 +69,7 @@ function NewTagButton({ session, store_id }) {
         setError(false);
       }
       setIsLoading(false);
+      setOnSubmit(false);
     }
   }, [onSubmit]);
 
