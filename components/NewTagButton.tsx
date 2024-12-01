@@ -57,7 +57,6 @@ function NewTagButton({ session, store_id }) {
           theme: theme,
           type: "error",
         });
-        console.error(errMessage);
       }
     }
     if (onSubmit) {
