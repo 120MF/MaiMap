@@ -44,7 +44,8 @@ pnpm run dev
 
 ```shell
 # 参考官方Dockerfile，使用pnpm部署
-docker build -t maimap-docker . --build-arg NEXT_PUBLIC_AMAP_AKEY=... --build-arg NEXT_PUBLIC_QMAP_API_KEY=... --build-arg NEXT_PUBLIC_BUILD_FROM=local .
+# 
+docker build -t maimap-docker . --build-arg NEXT_PUBLIC_AMAP_AKEY=... --build-arg NEXT_PUBLIC_QMAP_API_KEY=... --build-arg NEXT_PUBLIC_BUILD_FROM=local --build-arg REPO_NAME=maimap-env --build-arg REPO_OWNER=MoonBite666 --build-arg FILE_PATH=.env --build-arg BRANCH=main --build-arg GITHUB_TOKEN=... .
 # 可选：上传Docker Hub
 # docker tag maimap-docker:latest my-dockerhub-username/maimap-docker:latest
 # docker push my-dockerhub-username/maimap-docker:latest
