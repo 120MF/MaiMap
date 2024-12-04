@@ -11,6 +11,7 @@ import UserCard from "@/components/UserCard";
 import UpdateReviewButton from "@/components/UpdateReviewButton";
 import { tag } from "@/types/tags";
 import NewTagButton from "@/components/NewTagButton";
+import ArcadeTag from "@/components/ArcadeTag";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;
@@ -109,9 +110,12 @@ function ArcadeDetail({
           <h2 className="text-xl pl-4 pt-2">机厅标签</h2>
           <div className="flex flex-wrap justify-start gap-4 pl-4 py-2">
             {arcadeTags.map((tag) => (
-              <Chip key={String(tag._id)} color="secondary" variant="dot">
-                {tag.name}
-              </Chip>
+              <ArcadeTag
+                key={String(tag._id)}
+                arcadeId={arcadeDetail.store_id}
+                session={session}
+                tag={tag}
+              />
             ))}
             <NewTagButton session={session} store_id={arcadeDetail.store_id} />
           </div>
