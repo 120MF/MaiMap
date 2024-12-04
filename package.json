@@ -1,6 +1,6 @@
 {
 	"name": "maimap",
-	"version": "0.5.14",
+	"version": "0.6.0",
 	"private": true,
 	"scripts": {
 		"dev": "next dev",

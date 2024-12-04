@@ -17,8 +17,14 @@ function GeolocationButton() {
   useEffect(() => {
     async function fetchIpGeolocation() {
       const params = new URLSearchParams(searchParams);
+
+      const ipRes = await fetch("https://ipapi.co/json");
+      const ipData = await ipRes.json();
+      const userIp = ipData.ip;
+
+      // 理论上可以直接在client side去fetch 腾讯地图的api，但是会遇到跨域请求失败，于是只能走server side
       const res = await fetch(
-        `/api/qmap/ip?key=${process.env.NEXT_PUBLIC_QMAP_API_KEY}`,
+        `/api/qmap/ip?key=${process.env.NEXT_PUBLIC_QMAP_API_KEY}&ip=${userIp}`,
       );
       const data = await res.json();
 

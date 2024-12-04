@@ -54,42 +54,6 @@ export async function POST(request: NextRequest) {
     const collection = db.collection("tags");
 
     if ((await collection.countDocuments()) > 0) {
-      const closestTag = await collection
-        .aggregate([
-          {
-            $match: {
-              $and: [
-                { user_id: formTag.user_id },
-                { store_id: formTag.store_id },
-              ],
-            },
-          },
-          {
-            $addFields: {
-              diff: {
-                $abs: {
-                  $subtract: [
-                    { $toDate: "$created_at" },
-                    { $toDate: timestamp },
-                  ],
-                },
-              },
-            },
-          },
-          { $sort: { diff: 1 } },
-          { $limit: 1 },
-        ])
-        .toArray();
-
-      if (closestTag[0].diff / 1000 / 60 / 60 < 24) {
-        return new Response(
-          JSON.stringify({ error: "用户每日每机厅新增标签上限：1" }),
-          {
-            status: 400,
-            headers: { "Content-Type": "application/json" },
-          },
-        );
-      }
       const sameNameTag = await collection.findOne({ name: formTag.name });
 
       if (sameNameTag) {
@@ -110,7 +74,7 @@ export async function POST(request: NextRequest) {
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error }), {
+    return new Response(JSON.stringify({ error: error }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });

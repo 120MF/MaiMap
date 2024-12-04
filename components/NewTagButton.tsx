@@ -50,9 +50,9 @@ function NewTagButton({ session, store_id }) {
         });
         fetch_currentTags(store_id);
       } else {
-        const errMessage = await res.json();
+        const data = (await res.json()).error;
 
-        toast(`新增标签失败：${errMessage}`, {
+        toast(`新增标签失败：${data}`, {
           ...(toastStyle as ToastProps),
           theme: theme,
           type: "error",

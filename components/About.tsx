@@ -27,7 +27,7 @@ function About({ isOpen, onOpenChange }) {
             </ModalHeader>
             <ModalBody>
               <p>
-                MaiMap由两个街机音游爱好者构建，希望你能使用它发现、讨论、邂逅身边的每一台街机！
+                MaiMap项目由一群街机音游爱好者参与构建。希望你能使用它发现、讨论、邂逅身边的每一台街机！
               </p>
               <p>
                 你可以从右下角访问我们的开源仓库，提出宝贵的建议，为开源项目做贡献！
