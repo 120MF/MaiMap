@@ -1,13 +1,9 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import { Map } from "@uiw/react-amap-map";
 import { APILoader } from "@uiw/react-amap-api-loader";
-import { ScaleControl } from "@uiw/react-amap-scale-control";
 import { ToolBarControl } from "@uiw/react-amap-tool-bar-control";
-import { Marker } from "@uiw/react-amap-marker";
-import { LabelMarker } from "@uiw/react-amap-label-marker";
 import { Circle } from "@uiw/react-amap-circle";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -15,6 +11,9 @@ import { useEffect, useState } from "react";
 import GeolocationButton from "@/components/GeolocationButton";
 import { MapState, useMap } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
+import TargetMarker from "@/components/MapComponents/TargetMarker";
+import EditArcadeMarker from "@/components/MapComponents/EditArcadeMarker";
+import ArcadeMarker from "@/components/MapComponents/ArcadeMarker";
 
 function MaiMap() {
   const centerLat = useMap((state: MapState) => state.centerLat);
@@ -46,61 +45,82 @@ function MaiMap() {
   const { replace } = useRouter();
 
   const { theme } = useTheme();
-
+  // 在<Map>的center属性中使用syncedCenter,而不是MapStore中的center
+  // 避免修改机厅信息时，状态更新导致地图锁定在中心无法拖动
   const [syncedCenter, setSyncedCenter] = useState([centerLng, centerLat]);
-  // const [settingDetailArcade, setSettingDetailArcade] = useState(false);
 
   useEffect(() => {
-    // setSettingDetailArcade(true);
     if (detailArcade) {
       setSyncedCenter([detailArcade.store_lng, detailArcade.store_lat]);
-      // update_center([detailArcade.store_lat, detailArcade.store_lng]);
     } else {
       setSyncedCenter([targetLng, targetLat]);
-      // update_center([targetLat, targetLng]);
     }
   }, [detailArcade]);
 
   useEffect(() => {
-    // if (settingDetailArcade) {
-    //   setSettingDetailArcade(false);
-    // } else
     if (!isMarking) {
       setSyncedCenter([centerLng, centerLat]);
     }
   }, [centerLat, centerLng]);
 
-  // @ts-ignore
+  // 修改机厅位置时，在地图上点击的回调函数，仅在移动端上被调用
+  function onMapTouchStart(event: any) {
+    if (isMarking) {
+      setPressedPosition([event.pixel.x, event.pixel.y]);
+    }
+  }
+
+  function onMapTouchEnd(event: any) {
+    if (
+      isMarking &&
+      Math.abs(pressedPosition[0] - event.pixel.x) < 10 &&
+      Math.abs(pressedPosition[1] - event.pixel.y) < 10
+    ) {
+      update_mark([event.lnglat.lat, event.lnglat.lng]);
+      setIsMarking(false);
+    }
+  }
+  // 修改机厅位置时，在地图上点击的回调函数，仅在桌面端网页被调用
+  function onMapClick(event: any) {
+    if (isMarking) {
+      update_mark([event.lnglat.lat, event.lnglat.lng]);
+      setIsMarking(false);
+    }
+  }
+
+  function onArcadeMarkerClick(arcade) {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("arcadeId", String(arcade.store_id));
+    replace(`${pathname}?${params.toString()}`);
+    update_center([arcade.store_lng, arcade.store_lat]);
+    update_arcadeId(arcade.store_id);
+  }
+
+  // uiw Map组件配合Typescript使用时有Bug，导致各种 props type 无法正常传递，可使用@ts-ignore忽略报错
+
   return (
     <Map
       key={theme}
+      // @ts-ignore
       center={syncedCenter}
       mapStyle={
         theme === "light" ? "amap://styles/normal" : "amap://styles/dark"
       }
       style={{ height: "90vh", width: "100vw" }}
       zoom={10}
-      onTouchEnd={(e) => {
-        if (
-          isMarking &&
-          Math.abs(pressedPosition[0] - e.pixel.x) < 10 &&
-          Math.abs(pressedPosition[1] - e.pixel.y) < 10
-        ) {
-          update_mark([e.lnglat.lat, e.lnglat.lng]);
-          setIsMarking(false);
-        }
-      }}
-      onTouchStart={(e) => {
-        if (isMarking) {
-          setPressedPosition([e.pixel.x, e.pixel.y]);
-        }
-      }}
+      onClick={onMapClick}
+      onTouchEnd={onMapTouchEnd}
+      onTouchStart={onMapTouchStart}
     >
-      <ScaleControl offset={[20, 40]} position="LB" visible={true} />
+      {/*地图尺寸控件，放置在左下角*/}
+      {/*@ts-ignore*/}
       <ToolBarControl offset={[10, 60]} position="LT" visible={true} />
+      {/*半径圆，不能在编辑机厅位置时渲染，否则会遮挡图层*/}
       {!isEditing ? (
         <Circle
           key={range}
+          // @ts-ignore
           center={[targetLng, targetLat]}
           fillOpacity={0.1}
           radius={range * 1000}
@@ -110,95 +130,20 @@ function MaiMap() {
         />
       ) : null}
 
-      <Marker
-        offset={new AMap.Pixel(-15, -42)}
-        position={[targetLng, targetLat]}
-        title={"标定位置"}
-        visible={true}
-        zIndex={300}
-      >
-        <Image alt="target" height={50} src="/nail-target.png" width={30} />
-      </Marker>
+      {/*标定点的位置标记*/}
+      <TargetMarker targetLat={targetLat} targetLng={targetLng} />
+      {/*在编辑模式下显示用户标记的机厅位置*/}
       {isEditing && markLat !== 0 ? (
-        <div>
-          <Marker
-            offset={new AMap.Pixel(-15, -42)}
-            position={[markLng, markLat]}
-            title={"标记位置"}
-            visible={true}
-            zIndex={300}
-          >
-            <Image
-              src="/nail-arcade-mark.png"
-              alt="marking"
-              width={30}
-              height={50}
-            />
-          </Marker>
-          <LabelMarker
-            icon={null}
-            position={[markLng, markLat]}
-            text={{
-              content: "标记位置",
-              direction: "top",
-              offset: [0, 18],
-              style: {
-                strokeColor: "#ffffff",
-                fontSize: 10,
-                fillColor: "#60666E",
-                strokeWidth: 4,
-                backgroundColor: "rgba(0,0,0,0)",
-              },
-            }}
-          />
-        </div>
+        <EditArcadeMarker markLat={markLat} markLng={markLng} />
       ) : null}
-
+      {/*将范围内arcade渲染成Marker*/}
       {nearbyArcades.map((arcade, index) => (
-        <div key={index}>
-          <Marker
-            offset={new AMap.Pixel(-15, -42)}
-            position={[arcade.store_lng, arcade.store_lat]}
-            title={arcade.store_name}
-            visible={true}
-            zIndex={arcadeId === arcade.store_id ? 200 : 100}
-            onClick={() => {
-              const params = new URLSearchParams(searchParams);
-
-              params.set("arcadeId", String(arcade.store_id));
-              replace(`${pathname}?${params.toString()}`);
-              update_center([arcade.store_lng, arcade.store_lat]);
-              update_arcadeId(arcade.store_id);
-            }}
-          >
-            {/*分支一：被选中，机厅停业，显示nail-arcade-dead-selected.png*/}
-            {/*分支二：被选中，机厅正常，显示nail-arcade-selected.png*/}
-            {/*分支三：未被选中，机厅停业，显示nail-arcade-dead.png*/}
-            {/*分支四：未被选中，机厅正常，显示nail-arcade.png*/}
-            <Image
-              alt="arcade"
-              height={50}
-              src={`${arcadeId === arcade.store_id ? (arcade.arcade_dead ? "/nail-arcade-dead-selected.png" : "/nail-arcade-selected.png") : arcade.arcade_dead ? "/nail-arcade-dead.png" : "/nail-arcade.png"}`}
-              width={30}
-            />
-          </Marker>
-          <LabelMarker
-            icon={null}
-            position={[arcade.store_lng, arcade.store_lat]}
-            text={{
-              content: arcade.store_name,
-              direction: "top",
-              offset: [0, 18],
-              style: {
-                strokeColor: "#ffffff",
-                fontSize: 10,
-                fillColor: "#60666E",
-                strokeWidth: 4,
-                backgroundColor: "rgba(0,0,0,0)",
-              },
-            }}
-          />
-        </div>
+        <ArcadeMarker
+          key={index}
+          arcade={arcade}
+          currentArcadeId={arcadeId}
+          onMarkerClick={onArcadeMarkerClick}
+        />
       ))}
     </Map>
   );
