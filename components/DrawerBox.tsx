@@ -6,42 +6,33 @@ import { Button } from "@nextui-org/button";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Divider } from "@nextui-org/divider";
 import { Select, SelectItem } from "@nextui-org/select";
-import { Skeleton } from "@nextui-org/skeleton";
 import { useSession } from "next-auth/react";
 
 import IconReturnDownBack from "@/components/icons/IconReturnDownBack";
 import IconBxArrowToBottom from "@/components/icons/IconBxArrowToBottom";
 import IconBxArrowFromBottom from "@/components/icons/IconBxArrowFromBottom";
-import { useArcades, SortMethod } from "@/stores/useArcades";
-import PathButton from "@/components/PathButton";
+import { useArcades } from "@/stores/useArcades";
+import PathButton from "@/components/DrawerBoxComponents/PathButton";
 import { useMap } from "@/stores/useMap";
-import ArcadeList from "@/components/ArcadeList";
+import ArcadeList from "@/components/DrawerBoxComponents/ArcadeList";
 import { useReviews } from "@/stores/useReviews";
-import NewReviewButton from "@/components/NewReviewButton";
-import EditArcadeButton from "@/components/EditArcadeButton";
+import NewReviewButton from "@/components/DrawerBoxComponents/NewReviewButton";
+import EditArcadeButton from "@/components/DrawerBoxComponents/EditArcadeButton";
 import { useTags } from "@/stores/useTags";
-import EditArcadeForm from "@/components/EditArcadeForm";
+import EditArcadeForm from "@/components/DrawerBoxComponents/EditArcadeForm";
+import ArcadeDetailSkeleton from "@/components/DrawerBoxComponents/ArcadeDetailSkeleton";
+import { SortMethod } from "@/types/arcades";
 
-function SideBox() {
+function DrawerBox() {
   const { data: session } = useSession();
-  const ArcadeDetail = dynamic(() => import("@/components/ArcadeDetail"), {
-    loading: () => (
-      <div className="w-full flex items-center gap-3">
-        <div className="px-2 w-full flex flex-col gap-2">
-          {/*TODO: make these into a component*/}
-          <Skeleton className="h-6 w-9/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-          <Skeleton className="h-4 w-11/12 rounded-lg" />
-        </div>
-      </div>
-    ),
-    ssr: true,
-  });
+  // 使用SSR渲染每一个单独的机厅页面
+  const ArcadeDetail = dynamic(
+    () => import("@/components/DrawerBoxComponents/ArcadeDetail"),
+    {
+      loading: () => <ArcadeDetailSkeleton />,
+      ssr: true,
+    },
+  );
 
   const [isOpen, setIsOpen] = useState(false);
   const searchParams = useSearchParams();
@@ -65,7 +56,7 @@ function SideBox() {
   const update_sortMethod = useArcades((state) => state.update_sortMethod);
 
   function toggleBox() {
-    setIsOpen(!isOpen);
+    setIsOpen((state) => !state);
   }
 
   useEffect(() => {
@@ -136,6 +127,7 @@ function SideBox() {
       </>
     );
   let bodyContent = <div />;
+
   if (isEditing)
     bodyContent = (
       <div className="p-2">
@@ -161,6 +153,26 @@ function SideBox() {
         在指定范围内没有找到机厅。别气馁啦！
       </p>
     );
+
+  let footerContent = <div />;
+
+  if (arcadeId && detailArcade && !isEditing) {
+    footerContent = (
+      <CardFooter className="min-h-12 max-h-12 flex items-center gap-2 border-t-1 border-gray-400">
+        <div className="ml-0">
+          <EditArcadeButton session={session}>编辑信息</EditArcadeButton>
+        </div>
+        <PathButton
+          endAddress={detailArcade.store_address}
+          startLat={targetLat}
+          startLng={targetLng}
+        >
+          查看路线
+        </PathButton>
+        <NewReviewButton session={session} />
+      </CardFooter>
+    );
+  } else footerContent = null;
 
   return (
     <div className="relative z-20">
@@ -189,23 +201,7 @@ function SideBox() {
             </CardHeader>
             <Divider />
             <CardBody className="px-0 py-0">{bodyContent}</CardBody>
-            {arcadeId && detailArcade && !isEditing && (
-              <CardFooter className="min-h-12 max-h-12 flex items-center gap-2 border-t-1 border-gray-400">
-                <div className="ml-0">
-                  <EditArcadeButton session={session}>
-                    编辑信息
-                  </EditArcadeButton>
-                </div>
-                <PathButton
-                  endAddress={detailArcade.store_address}
-                  startLat={targetLat}
-                  startLng={targetLng}
-                >
-                  查看路线
-                </PathButton>
-                <NewReviewButton session={session} />
-              </CardFooter>
-            )}
+            {footerContent}
           </Card>
         </div>
       </div>
@@ -213,4 +209,4 @@ function SideBox() {
   );
 }
 
-export default SideBox;
+export default DrawerBox;

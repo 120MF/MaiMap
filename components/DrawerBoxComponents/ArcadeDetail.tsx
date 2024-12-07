@@ -10,8 +10,8 @@ import { formatReadableDate, getAverage } from "@/lib/utils";
 import UserCard from "@/components/UserCard";
 import UpdateReviewButton from "@/components/UpdateReviewButton";
 import { tag } from "@/types/tags";
-import NewTagButton from "@/components/NewTagButton";
-import ArcadeTag from "@/components/ArcadeTag";
+import NewTagButton from "@/components/DrawerBoxComponents/NewTagButton";
+import ArcadeTag from "@/components/DrawerBoxComponents/ArcadeTag";
 
 interface ArcadeDetailPageProps {
   arcadeDetail: arcade;

@@ -8,7 +8,7 @@ import {
 } from "@nextui-org/modal";
 
 import IconEdit from "@/components/icons/IconEdit";
-import ReviewForm from "@/components/ReviewForm";
+import ReviewForm from "@/components/DrawerBoxComponents/ReviewForm";
 
 function UpdateReviewButton({
   session,
@@ -30,11 +30,11 @@ function UpdateReviewButton({
               </ModalHeader>
               <ModalBody className="flex justify-between">
                 <ReviewForm
-                  session={session}
-                  onClose={onClose}
-                  originReviewId={originReviewId}
                   originComment={originComment}
                   originRating={originRating}
+                  originReviewId={originReviewId}
+                  session={session}
+                  onClose={onClose}
                 />
               </ModalBody>
               <ModalFooter />

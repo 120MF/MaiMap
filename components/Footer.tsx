@@ -8,8 +8,8 @@ import { useRouter, usePathname } from "next/navigation";
 
 import IconInfoCircle from "@/components/icons/IconInfoCircle";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import RangeSlider from "@/components/RangeSlider";
-import About from "@/components/About";
+import RangeSlider from "@/components/FooterComponents/RangeSlider";
+import About from "@/components/FooterComponents/About";
 import IconMapLocationDot from "@/components/icons/IconMapLocationDot";
 import IconStore from "@/components/icons/IconStore";
 import IconBxsUserCircle from "@/components/icons/IconBxsUserCircle";
@@ -19,6 +19,7 @@ function Footer() {
   const router = useRouter();
   let pathname = usePathname();
 
+  // 仅获取一级页面路径
   pathname =
     pathname.split("/").length > 2
       ? pathname.split("/").slice(0, -1).join("/")

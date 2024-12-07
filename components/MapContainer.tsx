@@ -8,7 +8,7 @@ import { Circle } from "@uiw/react-amap-circle";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
-import GeolocationButton from "@/components/GeolocationButton";
+import GeolocationButton from "@/components/MapComponents/GeolocationButton";
 import { MapState, useMap } from "@/stores/useMap";
 import { ArcadesState, useArcades } from "@/stores/useArcades";
 import TargetMarker from "@/components/MapComponents/TargetMarker";

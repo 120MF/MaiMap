@@ -1,14 +1,6 @@
 import { create } from "zustand";
 
-import { arcade } from "@/types/arcades";
-
-export enum SortMethod {
-  DistanceAscending,
-  DistanceDescending,
-  PinyinAscending,
-  PinyinDescending,
-  Default,
-}
+import { arcade, SortMethod } from "@/types/arcades";
 
 interface ArcadesState {
   nearbyArcades: arcade[];

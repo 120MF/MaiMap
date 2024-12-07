@@ -2,7 +2,7 @@ import { type NextRequest } from "next/server";
 
 import client from "@/lib/db";
 import { auth } from "@/auth";
-import { ArcadeFormInput } from "@/components/EditArcadeForm";
+import { ArcadeFormInput } from "@/components/DrawerBoxComponents/EditArcadeForm";
 
 export async function POST(request: NextRequest) {
   const form: ArcadeFormInput = await request.json();

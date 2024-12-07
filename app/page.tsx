@@ -3,8 +3,8 @@ import { SessionProvider } from "next-auth/react";
 
 import Updater from "@/components/Updater";
 import SearchBar from "@/components/SearchBar";
-import SideBox from "@/components/SideBox";
-import MapLoading from "@/components/MapLoading";
+import DrawerBox from "@/components/DrawerBox";
+import MapLoading from "@/components/MapComponents/MapLoading";
 
 export default async function Home() {
   const MapContainer = dynamic(() => import("@/components/MapContainer"), {
@@ -16,7 +16,7 @@ export default async function Home() {
     <SessionProvider>
       <Updater />
       <SearchBar />
-      <SideBox />
+      <DrawerBox />
       <div className="absolute top-0 left-0">
         <MapContainer />
       </div>

@@ -8,7 +8,7 @@ import {
   useDisclosure,
 } from "@nextui-org/modal";
 
-import ReviewForm from "@/components/ReviewForm";
+import ReviewForm from "@/components/DrawerBoxComponents/ReviewForm";
 import SignInRedirectModalContent from "@/components/SignInRedirectModalContent";
 
 function NewReviewButton({ session }) {
