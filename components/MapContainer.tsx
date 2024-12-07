@@ -64,13 +64,13 @@ function MaiMap() {
   }, [centerLat, centerLng]);
 
   // 修改机厅位置时，在地图上点击的回调函数，仅在移动端上被调用
-  function onMapTouchStart(event: any) {
+  function handleMapTouchStart(event: any) {
     if (isMarking) {
       setPressedPosition([event.pixel.x, event.pixel.y]);
     }
   }
 
-  function onMapTouchEnd(event: any) {
+  function handleMapTouchEnd(event: any) {
     if (
       isMarking &&
       Math.abs(pressedPosition[0] - event.pixel.x) < 10 &&
@@ -81,14 +81,14 @@ function MaiMap() {
     }
   }
   // 修改机厅位置时，在地图上点击的回调函数，仅在桌面端网页被调用
-  function onMapClick(event: any) {
+  function handleMapClick(event: any) {
     if (isMarking) {
       update_mark([event.lnglat.lat, event.lnglat.lng]);
       setIsMarking(false);
     }
   }
 
-  function onArcadeMarkerClick(arcade) {
+  function handleArcadeMarkerClick(arcade) {
     const params = new URLSearchParams(searchParams);
 
     params.set("arcadeId", String(arcade.store_id));
@@ -109,9 +109,9 @@ function MaiMap() {
       }
       style={{ height: "90vh", width: "100vw" }}
       zoom={10}
-      onClick={onMapClick}
-      onTouchEnd={onMapTouchEnd}
-      onTouchStart={onMapTouchStart}
+      onClick={handleMapClick}
+      onTouchEnd={handleMapTouchEnd}
+      onTouchStart={handleMapTouchStart}
     >
       {/*地图尺寸控件，放置在左下角*/}
       {/*@ts-ignore*/}
@@ -142,7 +142,7 @@ function MaiMap() {
           key={index}
           arcade={arcade}
           currentArcadeId={arcadeId}
-          onMarkerClick={onArcadeMarkerClick}
+          onMarkerClick={handleArcadeMarkerClick}
         />
       ))}
     </Map>

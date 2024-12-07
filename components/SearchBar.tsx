@@ -4,13 +4,11 @@ import { useState, useEffect } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { Input } from "@nextui-org/input";
 import { Card, CardBody, CardHeader } from "@nextui-org/card";
-import { Button } from "@nextui-org/button";
 
-import IconSlashSquareFill from "@/components/icons/IconSlashSquareFill";
-import IconAngleUp from "@/components/icons/IconAngleUp";
-import IconAngleDown from "@/components/icons/IconAngleDown";
 import { getSuggestion } from "@/lib/QMapSuggestion";
 import { suggestion } from "@/types/suggestion";
+import DrawerControlButton from "@/components/SearchBarComponents/DrawerControlButton";
+import SuggestionCard from "@/components/SearchBarComponents/SuggestionCard";
 
 export default function SearchBar() {
   const [inputValue, setInputValue] = useState<string>("");
@@ -22,6 +20,8 @@ export default function SearchBar() {
   const pathname = usePathname();
   const { replace } = useRouter();
 
+  // 检测inputValue并搜索
+  // 1s定时器防止多次触发
   useEffect(() => {
     if (inputValue) {
       setIsLoading(true);
@@ -46,13 +46,15 @@ export default function SearchBar() {
     }
   }, [inputValue]);
 
-  function handleSearch(input: { lat: any; lng: any }) {
-    const { lat, lng } = input;
+  // 点击搜索栏上的结果的回调函数
+  function handleSuggestionClick(suggestion: suggestion) {
+    setInputValue(suggestion.title);
+    const { lat, lng } = suggestion.location;
     const params = new URLSearchParams(searchParams);
 
-    if (input) {
-      params.set("lat", lat);
-      params.set("lng", lng);
+    if (suggestion.location) {
+      params.set("lat", String(lat));
+      params.set("lng", String(lng));
       params.delete("arcadeId");
     } else {
       params.delete("lat");
@@ -60,6 +62,10 @@ export default function SearchBar() {
     }
     replace(`${pathname}?${params.toString()}`);
     setIsSuggestionsOpen(false);
+  }
+
+  function handleDrawerControlButtonClick() {
+    setIsSuggestionsOpen((state) => !state);
   }
 
   return (
@@ -74,25 +80,11 @@ export default function SearchBar() {
           onValueChange={setInputValue}
         />
 
-        <Button
-          disableAnimation={!inputValue}
-          isIconOnly
-          size="lg"
-          radius="none"
-          onClick={() => {
-            setIsSuggestionsOpen((state) => !state);
-          }}
-        >
-          {inputValue ? (
-            isSuggestionsOpen ? (
-              <IconAngleUp />
-            ) : (
-              <IconAngleDown />
-            )
-          ) : (
-            <IconSlashSquareFill />
-          )}
-        </Button>
+        <DrawerControlButton
+          handleClick={handleDrawerControlButtonClick}
+          inputValue={inputValue}
+          isSuggestionsOpen={isSuggestionsOpen}
+        />
       </div>
       {suggestions &&
         suggestions.length > 0 &&
@@ -103,23 +95,11 @@ export default function SearchBar() {
               <CardHeader className="h-10">搜索结果</CardHeader>
               <CardBody className="custom-scrollbar px-0 py-0">
                 {suggestions.map((suggestion, index) => (
-                  <Card
+                  <SuggestionCard
                     key={index}
-                    isBlurred
-                    isHoverable
-                    isPressable
-                    className="min-h-28"
-                    radius="none"
-                    onClick={() => {
-                      setInputValue(suggestion.title);
-                      handleSearch(suggestion.location);
-                    }}
-                  >
-                    <CardBody className="h-auto flex justify-center">
-                      <p className="text-xl block">{suggestion.title}</p>
-                      <p className="text-md block">{suggestion.address}</p>
-                    </CardBody>
-                  </Card>
+                    handleClick={handleSuggestionClick}
+                    suggestion={suggestion}
+                  />
                 ))}
               </CardBody>
             </Card>
