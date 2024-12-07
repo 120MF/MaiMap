@@ -33,20 +33,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const timestamp = new Date()
-    .toLocaleString("en-CA", {
-      timeZone: "Asia/Shanghai",
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    })
-    .replace(/, /g, " ")
-    .replace(/\//g, "-");
-
   try {
     await client.connect();
     const db = client.db("maimap");
@@ -58,7 +44,7 @@ export async function POST(request: NextRequest) {
         $set: {
           comment: form.comment,
           rating: form.rating,
-          created_at: timestamp,
+          created_at: new Date(),
         },
       },
     );

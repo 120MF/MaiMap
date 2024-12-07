@@ -6,7 +6,7 @@ import { Session } from "next-auth";
 
 import { review } from "@/types/reviews";
 import { arcade } from "@/types/arcades";
-import { formatReadableDate, getAverage } from "@/lib/utils";
+import { getAverage, readFormattedDate } from "@/lib/utils";
 import UserCard from "@/components/UserCard";
 import UpdateReviewButton from "@/components/UpdateReviewButton";
 import { tag } from "@/types/tags";
@@ -156,7 +156,7 @@ function ArcadeDetail({
                         ? review.comment
                         : "该用户没有留下文字评论"
                     }
-                    description={formatReadableDate(review.created_at)}
+                    description={readFormattedDate(review.created_at)}
                     label={`评分：${review.rating.toFixed(2)} / 5.00`}
                     labelPlacement="inside"
                     variant="faded"

@@ -6,6 +6,6 @@ export interface review {
   user_id: ObjectId;
   rating: number;
   comment: string;
-  created_at: string;
+  created_at: string; // ISO, UTC , not GMT+8
   vote: number;
 }

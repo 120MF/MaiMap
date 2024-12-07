@@ -3,8 +3,8 @@ import { Textarea } from "@nextui-org/input";
 import { useEffect, useState } from "react";
 
 import UpdateReviewButton from "@/components/UpdateReviewButton";
-import { formatReadableDate } from "@/lib/utils";
 import { review } from "@/types/reviews";
+import { readFormattedDate } from "@/lib/utils";
 
 function UserReviews({ session }) {
   const [error, setError] = useState(false);
@@ -52,7 +52,7 @@ function UserReviews({ session }) {
             <Textarea
               isReadOnly
               defaultValue={review.comment}
-              description={formatReadableDate(review.created_at)}
+              description={readFormattedDate(review.created_at)}
               label={`评分：${review.rating.toFixed(2)} / 5.00`}
               labelPlacement="inside"
               variant="faded"
