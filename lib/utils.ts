@@ -36,16 +36,8 @@ export function getMostFrequent<T>(
   return mostFrequentValue;
 }
 
-export function formatReadableDate(isoString: string): string {
-  const date = new Date(isoString);
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-  };
+export function readFormattedDate(date: string | Date): string {
+  const d = new Date(date);
 
-  return date.toLocaleDateString("zh-CN", options);
+  return d.toLocaleString("zh-cn");
 }
