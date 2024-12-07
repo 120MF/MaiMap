@@ -7,7 +7,7 @@ import { ArcadesState, useArcades } from "@/stores/useArcades";
 import { useReviews } from "@/stores/useReviews";
 import { useTags } from "@/stores/useTags";
 
-function Updater() {
+function URLUpdater() {
   const searchParams = useSearchParams();
 
   const range = Number(searchParams.get("range")) || 40;
@@ -66,4 +66,4 @@ function Updater() {
   return <></>;
 }
 
-export default Updater;
+export default URLUpdater;

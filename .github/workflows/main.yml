@@ -30,7 +30,7 @@ jobs:
             NEXT_PUBLIC_QMAP_API_KEY=${{ secrets.NEXT_PUBLIC_QMAP_API_KEY }}
             NEXT_PUBLIC_BUILD_FROM=GithubAction
             REPO_NAME=maimap-env
-            REPO_OWNER=MoonBite666
+            REPO_OWNER=120MF
             FILE_PATH=.env
             BRANCH=main
             GITHUB_TOKEN=${{ secrets.GH_TOKEN }}

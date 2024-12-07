@@ -2,8 +2,8 @@
 
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 
-import UpdateProfileForm from "@/components/UpdateProfileForm";
-import UserReviews from "@/components/UserReviews";
+import UpdateProfileForm from "@/components/UserPageComponents/UpdateProfileForm";
+import UserReviews from "@/components/UserPageComponents/UserReviews";
 
 function UserAccordion({ session }) {
   return (

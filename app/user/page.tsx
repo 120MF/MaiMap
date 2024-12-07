@@ -2,7 +2,7 @@ import UserCard from "@/components/UserCard";
 import { auth } from "@/auth";
 import SignInRedirect from "@/components/SignInRedirect";
 import SignOutButton from "@/components/SignOutButton";
-import UserAccordion from "@/components/UserAccordion";
+import UserAccordion from "@/components/UserPageComponents/UserAccordion";
 
 export default async function User() {
   const session = await auth();
