@@ -49,6 +49,7 @@ function EditArcadeForm({ arcadeDetail }: ArcadeFormProps) {
       String(data.arcadePcPrice) === "" ? null : Number(data.arcadePcPrice);
     data.arcadeLat = markLat === 0 ? arcadeLat : markLat;
     data.arcadeLng = markLng === 0 ? arcadeLng : markLng;
+    console.log(data);
     const res = await fetch("/api/arcades/update", {
       method: "POST",
       headers: {

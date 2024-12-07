@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     const arcades = await collection
       .find({ store_name: { $regex: name, $options: "i" } })
-      .project({ store_pos: 0 })
+      .project({ store_pos: 0, _id: 0 })
       .toArray();
 
     for (let i = 0; i < arcades.length; i++) {

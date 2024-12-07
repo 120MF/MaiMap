@@ -7,7 +7,7 @@ export type arcade = {
   store_lat: number;
   store_lng: number;
   store_pos: string;
-  arcade_type: string;
+  store_type: string;
   arcade_dead: boolean;
   store_arcade_count: number;
   store_coin_price: number;

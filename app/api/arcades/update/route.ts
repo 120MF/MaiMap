@@ -38,10 +38,11 @@ export async function POST(request: NextRequest) {
           arcade_dead: form.arcadeDead,
           store_name: form.arcadeName,
           store_address: form.arcadeAddress,
-          store_lat: form.arcadeLat,
-          store_lng: form.arcadeLng,
+          store_lat: parseFloat(String(form.arcadeLat)),
+          store_lng: parseFloat(String(form.arcadeLng)),
           store_arcade_count: form.arcadeCount,
           store_pc_coin_count: form.arcadePcPrice,
+          store_coin_price: form.arcadeCoinPrice,
           store_pos: {
             type: "Point",
             coordinates: [

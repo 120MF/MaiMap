@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     const arcade = await collection.findOne(
       { store_id: Number(id) },
-      { projection: { store_pos: 0 } },
+      { projection: { store_pos: 0, _id: 0 } },
     );
 
     if (!arcade) {

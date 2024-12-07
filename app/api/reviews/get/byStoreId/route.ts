@@ -21,7 +21,10 @@ export async function GET(request: NextRequest) {
     const db = client.db("maimap");
     const collection = db.collection("reviews");
 
-    const reviews = await collection.find({ store_id: Number(id) }).toArray();
+    const reviews = await collection
+      .find({ store_id: Number(id) })
+      .project({ email: 0 })
+      .toArray();
 
     const length = reviews.length;
 
@@ -33,7 +36,6 @@ export async function GET(request: NextRequest) {
     }
     for (let i = 0; i < length; i++) {
       reviews[i].rating = parseFloat(String(reviews[i].rating));
-      reviews[i].coin_price = parseFloat(String(reviews[i].coin_price));
     }
 
     return new Response(JSON.stringify(reviews), {
