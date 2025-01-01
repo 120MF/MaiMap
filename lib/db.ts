@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = "mongodb://salt:yelsjdhl@maimap-mysql.mfnest.tech:27017/maimap";
+const uri =
+  "mongodb://salt:yelsjdhl@maimap-mysql.mfnest.tech:27017/maimap?authSource=admin";
 // 可使用公用的MongoDB Atlas数据库进行开发
 // const uri = "mongodb+srv://salt:yelsjdhl@maimap.uqvlj.mongodb.net/"
 const options = {
