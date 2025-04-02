@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@heroui/react": "^2.7.5",
+    "@types/node": "^22.13.17",
     "autoprefixer": "^10.4.21",
+    "dotenv-webpack": "^8.1.0",
     "framer-motion": "^12.6.3",
     "postcss": "^8.5.3",
     "postcss-loader": "^8.1.1",
