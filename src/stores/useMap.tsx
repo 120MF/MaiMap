@@ -1,6 +1,6 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import { coord } from "@/types/map";
+import type { coord } from '@/types/map';
 
 interface MapState {
   centerLat: number;

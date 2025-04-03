@@ -1,10 +1,10 @@
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardBody } from '@heroui/card';
 
-import { suggestion } from "@/types/suggestion";
+import type { suggestion } from '@/types/suggestion';
 
 class SuggestionCardProps {
-  suggestion: suggestion;
-  handleClick: (arg0: suggestion) => void;
+  suggestion!: suggestion;
+  handleClick!: (arg0: suggestion) => void;
 }
 
 function SuggestionCard({ suggestion, handleClick }: SuggestionCardProps) {
@@ -15,8 +15,10 @@ function SuggestionCard({ suggestion, handleClick }: SuggestionCardProps) {
       isPressable
       className="min-h-28"
       radius="none"
-      onClick={() => {
-        handleClick(suggestion);
+      onPress={() => {
+        if (handleClick) {
+          handleClick(suggestion);
+        }
       }}
     >
       <CardBody className="h-auto flex justify-center">

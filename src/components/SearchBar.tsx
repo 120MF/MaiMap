@@ -2,7 +2,6 @@
 
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import { Input } from '@heroui/input';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import DrawerControlButton from '@/components/SearchBarComponents/DrawerControlButton';
@@ -10,15 +9,14 @@ import SuggestionCard from '@/components/SearchBarComponents/SuggestionCard';
 import { getSuggestion } from '@/lib/QMapSuggestion.ts';
 import type { suggestion } from '@/types/suggestion';
 
+import { useMap } from '@/stores/useMap.tsx';
+
 export default function SearchBar() {
   const [inputValue, setInputValue] = useState<string>('');
   const [suggestions, setSuggestions] = useState<suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
-
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
+  const update_center = useMap((state) => state.update_center);
 
   // 检测inputValue并搜索
   // 1s定时器防止多次触发
@@ -45,17 +43,10 @@ export default function SearchBar() {
   function handleSuggestionClick(suggestion: suggestion) {
     setInputValue(suggestion.title);
     const { lat, lng } = suggestion.location;
-    const params = new URLSearchParams(searchParams);
 
     if (suggestion.location) {
-      params.set('lat', String(lat));
-      params.set('lng', String(lng));
-      params.delete('arcadeId');
-    } else {
-      params.delete('lat');
-      params.delete('lng');
+      update_center([lng, lat]);
     }
-    replace(`${pathname}?${params.toString()}`);
     setIsSuggestionsOpen(false);
   }
 
@@ -89,9 +80,9 @@ export default function SearchBar() {
             <Card fullWidth isBlurred className="h-96" radius="sm">
               <CardHeader className="h-10">搜索结果</CardHeader>
               <CardBody className="custom-scrollbar px-0 py-0">
-                {suggestions.map((suggestion, index) => (
+                {suggestions.map((suggestion) => (
                   <SuggestionCard
-                    key={index}
+                    key={suggestion.title}
                     handleClick={handleSuggestionClick}
                     suggestion={suggestion}
                   />

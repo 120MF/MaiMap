@@ -1,13 +1,13 @@
-import { Button } from "@nextui-org/button";
+import { Button } from '@heroui/button';
 
-import IconAngleUp from "@/components/icons/IconAngleUp";
-import IconAngleDown from "@/components/icons/IconAngleDown";
-import IconSlashSquareFill from "@/components/icons/IconSlashSquareFill";
+import IconAngleDown from '@/components/icons/IconAngleDown';
+import IconAngleUp from '@/components/icons/IconAngleUp';
+import IconSlashSquareFill from '@/components/icons/IconSlashSquareFill';
 
 class DrawerControlButtonProps {
-  inputValue: string;
-  isSuggestionsOpen: boolean;
-  handleClick: () => void;
+  inputValue: string | undefined;
+  isSuggestionsOpen: boolean | undefined;
+  handleClick: (() => void) | undefined;
 }
 
 function DrawerControlButton({
