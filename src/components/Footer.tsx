@@ -1,28 +1,28 @@
-"use client";
+import { Image } from '@heroui/image';
+import { Link } from '@heroui/link';
+import { useDisclosure } from '@heroui/modal';
+import { Tab, Tabs } from '@heroui/tabs';
+import { useLocation, useNavigate } from 'react-router';
 
-import Image from "next/image";
-import { Link } from "@nextui-org/link";
-import { useDisclosure } from "@nextui-org/modal";
-import { Tabs, Tab } from "@nextui-org/tabs";
-import { useRouter, usePathname } from "next/navigation";
-
-import IconInfoCircle from "@/components/icons/IconInfoCircle";
-import { ThemeSwitcher } from "@/components/ThemeSwitcher";
-import RangeSlider from "@/components/FooterComponents/RangeSlider";
-import About from "@/components/FooterComponents/About";
-import IconMapLocationDot from "@/components/icons/IconMapLocationDot";
-import IconStore from "@/components/icons/IconStore";
-import IconBxsUserCircle from "@/components/icons/IconBxsUserCircle";
+import About from '@/components/FooterComponents/About';
+import RangeSlider from '@/components/FooterComponents/RangeSlider';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import IconBxsUserCircle from '@/components/icons/IconBxsUserCircle';
+import IconInfoCircle from '@/components/icons/IconInfoCircle';
+import IconMapLocationDot from '@/components/icons/IconMapLocationDot';
+import IconStore from '@/components/icons/IconStore';
+import type { Key } from 'react';
 
 function Footer() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const router = useRouter();
-  let pathname = usePathname();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // 仅获取一级页面路径
+  let pathname = location.pathname;
   pathname =
-    pathname.split("/").length > 2
-      ? pathname.split("/").slice(0, -1).join("/")
+    pathname.split('/').length > 2
+      ? pathname.split('/').slice(0, -1).join('/')
       : pathname;
 
   return (
@@ -30,20 +30,14 @@ function Footer() {
       <div className="h-full border-t border-gray-300 flex flex-col items-center justify-between bg-background px-2">
         <div className="flex items-center justify-around w-full gap-2 pt-0 h-md:pt-6">
           <div className="flex items-center">
-            <Image
-              alt="Logo"
-              height={80}
-              quality={80}
-              src="/Logo.png"
-              width={150}
-            />
+            <Image alt="Logo" height={80} width={150} src="@/assets/Logo.png" />
           </div>
           <RangeSlider />
           <div className="flex items-center space-x-2">
             <Link
               className="pl-2 m-0 text-sm"
               color="foreground"
-              onClick={onOpen}
+              onPress={onOpen}
             >
               <IconInfoCircle height="20px" width="20px" />
             </Link>
@@ -56,12 +50,13 @@ function Footer() {
           <Tabs
             fullWidth
             aria-label="pages"
-            selectedKey={pathname === "/signin" ? "/user" : pathname}
+            selectedKey={pathname === '/signin' ? '/user' : pathname}
             size="md"
             variant="underlined"
-            onSelectionChange={(key: string) => {
-              if (pathname !== "/signin") router.push(key);
-              else if (key !== "/user") router.push(key);
+            onSelectionChange={(key: Key) => {
+              const keyString = String(key);
+              if (pathname !== '/signin') navigate(keyString);
+              else if (keyString !== '/user') navigate(keyString);
             }}
           >
             {/*<Tab*/}

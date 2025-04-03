@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import IconSunMoon from "@/components/icons/IconSunMoon";
-import IconMoonStars from "@/components/icons/IconMoonStars";
+import IconMoonStars from '@/components/icons/IconMoonStars';
+import IconSunMoon from '@/components/icons/IconSunMoon';
+import { useTheme } from '@/stores/useTheme';
+import { useEffect, useState } from 'react';
 
 export function ThemeSwitcher() {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, update_theme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -17,8 +17,11 @@ export function ThemeSwitcher() {
 
   return (
     <div>
-      <button onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-        {theme === "light" ? (
+      <button
+        type="button"
+        onClick={() => update_theme(theme === 'light' ? 'dark' : 'light')}
+      >
+        {theme === 'light' ? (
           <IconMoonStars height="20px" width="20px" />
         ) : (
           <IconSunMoon height="20px" width="20px" />

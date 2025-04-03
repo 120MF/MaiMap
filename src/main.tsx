@@ -1,15 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App.tsx';
 import './index.css';
-import SearchBar from '@/components/SearchBar.tsx';
-import { HeroUIProvider } from '@heroui/react';
+import Layout from '@/Layout.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <HeroUIProvider>
-      <SearchBar />
-      <App />
-    </HeroUIProvider>
+    <Layout />
   </React.StrictMode>,
 );
