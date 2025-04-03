@@ -4,6 +4,7 @@ import { useDisclosure } from '@heroui/modal';
 import { Tab, Tabs } from '@heroui/tabs';
 import { useLocation, useNavigate } from 'react-router';
 
+import LogoImage from '@/assets/Logo.png';
 import About from '@/components/FooterComponents/About';
 import RangeSlider from '@/components/FooterComponents/RangeSlider';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
@@ -11,6 +12,7 @@ import IconBxsUserCircle from '@/components/icons/IconBxsUserCircle';
 import IconInfoCircle from '@/components/icons/IconInfoCircle';
 import IconMapLocationDot from '@/components/icons/IconMapLocationDot';
 import IconStore from '@/components/icons/IconStore';
+
 import type { Key } from 'react';
 
 function Footer() {
@@ -30,7 +32,7 @@ function Footer() {
       <div className="h-full border-t border-gray-300 flex flex-col items-center justify-between bg-background px-2">
         <div className="flex items-center justify-around w-full gap-2 pt-0 h-md:pt-6">
           <div className="flex items-center">
-            <Image alt="Logo" height={80} width={150} src="@/assets/Logo.png" />
+            <Image alt="Logo" height={38} width={150} src={LogoImage} />
           </div>
           <RangeSlider />
           <div className="flex items-center space-x-2">

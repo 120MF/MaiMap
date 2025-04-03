@@ -1,3 +1,4 @@
+import LogoImage from '@/assets/Logo.png';
 import { Image } from '@heroui/image';
 import {
   Modal,
@@ -20,7 +21,7 @@ function About({
         {() => (
           <>
             <ModalHeader>
-              <Image alt="Logo" height={70} src="/Logo.png" width={150} />
+              <Image alt="Logo" height={75} src={LogoImage} width={300} />
             </ModalHeader>
             <ModalBody>
               <p>
