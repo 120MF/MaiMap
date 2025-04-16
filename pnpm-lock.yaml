@@ -41,6 +41,9 @@ importers:
       tailwindcss:
         specifier: '3'
         version: 3.4.17(ts-node@10.9.2(@types/node@22.13.17)(typescript@5.8.2))
+      tlbs-map-react:
+        specifier: ^1.1.0
+        version: 1.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zustand:
         specifier: ^5.0.3
         version: 5.0.3(@types/react@19.0.12)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
@@ -2901,6 +2904,12 @@ packages:
   tinypool@1.0.2:
     resolution: {integrity: sha512-al6n+QEANGFOMf/dmUMsuS5/r9B06uwlyNjZZql/zv8J7ybHCgoihBNORZCY2mzUuAnomQa2JdhyHKzZxPCrFA==}
     engines: {node: ^18.0.0 || >=20.0.0}
+
+  tlbs-map-react@1.1.0:
+    resolution: {integrity: sha512-5pDPlDNIdbjnj1Iix5QCKqSVtxjVMg8rLN9cCEHph+TvOoFkKuzZOepG5/Eze1NhagKJ2BAf+k3mQPh+Wd7Efg==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
 
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
@@ -6945,6 +6954,11 @@ snapshots:
   thunky@1.1.0: {}
 
   tinypool@1.0.2: {}
+
+  tlbs-map-react@1.1.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0):
+    dependencies:
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
 
   to-regex-range@5.0.1:
     dependencies:
