@@ -27,7 +27,11 @@ function MapContainer() {
     console.log('🚀🚀🚀 点标记图层点击事件', event);
   }, []);
   return (
-    <TMap ref={mapRef} apiKey={`${key}`}>
+    <TMap
+      ref={mapRef}
+      apiKey={`${key}`}
+      style={{ height: '100%', width: '100%' }}
+    >
       <MultiMarker
         ref={markerRef}
         styles={styles}
