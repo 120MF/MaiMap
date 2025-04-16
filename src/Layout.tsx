@@ -10,7 +10,7 @@ function Layout() {
   return (
     <HeroUIProvider>
       <BrowserRouter>
-        <main className={`${theme}`}>
+        <main className={`${theme} text-foreground bg-background`}>
           <SearchBar />
 
           <Routes>
