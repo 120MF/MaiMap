@@ -1,8 +1,12 @@
-import React, { useCallback, useRef } from 'react';
+import { useTheme } from '@/stores/useTheme.tsx';
+import React, { useRef, useState, useEffect } from 'react';
 import { TMap } from 'tlbs-map-react';
 import { MultiMarker } from 'tlbs-map-react';
 
 const key = process.env.QMAP_KEY;
+
+const LIGHT_STYLE = 'style0';
+const DARK_STYLE = 'style1';
 
 const styles = {
   multiMarkerStyle: {
@@ -22,22 +26,26 @@ const geometries = [
 function MapContainer() {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
-  // @ts-ignore
-  const clickHandler = useCallback((event: TMap.MapEvent) => {
-    console.log('🚀🚀🚀 点标记图层点击事件', event);
-  }, []);
+  const { theme } = useTheme();
+  const [key, setKey] = useState(0);
+
+  const mapStyleId = theme === 'dark' ? DARK_STYLE : LIGHT_STYLE;
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    setKey((prevKey) => prevKey + 1);
+  }, [theme]);
+
   return (
     <TMap
+      key={key} // 添加key属性实现强制重新渲染
       ref={mapRef}
       apiKey={`${key}`}
-      style={{ height: '100%', width: '100%' }}
+      style={{ height: '90svh', width: '100%' }}
+      className="z-10"
+      options={{ mapStyleId: mapStyleId }}
     >
-      <MultiMarker
-        ref={markerRef}
-        styles={styles}
-        geometries={geometries}
-        onClick={clickHandler}
-      />
+      <MultiMarker ref={markerRef} styles={styles} geometries={geometries} />
     </TMap>
   );
 }

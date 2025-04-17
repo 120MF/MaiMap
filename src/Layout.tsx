@@ -16,17 +16,7 @@ function Layout() {
           <div className="flex-1 flex flex-col">
             <div className="m-0 p-0" style={{ height: '90svh' }}>
               <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <>
-                      <div className="z-30">
-                        <SearchBar />
-                      </div>
-                      <HomePage />
-                    </>
-                  }
-                />
+                <Route path="/" element={<HomePage />} />
               </Routes>
             </div>
             <div className="z-30" style={{ height: '10svh' }}>
