@@ -11,11 +11,6 @@ function RangeCircle() {
       center: { lat: centerLat, lng: centerLng },
       radius: range,
     },
-    {
-      styleId: 'rangeCircleStyle',
-      center: { lat: centerLat, lng: centerLng },
-      radius: range,
-    },
   ];
 
   const styles = {

@@ -4,7 +4,5 @@ import './index.css';
 import Layout from '@/Layout.tsx';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
-    <Layout />
-  </React.StrictMode>,
+  <Layout />,
 );

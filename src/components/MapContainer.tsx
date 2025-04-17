@@ -40,7 +40,7 @@ function MapContainer() {
         mapStyleId: mapStyleId,
       }}
     >
-      <RangeCircle />
+      <RangeCircle key={key} />
     </BaseMap>
   );
 }
