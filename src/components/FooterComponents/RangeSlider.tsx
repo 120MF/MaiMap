@@ -2,8 +2,7 @@ import { useMap } from '@/stores/useMap.tsx';
 import { Slider } from '@heroui/slider';
 
 function RangeSlider() {
-  const range = useMap((state) => state.range);
-  const update_range = useMap((state) => state.update_range);
+  const { range, update_range } = useMap();
 
   return (
     <div className="w-36 sm:w-48 md:w-52 lg:w-64">
@@ -21,12 +20,12 @@ function RangeSlider() {
         showSteps={true}
         size="md"
         step={10}
-        value={Number(range)}
+        value={Number(range) / 1000}
         onChange={(e) => {
           if (Array.isArray(e)) {
-            update_range(e[0]);
+            update_range(e[0] * 1000);
           } else {
-            update_range(e);
+            update_range(e * 1000);
           }
         }}
       />
