@@ -1,4 +1,5 @@
 import RangeCircle from '@/components/MapComponents/RangeCircle.tsx';
+import { useArcades } from '@/stores/useArcades.tsx';
 import { useMap } from '@/stores/useMap.tsx';
 import { useTheme } from '@/stores/useTheme.tsx';
 import React, { useRef, useState, useEffect } from 'react';
@@ -27,7 +28,12 @@ function MapContainer() {
     setKey((prevKey) => prevKey + 1);
   }, [theme]);
 
-  const { centerLng, centerLat } = useMap();
+  const { centerLng, centerLat, range } = useMap();
+  const { fetch_nearby_arcade } = useArcades();
+
+  useEffect(() => {
+    fetch_nearby_arcade(centerLat, centerLng, range);
+  }, [centerLat, centerLng, range, fetch_nearby_arcade]);
 
   return (
     <BaseMap

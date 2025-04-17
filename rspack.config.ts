@@ -1,10 +1,9 @@
 import { defineConfig } from '@rspack/cli';
 import { rspack } from '@rspack/core';
 import * as RefreshPlugin from '@rspack/plugin-react-refresh';
-
+const Dotenv = require('dotenv-webpack');
 const isDev = process.env.NODE_ENV === 'development';
 import * as path from 'node:path';
-const Dotenv = require('dotenv-webpack');
 // Target browsers, see: https://github.com/browserslist/browserslist
 const targets = ['chrome >= 87', 'edge >= 88', 'firefox >= 78', 'safari >= 14'];
 
@@ -78,10 +77,10 @@ export default defineConfig({
   devServer: {
     proxy: [
       {
-        context: '/api/map',
+        context: '/mapApi',
         target: 'https://apis.map.qq.com',
         changeOrigin: true,
-        pathRewrite: { '^/api/map': '' },
+        pathRewrite: { '^/mapApi': '' },
       },
     ],
   },
