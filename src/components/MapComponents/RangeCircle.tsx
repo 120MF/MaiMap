@@ -4,9 +4,13 @@ import { MultiCircle } from 'tlbs-map-react';
 
 function RangeCircle() {
   const { centerLat, centerLng, range } = useMap();
-  const circleRef = useRef(null);
 
   const rangeCircleGeometry = [
+    {
+      styleId: 'rangeCircleStyle',
+      center: { lat: centerLat, lng: centerLng },
+      radius: range,
+    },
     {
       styleId: 'rangeCircleStyle',
       center: { lat: centerLat, lng: centerLng },
@@ -23,20 +27,7 @@ function RangeCircle() {
     },
   };
 
-  // 组件卸载时清理图层
-  useEffect(() => {
-    return () => {
-      console.log(circleRef.current, range);
-    };
-  }, [range]);
-
-  return (
-    <MultiCircle
-      ref={circleRef}
-      geometries={rangeCircleGeometry}
-      styles={styles}
-    />
-  );
+  return <MultiCircle geometries={rangeCircleGeometry} styles={styles} />;
 }
 
 export default RangeCircle;
