@@ -1,3 +1,4 @@
+import ArcadeMarkers from '@/components/MapComponents/ArcadeMarker.tsx';
 import RangeCircle from '@/components/MapComponents/RangeCircle.tsx';
 import { useArcades } from '@/stores/useArcades.tsx';
 import { useMap } from '@/stores/useMap.tsx';
@@ -10,13 +11,6 @@ const apiKey = process.env.QMAP_KEY;
 
 const LIGHT_STYLE = 'style0';
 const DARK_STYLE = 'style1';
-
-const markerGeometry = [
-  {
-    styleId: 'multiMarkerStyle',
-    position: { lat: 40.0404, lng: 116.2735 },
-  },
-];
 
 function MapContainer() {
   const { theme } = useTheme();
@@ -46,7 +40,8 @@ function MapContainer() {
         mapStyleId: mapStyleId,
       }}
     >
-      <RangeCircle key={key} />
+      <RangeCircle />
+      <ArcadeMarkers />
     </BaseMap>
   );
 }
