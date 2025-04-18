@@ -4,8 +4,7 @@ import { useArcades } from '@/stores/useArcades.tsx';
 import { useMap } from '@/stores/useMap.tsx';
 import { useTheme } from '@/stores/useTheme.tsx';
 import React, { useRef, useState, useEffect } from 'react';
-import { BaseMap, MultiCircle } from 'tlbs-map-react';
-import { MultiMarker } from 'tlbs-map-react';
+import { BaseMap } from 'tlbs-map-react';
 
 const apiKey = process.env.QMAP_KEY;
 
