@@ -29,20 +29,22 @@ function MapContainer() {
   }, [centerLat, centerLng, range, fetch_nearby_arcade]);
 
   return (
-    <BaseMap
-      key={key}
-      apiKey={`${apiKey}`}
-      style={{ height: '90svh', width: '100%' }}
-      className="z-20"
-      options={{
-        center: { lat: centerLat, lng: centerLng },
-        mapStyleId: mapStyleId,
-        offset: { x: 0, y: -50 },
-      }}
-    >
-      <RangeCircle />
-      <ArcadeMarkers />
-    </BaseMap>
+    <>
+      <BaseMap
+        key={key}
+        apiKey={`${apiKey}`}
+        style={{ height: '90svh', width: '100%' }}
+        className="z-20"
+        options={{
+          center: { lat: centerLat, lng: centerLng },
+          mapStyleId: mapStyleId,
+          offset: { x: 0, y: -50 },
+        }}
+      >
+        <RangeCircle />
+        <ArcadeMarkers />
+      </BaseMap>
+    </>
   );
 }
 

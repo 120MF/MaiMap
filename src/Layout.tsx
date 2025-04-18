@@ -1,14 +1,14 @@
 import Footer from '@/components/Footer.tsx';
-import SearchBar from '@/components/SearchBar.tsx';
 import HomePage from '@/pages/HomePage.tsx';
 import { useTheme } from '@/stores/useTheme.tsx';
-import { HeroUIProvider } from '@heroui/react';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 function Layout() {
   const { theme } = useTheme();
   return (
     <HeroUIProvider>
+      <ToastProvider placement="top-right" />
       <BrowserRouter>
         <main
           className={`${theme} text-foreground bg-background h-full overflow-hidden`}

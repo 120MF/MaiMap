@@ -1,3 +1,4 @@
+import GeolocationButton from '@/components/MapComponents/GeolocationButton.tsx';
 import MapContainer from '@/components/MapContainer.tsx';
 import SearchBar from '@/components/SearchBar.tsx';
 import React from 'react';
@@ -9,6 +10,7 @@ export default function HomePage() {
         <SearchBar />
       </div>
       <MapContainer />
+      <GeolocationButton />
     </>
   );
 }
