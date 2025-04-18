@@ -37,6 +37,7 @@ function MapContainer() {
       options={{
         center: { lat: centerLat, lng: centerLng },
         mapStyleId: mapStyleId,
+        offset: { x: 0, y: -50 },
       }}
     >
       <RangeCircle />

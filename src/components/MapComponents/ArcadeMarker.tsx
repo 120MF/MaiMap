@@ -1,4 +1,5 @@
 import { useArcades } from '@/stores/useArcades.tsx';
+import { useMap } from '@/stores/useMap.tsx';
 import { MultiMarker } from 'tlbs-map-react';
 
 import arcadeDeadSelectedIcon from '@/assets/nail-arcade-dead-selected.png';
@@ -10,6 +11,10 @@ import { useCallback } from 'react';
 interface MarkerEvent {
   geometry: {
     id: string;
+    position: {
+      lat: number;
+      lng: number;
+    };
   };
 }
 
@@ -41,6 +46,7 @@ const styles = {
 };
 
 function ArcadeMarkers() {
+  const { update_center } = useMap();
   const { nearbyArcades, arcadeId, update_arcadeId } = useArcades();
   const geometriesData = nearbyArcades.map((arcade) => {
     return {
@@ -59,8 +65,9 @@ function ArcadeMarkers() {
   const onClickHandler = useCallback(
     (event: MarkerEvent) => {
       update_arcadeId(Number.parseInt(event.geometry.id));
+      update_center([event.geometry.position.lng, event.geometry.position.lat]);
     },
-    [update_arcadeId],
+    [update_arcadeId, update_center],
   );
 
   return (
