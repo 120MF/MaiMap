@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 import type { Arcade } from '@/types/arcades';
-import { SortMethod } from '@/types/arcades';
 import type { ApiResponse } from '@/types/response.ts';
 
 const url = process.env.BACKEND_URL;
@@ -10,28 +9,27 @@ interface ArcadesState {
   nearbyArcades: Arcade[];
   detailArcade: Arcade | null;
   arcadeId: number;
-  sortMethod: SortMethod;
+  sortMethod: string;
   //   methods
   update_nearby: (items: Arcade[]) => void;
   update_arcadeId: (id: number) => void;
   fetch_nearby_arcade: (lat: number, lng: number, range: number) => void;
   fetch_detailArcade: (id: number) => void;
   update_detailArcade: (arcade: Arcade | null) => void;
-  update_sortMethod: (newMethod: SortMethod) => void;
+  update_sortMethod: (newMethod: string) => void;
 }
 
 const useArcades = create<ArcadesState>()((set, get) => ({
   nearbyArcades: [],
   detailArcade: null,
   arcadeId: -1,
-  sortMethod: SortMethod.Default,
+  sortMethod: 'default',
   update_arcadeId: (id) => set({ arcadeId: id }),
   update_nearby: (items) => set({ nearbyArcades: items }),
   fetch_nearby_arcade: async (lat, lng, range) => {
     const { sortMethod } = get();
-    const methodString = SortMethod[sortMethod];
     const res = await fetch(
-      `${url}arcades?lat=${lat}&lng=${lng}&range=${range}&sort=${methodString}`,
+      `${url}arcades?lat=${lat}&lng=${lng}&range=${range}&sort=${sortMethod}`,
     );
 
     if (res.status !== 200) {
@@ -44,7 +42,7 @@ const useArcades = create<ArcadesState>()((set, get) => ({
     set({ nearbyArcades: arcades });
   },
   fetch_detailArcade: async (id) => {
-    const res = await fetch(`/api/arcades/get/byId?id=${id}`);
+    const res = await fetch(`${url}arcades/${id}`);
 
     if (res.status === 500) {
       set({ detailArcade: null });

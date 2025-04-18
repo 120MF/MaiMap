@@ -1,10 +1,8 @@
-import { ObjectId } from "mongodb";
-
-export type tag = {
-  _id: ObjectId;
+export type Tag = {
+  id: string;
   created_at: string;
   vote: number;
   name: string;
   store_id: number;
-  user_id: ObjectId;
+  user_id: string;
 };

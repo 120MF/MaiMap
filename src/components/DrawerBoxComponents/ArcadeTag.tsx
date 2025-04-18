@@ -1,5 +1,7 @@
-import { Chip } from "@nextui-org/chip";
-import { Button } from "@nextui-org/button";
+import { useTags } from '@/stores/useTags';
+import { useTheme } from '@/stores/useTheme';
+import { Button } from '@heroui/button';
+import { Chip } from '@heroui/chip';
 import {
   Modal,
   ModalBody,
@@ -7,18 +9,13 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { ToastProps } from "react-toastify/dist/types";
-import { useTheme } from "next-themes";
+} from '@heroui/modal';
+import { useEffect, useState } from 'react';
 
-import IconBxsXCircle from "@/components/icons/IconBxsXCircle";
-import { toastStyle } from "@/lib/toastStyle";
-import SignInRedirectModalContent from "@/components/SignInRedirectModalContent";
-import { useTags } from "@/stores/useTags";
+import SignInRedirectModalContent from '@/components/SignInRedirectModalContent';
+import IconBxsXCircle from '@/components/icons/IconBxsXCircle';
 
-function DeleteButton({ tagId, arcadeId, name, session }) {
+function DeleteButton({ tagId, arcadeId, name }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { theme } = useTheme();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -26,10 +23,10 @@ function DeleteButton({ tagId, arcadeId, name, session }) {
 
   useEffect(() => {
     async function deleteTag() {
-      const res = await fetch("/api/tags/delete", {
-        method: "DELETE",
+      const res = await fetch('/api/tags/delete', {
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(tagId),
       });
@@ -38,13 +35,13 @@ function DeleteButton({ tagId, arcadeId, name, session }) {
       if (res.status !== 200) {
         toast.error(`删除Tag失败！${data}`, {
           ...(toastStyle as ToastProps),
-          type: "error",
+          type: 'error',
           theme: theme,
         });
       } else {
-        toast.success("删除Tag成功！", {
+        toast.success('删除Tag成功！', {
           ...(toastStyle as ToastProps),
-          type: "success",
+          type: 'success',
           theme: theme,
         });
         fetch_currentTag(arcadeId);
@@ -112,18 +109,18 @@ function DeleteButton({ tagId, arcadeId, name, session }) {
   );
 }
 
-function ArcadeTag({ tag, session, arcadeId }) {
+function ArcadeTag({ tag, arcadeId }) {
   return (
     <Chip
       color="secondary"
-      endContent={
-        <DeleteButton
-          arcadeId={arcadeId}
-          name={tag.name}
-          session={session}
-          tagId={tag._id}
-        />
-      }
+      // endContent={
+      //   <DeleteButton
+      //     arcadeId={arcadeId}
+      //     name={tag.name}
+      //     session={session}
+      //     tagId={tag._id}
+      //   />
+      // }
       variant="dot"
     >
       {tag.name}

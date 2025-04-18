@@ -41,9 +41,3 @@ export interface Arcade {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   [property: string]: any;
 }
-
-export enum SortMethod {
-  Distance = 0,
-  Pinyin = 1,
-  Default = 2,
-}

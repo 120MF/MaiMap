@@ -1,6 +1,9 @@
-"use client";
+'use client';
 
-import { Chip } from "@nextui-org/chip";
+import { useTheme } from '@/stores/useTheme';
+import { Button } from '@heroui/button';
+import { Chip } from '@heroui/chip';
+import { Input } from '@heroui/input';
 import {
   Modal,
   ModalBody,
@@ -8,22 +11,17 @@ import {
   ModalFooter,
   ModalHeader,
   useDisclosure,
-} from "@nextui-org/modal";
-import { Input } from "@nextui-org/input";
-import { Button } from "@nextui-org/button";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import { ToastProps } from "react-toastify/dist/types";
-import { useTheme } from "next-themes";
+} from '@heroui/modal';
+import { useEffect, useState } from 'react';
 
-import IconAddFill from "@/components/icons/IconAddFill";
-import SignInRedirectModalContent from "@/components/SignInRedirectModalContent";
-import { toastStyle } from "@/lib/toastStyle";
-import { useTags } from "@/stores/useTags";
+import SignInRedirectModalContent from '@/components/SignInRedirectModalContent';
+import IconAddFill from '@/components/icons/IconAddFill';
+import { toastStyle } from '@/lib/toastStyle';
+import { useTags } from '@/stores/useTags';
 
 function NewTagButton({ session, store_id }) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState('');
   const [onSubmit, setOnSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -34,19 +32,19 @@ function NewTagButton({ session, store_id }) {
   useEffect(() => {
     async function postTag() {
       const value = { user_id: session.user.id, name: tag, store_id: store_id };
-      const res = await fetch("/api/tags/post", {
-        method: "POST",
+      const res = await fetch('/api/tags/post', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(value),
       });
 
       if (res.status === 200) {
-        toast("新增标签成功", {
+        toast('新增标签成功', {
           ...(toastStyle as ToastProps),
           theme: theme,
-          type: "success",
+          type: 'success',
         });
         fetch_currentTags(store_id);
       } else {
@@ -55,7 +53,7 @@ function NewTagButton({ session, store_id }) {
         toast(`新增标签失败：${data}`, {
           ...(toastStyle as ToastProps),
           theme: theme,
-          type: "error",
+          type: 'error',
         });
       }
     }

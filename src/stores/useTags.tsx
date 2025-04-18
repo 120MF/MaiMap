@@ -1,19 +1,19 @@
-import { create } from "zustand";
+import { create } from 'zustand';
 
-import { tag } from "@/types/tags";
+import type { Tag } from '@/types/tags';
 
-async function getArcadeTag(id: number): Promise<tag[]> {
+async function getArcadeTag(id: number): Promise<Tag[]> {
   const res = await fetch(`/api/tags/get/byStoreId?id=${id}`);
 
   if (res.status !== 200) {
-    throw new Error("fetch tags failed");
+    throw new Error('fetch tags failed');
   }
 
   return await res.json();
 }
 
 export interface TagsState {
-  currentTags: tag[];
+  currentTags: Tag[];
   fetch_currentTags: (id: number) => void;
 }
 

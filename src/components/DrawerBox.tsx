@@ -1,59 +1,38 @@
-"use client";
-import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import dynamic from "next/dynamic";
-import { Button } from "@nextui-org/button";
-import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
-import { Divider } from "@nextui-org/divider";
-import { Select, SelectItem } from "@nextui-org/select";
-import { useSession } from "next-auth/react";
+import { Button } from '@heroui/button';
+import { Divider } from '@heroui/divider';
+import { Select, SelectItem } from '@heroui/select';
+import { Card, CardBody, CardFooter, CardHeader } from '@nextui-org/card';
+import { useEffect, useState } from 'react';
 
-import IconReturnDownBack from "@/components/icons/IconReturnDownBack";
-import IconBxArrowToBottom from "@/components/icons/IconBxArrowToBottom";
-import IconBxArrowFromBottom from "@/components/icons/IconBxArrowFromBottom";
-import { useArcades } from "@/stores/useArcades";
-import PathButton from "@/components/DrawerBoxComponents/PathButton";
-import { useMap } from "@/stores/useMap";
-import ArcadeList from "@/components/DrawerBoxComponents/ArcadeList";
-import { useReviews } from "@/stores/useReviews";
-import NewReviewButton from "@/components/DrawerBoxComponents/NewReviewButton";
-import EditArcadeButton from "@/components/DrawerBoxComponents/EditArcadeButton";
-import { useTags } from "@/stores/useTags";
-import EditArcadeForm from "@/components/DrawerBoxComponents/EditArcadeForm";
-import ArcadeDetailSkeleton from "@/components/DrawerBoxComponents/ArcadeDetailSkeleton";
-import { SortMethod } from "@/types/arcades";
+import ArcadeDetail from '@/components/DrawerBoxComponents/ArcadeDetail.tsx';
+import ArcadeDetailSkeleton from '@/components/DrawerBoxComponents/ArcadeDetailSkeleton';
+import ArcadeList from '@/components/DrawerBoxComponents/ArcadeList';
+import EditArcadeButton from '@/components/DrawerBoxComponents/EditArcadeButton';
+import EditArcadeForm from '@/components/DrawerBoxComponents/EditArcadeForm';
+import NewReviewButton from '@/components/DrawerBoxComponents/NewReviewButton';
+import PathButton from '@/components/DrawerBoxComponents/PathButton';
+import IconBxArrowFromBottom from '@/components/icons/IconBxArrowFromBottom';
+import IconBxArrowToBottom from '@/components/icons/IconBxArrowToBottom';
+import IconReturnDownBack from '@/components/icons/IconReturnDownBack';
+import { useArcades } from '@/stores/useArcades';
+import { useComments } from '@/stores/useComments.tsx';
+import { useMap } from '@/stores/useMap';
+import { useTags } from '@/stores/useTags';
 
 function DrawerBox() {
-  const { data: session } = useSession();
-  // 使用SSR渲染每一个单独的机厅页面
-  const ArcadeDetail = dynamic(
-    () => import("@/components/DrawerBoxComponents/ArcadeDetail"),
-    {
-      loading: () => <ArcadeDetailSkeleton />,
-      ssr: true,
-    },
-  );
-
   const [isOpen, setIsOpen] = useState(false);
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const params = new URLSearchParams(searchParams);
 
-  const targetLat = useMap((state) => state.targetLat);
-  const targetLng = useMap((state) => state.targetLng);
-
-  const isEditing = useMap((state) => state.isEditing);
-  const setIsEditing = useMap((state) => state.setIsEditing);
-
-  const arcadeId = useArcades((state) => state.arcadeId);
-  const detailArcade = useArcades((state) => state.detailArcade);
-  const arcadeReviews = useReviews((state) => state.currentReviews);
-  const arcadeTags = useTags((state) => state.currentTags);
-  const nearbyArcades = useArcades((state) => state.nearbyArcades);
-  const sortMethod: string =
-    SortMethod[useArcades((state) => state.sortMethod)];
-  const update_sortMethod = useArcades((state) => state.update_sortMethod);
+  const { isEditing, setIsEditing } = useMap();
+  const {
+    arcadeId,
+    detailArcade,
+    nearbyArcades,
+    sortMethod,
+    update_sortMethod,
+    update_arcadeId,
+  } = useArcades();
+  const { currentComments } = useComments();
+  const { currentTags } = useTags();
 
   function toggleBox() {
     setIsOpen((state) => !state);
@@ -74,7 +53,7 @@ function DrawerBox() {
           className="order-3 mr-2"
           size="sm"
           variant="bordered"
-          onClick={() => {
+          onPress={() => {
             setIsEditing(false);
           }}
         >
@@ -91,9 +70,8 @@ function DrawerBox() {
           className="order-3 mr-2"
           size="sm"
           variant="bordered"
-          onClick={() => {
-            params.delete("arcadeId");
-            replace(`${pathname}?${params.toString()}`);
+          onPress={() => {
+            update_arcadeId(0);
           }}
         >
           <IconReturnDownBack />
@@ -113,9 +91,7 @@ function DrawerBox() {
           size="sm"
           variant="underlined"
           onChange={(e) => {
-            update_sortMethod(
-              SortMethod[e.target.value as keyof typeof SortMethod],
-            );
+            update_sortMethod(e.target.value);
           }}
         >
           <SelectItem key="DistanceAscending">距离升序</SelectItem>
@@ -135,14 +111,7 @@ function DrawerBox() {
       </div>
     );
   else if (arcadeId > 0 && detailArcade?.store_name)
-    bodyContent = (
-      <ArcadeDetail
-        arcadeDetail={detailArcade}
-        arcadeReviews={arcadeReviews}
-        arcadeTags={arcadeTags}
-        session={session}
-      />
-    );
+    bodyContent = <ArcadeDetail />;
   else if (nearbyArcades.length > 0)
     bodyContent = (
       <ArcadeList arcadeList={nearbyArcades} sortMethod={sortMethod} />
@@ -160,37 +129,37 @@ function DrawerBox() {
     footerContent = (
       <CardFooter className="min-h-12 max-h-12 flex items-center gap-2 border-t-1 border-gray-400">
         <div className="ml-0">
-          <EditArcadeButton session={session}>编辑信息</EditArcadeButton>
+          {/*<EditArcadeButton session={session}>编辑信息</EditArcadeButton>*/}
         </div>
-        <PathButton
-          endAddress={detailArcade.store_address}
-          startLat={targetLat}
-          startLng={targetLng}
-        >
-          查看路线
-        </PathButton>
-        <NewReviewButton session={session} />
+        {/*<PathButton*/}
+        {/*  endAddress={detailArcade.store_address}*/}
+        {/*  startLat={targetLat}*/}
+        {/*  startLng={targetLng}*/}
+        {/*>*/}
+        {/*  查看路线*/}
+        {/*</PathButton>*/}
+        {/*<NewReviewButton session={session} />*/}
       </CardFooter>
     );
-  } else footerContent = null;
+  } else footerContent = <div />;
 
   return (
     <div className="relative z-20">
       <div
         className={`fixed bottom-[10%] left-0 transform translate-y-0 w-full h-[40%] transition-transform duration-300 ${
-          isOpen ? "translate-y-0" : "translate-y-[90%]"
+          isOpen ? 'translate-y-0' : 'translate-y-[90%]'
         }`}
       >
         <div className="flex items-center h-full">
           <Card
             isBlurred
             isFooterBlurred
-            className={`flex w-full h-full overflow-y-auto rounded-top`}
+            className="flex w-full h-full overflow-y-auto rounded-top"
             radius="none"
             shadow="md"
           >
             <CardHeader className="flex justify-between h-[10%]">
-              <button className="h-3 fixed" onClick={toggleBox}>
+              <button type="button" className="h-3 fixed" onClick={toggleBox}>
                 {isOpen ? (
                   <IconBxArrowToBottom className="h-[5%] top-[3%] fixed w-full" />
                 ) : (

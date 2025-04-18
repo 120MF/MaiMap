@@ -8,7 +8,7 @@ import { ToastProps } from "react-toastify/dist/types";
 
 import { review } from "@/types/reviews";
 import { useArcades } from "@/stores/useArcades";
-import { useReviews } from "@/stores/useReviews";
+import { useComments } from "@/stores/useComments.tsx";
 import { toastStyle } from "@/lib/toastStyle";
 
 function ReviewForm({
@@ -89,7 +89,7 @@ function ReviewForm({
   }, [onSubmit]);
   const { theme } = useTheme();
   const arcadeId = useArcades((state) => state.arcadeId);
-  const fetch_currentReviews = useReviews(
+  const fetch_currentReviews = useComments(
     (state) => state.fetch_currentReviews,
   );
 
